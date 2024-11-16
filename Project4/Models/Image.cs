@@ -1,6 +1,6 @@
 ﻿namespace Project4.Models
 {
-    public class Image
+    public class Image : ICloneable<Image>
     {
         //Fields
         private int? imageID;
@@ -50,6 +50,10 @@
         {
             get { return mainImage; }
             set { mainImage = value; }
+        }
+        public Image Clone()
+        {
+            return new Image(ImageID, Url, Type, Description, MainImage);
         }
     }
 }

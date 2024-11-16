@@ -21,7 +21,7 @@
         Storage,
         Outside
     }
-    public class Room
+    public class Room : ICloneable<Room>
     {
         private int? roomID;
         private RoomType type;
@@ -62,6 +62,11 @@
         {
             get { return width; }
             set { width = value; }
+        }
+
+        public Room Clone()
+        {
+            return new Room(RoomID, Type, Width, Height);  
         }
     }
 }
