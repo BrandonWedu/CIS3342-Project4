@@ -24,9 +24,8 @@
         DoubleCar,
         MultiCar
     }
-    public class Home
+    public class Home : ICloneable<Home>
     {
-        //Fields
         private int? homeID;
         private Agent agent;
         private int cost;
@@ -44,7 +43,6 @@
         private Rooms rooms;
         private Utilities utilities;
 
-        //Constructor without id
         public Home(Agent agent, int cost, Address address, PropertyType type, int yearConstructed, GarageType garageType, string description, DateTime dateListed, SaleStatus saleStatus, Images images, Amenities amenities, TemperatureControl temperatureControl, Rooms rooms, Utilities utilities)
         {
             this.homeID = null;
@@ -63,7 +61,6 @@
             this.rooms = rooms.Clone();
             this.utilities = utilities.Clone();
         }
-        //Constructor with id
         public Home(int? houseID, Agent agent, int cost, Address address, PropertyType type, int yearConstructed, GarageType garageType, string description, DateTime dateListed, SaleStatus saleStatus, Images images, Amenities amenities, TemperatureControl temperatureControl, Rooms rooms, Utilities utilities)
         {
             this.homeID = houseID;
@@ -83,7 +80,6 @@
             this.utilities = utilities.Clone();
         }
 
-        //Get Set
         public int? HomeID
         {
             get { return homeID; }
@@ -178,6 +174,10 @@
         public int TimeOnMarket()
         {
             return (DateListed - DateTime.Now).Days;
+        }
+        public Home Clone()
+        {
+            return new Home(HomeID, Agent, Cost, Address, PropertyType,YearConstructed, GarageType, Description, DateListed, SaleStatus, Images, Amenities, TemperatureControl, Rooms, Utilities);
         }
     }
 }
