@@ -12,7 +12,7 @@
                 list.Clear();
                 foreach (T item in value)
                 {
-                    Add(item);
+                    Add(item.Clone());
                 }
             }
         }
