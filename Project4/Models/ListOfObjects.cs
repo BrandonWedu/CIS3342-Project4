@@ -6,7 +6,7 @@
 
         public List<T> List
         {
-            get { return ListDeepCopy(); }
+            get { return ListClone(); }
             set
             {
                 list.Clear();
@@ -30,7 +30,7 @@
             }
         }
 
-        public List<T> ListDeepCopy()
+        protected List<T> ListClone()
         {
             List<T> temp = new List<T>();
             foreach (T obj in list)

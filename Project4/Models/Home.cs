@@ -48,39 +48,39 @@
         public Home(Agent agent, int cost, Address address, PropertyType type, int yearConstructed, GarageType garageType, string description, DateTime dateListed, SaleStatus saleStatus, Images images, Amenities amenities, TemperatureControl temperatureControl, Rooms rooms, Utilities utilities)
         {
             this.homeID = null;
-            this.agent = agent.DeepCopy();
+            this.agent = agent.Clone();
             this.cost = cost;
-            this.address = address.DeepCopy();
+            this.address = address.Clone();
             this.propertyType = type;
             this.yearConstructed = yearConstructed;
             this.garageType = garageType;
             this.description = description;
             this.dateListed = new DateTime(dateListed.Ticks);
             this.saleStatus = saleStatus;
-            this.images = images.DeepCopy();
-            this.amenities = amenities.DeepCopy();
-            this.temperatureControl = temperatureControl.DeepCopy();
-            this.rooms = rooms.DeepCopy();
-            this.utilities = utilities.DeepCopy();
+            this.images = images.Clone();
+            this.amenities = amenities.Clone();
+            this.temperatureControl = temperatureControl.Clone();
+            this.rooms = rooms.Clone();
+            this.utilities = utilities.Clone();
         }
         //Constructor with id
         public Home(int? houseID, Agent agent, int cost, Address address, PropertyType type, int yearConstructed, GarageType garageType, string description, DateTime dateListed, SaleStatus saleStatus, Images images, Amenities amenities, TemperatureControl temperatureControl, Rooms rooms, Utilities utilities)
         {
             this.homeID = houseID;
-            this.agent = agent.DeepCopy();
+            this.agent = agent.Clone();
             this.cost = cost;
-            this.address = address.DeepCopy();
+            this.address = address.Clone();
             this.propertyType = type;
             this.yearConstructed = yearConstructed;
             this.garageType = garageType;
             this.description = description;
             this.dateListed = new DateTime(dateListed.Ticks);
             this.saleStatus = saleStatus;
-            this.images = images.DeepCopy();
-            this.amenities = amenities.DeepCopy();
-            this.temperatureControl = temperatureControl.DeepCopy();
-            this.rooms = rooms.DeepCopy();
-            this.utilities = utilities.DeepCopy();
+            this.images = images.Clone();
+            this.amenities = amenities.Clone();
+            this.temperatureControl = temperatureControl.Clone();
+            this.rooms = rooms.Clone();
+            this.utilities = utilities.Clone();
         }
 
         //Get Set
@@ -91,8 +91,8 @@
         }
         public Agent Agent
         {
-            get { return agent.DeepCopy(); }
-            set { agent = value.DeepCopy(); }
+            get { return agent.Clone(); }
+            set { agent = value.Clone(); }
         }
         public int Cost
         {
@@ -101,8 +101,8 @@
         }
         public Address Address
         {
-            get { return address.DeepCopy(); }
-            set { address = value.DeepCopy(); }
+            get { return address.Clone(); }
+            set { address = value.Clone(); }
         }
         public PropertyType PropertyType
         {
@@ -140,13 +140,13 @@
         }
         public Images Images
         {
-            get { return images.DeepCopy(); }
-            set { images = value.DeepCopy(); }
+            get { return images.Clone(); }
+            set { images = value.Clone(); }
         }
         public Amenities Amenities
         {
-            get { return amenities.DeepCopy(); }
-            set { amenities = value.DeepCopy(); }
+            get { return amenities.Clone(); }
+            set { amenities = value.Clone(); }
         }
         public TemperatureControl TemperatureControl
         {
@@ -155,13 +155,13 @@
         }
         public Rooms Rooms
         {
-            get { return rooms.DeepCopy(); }
-            set { rooms = value.DeepCopy(); }
+            get { return rooms.Clone(); }
+            set { rooms = value.Clone(); }
         }
         public Utilities Utilities
         {
-            get { return utilities.DeepCopy(); }
-            set { utilities = value.DeepCopy(); }
+            get { return utilities.Clone(); }
+            set { utilities = value.Clone(); }
         }
 
         //Calculate home size
