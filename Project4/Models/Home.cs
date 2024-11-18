@@ -150,8 +150,8 @@
         }
         public TemperatureControl TemperatureControl
         {
-            get { return temperatureControl.DeepCopy(); }
-            set { temperatureControl = value.DeepCopy(); }
+            get { return temperatureControl.Clone(); }
+            set { temperatureControl = value.Clone(); }
         }
         public Rooms Rooms
         {
