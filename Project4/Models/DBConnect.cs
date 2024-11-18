@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using Microsoft.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Project4.Models
 
         // Home Connection String - used for working from home using SSH Tunneling.
         //String SqlConnectString = $"server=127.0.0.1,5555;Database=FA24_3342_tui78495;User id=tui78495;Password={password}"; // Brandon home connection
-        String SqlConnectString = $"server=127.0.0.1,5555;Database=FA24_3342_tur31103;User id=tu31103;Password={password}"; // Nathan home connection
+        String SqlConnectString = $"server=127.0.0.1,5555;Database=FA24_3342_tur31103;User id=tur31103;Password={password};Encrypt=True;TrustServerCertificate=True;"; // Nathan home connection
 
         SqlConnection myConnectionSql;
         SqlCommand objCmd;
