@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using Microsoft.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,12 +11,15 @@ namespace Project4.Models
 {
     public class DBConnect
     {
-        private static string password = "ingeeze7Ein7";
+        //private static string password = "ingeeze7Ein7"; // Brandon Connection PW
+        private static string password = "chohgui7Thae"; // Nathan Connection PW
         //Main Connection String - used for the published web application and project submissions.
-        String SqlConnectString = $"server=cis-mssql1.temple.edu;Database=FA24_3342_tui78495;User id=tui78495;Password={password}";
+        //String SqlConnectString = $"server=cis-mssql1.temple.edu;Database=FA24_3342_tui78495;User id=tui78495;Password={password}"; // Brandon connection string
+        //String SqlConnectString = $"server=cis-mssql1.temple.edu;Database=FA24_3342_tur31103;User id=tur31103;Password={password}"; // Nathan connection string
 
         // Home Connection String - used for working from home using SSH Tunneling.
-        //String SqlConnectString = $"server=127.0.0.1,5555;Database=FA24_3342_tui78495;User id=tui78495;Password={password}";
+        //String SqlConnectString = $"server=127.0.0.1,5555;Database=FA24_3342_tui78495;User id=tui78495;Password={password}"; // Brandon home connection
+        String SqlConnectString = $"server=127.0.0.1,5555;Database=FA24_3342_tur31103;User id=tur31103;Password={password};Encrypt=True;TrustServerCertificate=True;"; // Nathan home connection
 
         SqlConnection myConnectionSql;
         SqlCommand objCmd;
