@@ -1,0 +1,51 @@
+﻿@using Project4.Models.ViewModels
+@model ShowingViewModel
+
+@{
+Layout = null;
+ViewData["Title"] = "Project 4 - Schedule Showing"
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@ViewData["Title"]</title>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <form asp-controller="Showing" asp-action="ScheduleShowing" methon="POST">
+            <h1>Schedule Showing</h1>
+            <h2>Home Information</h2>
+            <p>
+                Company: @Model.Home.Agent.Company.Name<br/>
+                Agent: @Model.Home.Agent.FirstName @Model.Home.Agent.LastName | Agent Email: @Model.Agent.WorkEmail<br/>
+                Home Address: @Model.Home.Address.ToString()<br/>
+            </p>
+            <h2>Client Information</h2>
+            <span>First Name:</span>
+            <input id="clientFirstName" type="text" />
+            <span>Last Name:</span>
+            <input id="clientLastName" type="text" />
+            <span>Street:</span>
+            <input id="clientStreet" type="text" />
+            <span>City:</span>
+            <input id="clientCity" type="text" />
+            <span>State:</span>
+            <select id="clientState">
+            @foreach(string state in Enum.GetValues(typeof(States)))
+            {
+               <option value="@state">@state</option> 
+            }
+            </select>
+            <span>Zip Code:</span>
+            <input id="clientZipCode" type="text" />
+            <span>Phone Number:</span>
+            <input id="clientPhoneNumber" type="text" />
+            <span>Email:</span>
+            <input id="clientEmail" type="text" />
+            <span>Showing Time: </span>
+            <input id="showingTime" type="date" />
+            <button id="btnSubmitShowing" type="submit">Schedule</button>
+        </form>
+    </body>
+</html>
