@@ -1,0 +1,208 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Project4.Models.Property
+@{
+	DateTime currentDate = DateTime.Now.Date;
+}
+<div class="row">
+	<div class="col-md-3 col-lg-2 sidebar bg-light p-3" id="sidebar">
+		<form asp-controller="Dashboard" asp-action="AgentLogin" method="POST">
+			<input type="submit" id="btnAgentLogin" name="btnAgentLogin" value="Agent Dashboard" class="btn btn-primary w-100 mb-4" />
+		</form>
+		<h5 class="mb-3">Filter Options</h5>
+		<span class="text-warning">@ViewBag.FilterOptionsError</span>
+		<form asp-controller="Dashboard" asp-action="ApplyFilter" method="POST">
+			<div class="filter-group mb-3">
+				<label for="txtFilterCity" class="form-label">City</label>
+				<input tpye="text" id="txtFilterCity" name="txtFilterCity" class="form-control mb-3">
+
+				<label for="drplFilterState" class="form-label">State</label>
+				<select id="drplFilterState" name="drplFilterState" class="from-select mb-3">
+					<option value="AL">Alabama</option>
+					<option value="AK">Alaska</option>
+					<option value="AZ">Arizona</option>
+					<option value="AR">Arkansas</option>
+					<option value="CA">California</option>
+					<option value="CO">Colorado</option>
+					<option value="CT">Connecticut</option>
+					<option value="DE">Delaware</option>
+					<option value="FL">Florida</option>
+					<option value="GA">Georgia</option>
+					<option value="HI">Hawaii</option>
+					<option value="ID">Idaho</option>
+					<option value="IL">Illinois</option>
+					<option value="IN">Indiana</option>
+					<option value="IA">Iowa</option>
+					<option value="KS">Kansas</option>
+					<option value="KY">Kentucky</option>
+					<option value="LA">Louisiana</option>
+					<option value="ME">Maine</option>
+					<option value="MD">Maryland</option>
+					<option value="MA">Massachusetts</option>
+					<option value="MI">Michigan</option>
+					<option value="MN">Minnesota</option>
+					<option value="MS">Mississippi</option>
+					<option value="MO">Missouri</option>
+					<option value="MT">Montana</option>
+					<option value="NE">Nebraska</option>
+					<option value="NV">Nevada</option>
+					<option value="NH">New Hampshire</option>
+					<option value="NJ">New Jersey</option>
+					<option value="NM">New Mexico</option>
+					<option value="NY">New York</option>
+					<option value="NC">North Carolina</option>
+					<option value="ND">North Dakota</option>
+					<option value="OH">Ohio</option>
+					<option value="OK">Oklahoma</option>
+					<option value="OR">Oregon</option>
+					<option value="PA">Pennsylvania</option>
+					<option value="RI">Rhode Island</option>
+					<option value="SC">South Carolina</option>
+					<option value="SD">South Dakota</option>
+					<option value="TN">Tennessee</option>
+					<option value="TX">Texas</option>
+					<option value="UT">Utah</option>
+					<option value="VT">Vermont</option>
+					<option value="VA">Virginia</option>
+					<option value="WA">Washington</option>
+					<option value="WV">West Virginia</option>
+					<option value="WI">Wisconsin</option>
+					<option value="WY">Wyoming</option>
+				</select>
+
+				<p>Property Type</p>
+				<input type="radio" id="singleFamilyType" name="radlFilterPropertyType" value="Single Family" />
+				<label for="singleFamilyType">Single Family</label><br>
+				<input type="radio" id="condoType" name="radlFilterPropertyType" value="Condo" />
+				<label for="condoType">Condo</label><br>
+
+
+
+				<label for="priceRange" class="form-label">Price Range</label>
+				<div class="input-group mb-3" id="priceRange">
+					<span class="input-group-text">$</span>
+					<input type="text" class="form-control" placeholder="Min" id="txtFilterMinPrice" name="txtFilterMinPrice" />
+					<span class="input-group-text">-</span>
+					<input type="text" class="form-control" placeholder="Max" id="txtFilterMaxPrice" name="txtFilterMaxPrice" />
+				</div>
+
+				<label for="minBedroom" class="form-label">Min Bedrooms</label>
+				<input type="text" class="form-control" id="txtMinBedroom" name="txtMinBedroom" />
+
+				<label for="minBathroom" class="form-label">Min Bathroom</label>
+				<input type="text" class="form-control" id="txtMinBathroom" name="txtMinBathroom" />
+
+				<label for="drplFilterAmenitites" class="form-label">Amenities</label>
+				<select id="drplFilterAmenitites" name="drplFilterAmenitites" class="from-select mb-3">
+					<option value="AL">Alabama</option>
+				</select>
+
+			</div>
+		</form>
+	</div>
+
+	<div class="container">
+
+		<div class="row mb-3">
+			<div id="carousel">
+				<img src="" class="d-block w-100" style="height:500px;" alt="Listing Image" />
+				<div id="carouselControls" class="row">
+					<div class="col">
+						<button class="btn btn-primary w-100">Previous Image</button>
+					</div>
+					<div class="col">
+						<button class="btn btn-primary w-100">Next Image</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="d-flex flex-column">
+				<span class="fw-bold">Agent Company</span>
+				<span class="fw-bold">Agent Name</span>
+				<span class="fw-bold">Agent Email</span>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-12">
+				<h3>@Model.AddressStreet, @Model.AddressCity, @Model.AddressState, @Model.AddressZipCode</h3>
+				<p class="mb-1"><strong>Asking Price:</strong> @Model.AskingPrice</p>
+				<p class="mb-1"><strong>Year Built:</strong> @Model.YearBuilt</p>
+				<p class="mb-1"><strong>Total Square Feet:</strong> @Model.PropertySize</p>
+				<p class="mb-1"><strong>Bedrooms:</strong> @Model.NumberOfBedrooms</p>
+				<p class="mb-1"><strong>Bathrooms:</strong> @Model.NumberOfBathrooms</p>
+				<p class="mb-1"><strong>Garage:</strong> @Model.GarageType</p>
+				<p class="mb-1"><strong>Heating System:</strong> @Model.HeatingSystem</p>
+				<p class="mb-1"><strong>Cooling System:</strong> @Model.CoolingSystem</p>
+				<p class="mb-1"><strong>Water Utilities:</strong> @Model.UtilitiesWater</p>
+				<p class="mb-1"><strong>Sewer Utilities:</strong> @Model.UtilitiesSewer</p>
+				<p class="mb-1"><strong>Listed on:</strong> @Model.CreationDate.Date</p>
+				<p class="mb-1"><strong>Days on Market:</strong> @((currentDate-Model.CreationDate.Date).Days)</p>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-12">
+				<h4>Property Description</h4>
+				<p>@Model.PropertyDescription</p>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-12">
+				<h4>Property Amenities</h4>
+				
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-12">
+				<h4>Rooms Information</h4>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Room Type</th>
+							<th>Room Length</th>
+							<th>Room Width</th>
+							<th>Total Sq Ft</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr>
+							<td>roomType</td>
+							<td>roomLength</td>
+							<td>roomWidth</td>
+							<td>TotalSqaureFeet</td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-12 d-flex gap-2">
+				<form method="POST" asp-controller="Dashboard" asp-action="RequestShowing">
+					<input type="hidden" name="PropertyID" value="@Model.PropertyID" />
+					<button type="submit" class="btn btn-primary btn-sm me-2" name="btnRequestShowing" id="btnRequestShowing">Request Showing</button>
+				</form>
+				<form method="POST" asp-controller="Dashboard" asp-action="MakeOffer">
+					<input type="hidden" name="PropertyID" value="@Model.PropertyID" />
+					<button type="submit" class="btn btn-success btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Make Offer</button>
+				</form>
+				<form method="POST" asp-controller="Dashboard" asp-action="Dashboard">
+					<button type="submit" class="btn btn-success btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Make Offer</button>
+				</form>
+			</div>
+		</div>
+
+
+
+
+	</div>
+
+</div>
