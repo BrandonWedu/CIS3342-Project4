@@ -1,5 +1,5 @@
 ﻿@using Project4.Models.ViewModels
-@model ShowingViewModel
+@model ViewShowingsViewModel
 @*WHEN ATTEMPTING TO NAVIGATE TO THIS PAGE YOU MUST PROVIDE A HOME OBJECT IN THE VIEW MODEL*@
 @{
     Layout = null;
@@ -13,7 +13,7 @@
         <meta charset="utf-8" />
     </head>
     <body>
-        <form asp-controller="Showing" asp-action="ScheduleShowing" method="POST">
+        <form asp-controller="Showing" asp-action="ScheduleShowing" asp-route-showingID="@Model.Home.HomeID" method="POST">
             <h1>Schedule Showing</h1>
             <h2>Home Information</h2>
             <p>

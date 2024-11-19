@@ -7,20 +7,46 @@ namespace Project4.Controllers
     //Handles Showing Create and Manage
     public class ShowingController : Controller
     {
-        public IActionResult Index()
+        public IActionResult ViewShowings(ViewShowingsViewModel model)
         {
-            return View();
+            if (model.Agent == null)
+            {
+                return View("Dashboard");
+            }
+            if (model.Showings == null)
+            {
+                model.Showings = ReadShowing.GetShowingsByAgentID(agent.AgentID);
+            }
+            return View(model);
         }
-        public IActionResult ScheduleShowing(ShowingViewModel vm)
+        [HttpPost]
+        public IActionResult ChangeStatus(Agent agent, int showingID, ShowingStatus showingStatus)
         {
-            Showing showing = new Showing(vm.Home, vm.Client, DateTime.Now, vm.Showing.ShowingTime, ShowingStatus.Pending);
-            //call the model to do stuff with showing
-            return View(vm);
+            if(WriteShowing.UpdateShowingStatusByShowingID(showingID, showingStatus))
+            {
+                TempData["SuccessMessage"] = $"{showingID} status updated to {showingStatus.ToString()}";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"{showingID} status NOT updated";
+            }
+            ViewShowingsViewModel model = new ViewShowingsViewModel();
+            model.Agent = agent;
+            return View("ViewShowings", model);
         }
-        public IActionResult ChangeStatus(int showingID, ShowingStatus showingStatus)
+        public IActionResult ScheduleShowing(Agent agent, Home home)
         {
-            //use showingID and showing status to update the showing status
-            return View();
+            ViewShowingsViewModel model = new ViewShowingsViewModel();
+            if (agent != null)
+            {
+                model.Agent = agent;
+            }
+            model.Home = home;
+            return View(model);
+        }
+        public IActionResult ScheduleShowing(ViewShowingsViewModel model)
+        {
+            View("HomeProfile", mogent, HomeID);
         }
     }
 }
