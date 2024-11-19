@@ -14,20 +14,19 @@
     </head>
     <body>
         <h1>Showings</h1>
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <p>@TempData["SuccessMessage"]</p>
-    }
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <p>@TempData["ErrorMessage"]</p>
-    }
-    @if(Model.Showings != null)
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <p>@TempData["SuccessMessage"]</p>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <p>@TempData["ErrorMessage"]</p>
+        }
+        @if(Model.Showings != null)
         {
             @foreach (Showing showing in @Model.Showings.List)
                 {
                 <form asp-controller="Showing" asp-action="ChangeStatus" asp-route-showingID="@showing.ShowingID" method="POST">
-                    <input type="hidden" name="agent" value="@Model.Agent" />
                     <div>
                         <h2>Showing</h2>
                         <span>Home: @showing.Home.Address.ToString()</span><br />

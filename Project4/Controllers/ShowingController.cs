@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project4.Models;
 using Project4.Models.ViewModels;
+using System.Text.Json;
 
 namespace Project4.Controllers
 {
@@ -9,15 +10,17 @@ namespace Project4.Controllers
     {
         public IActionResult ViewShowings(ViewShowingsViewModel model)
         {
-            if (model.Agent == null)
+            string agentJson = HttpContext.Session.GetString("Agent");
+            if (agentJson == null)
             {
                 return View("Dashboard");
             }
+            Agent agent = JsonSerializer.Deserialize<Agent>(agentJson);
             model.Showings = ReadShowing.GetShowingsByAgentID(agent.AgentID);
             return View(model);
         }
         [HttpPost]
-        public IActionResult ChangeStatus(Agent agent, int showingID, ShowingStatus showingStatus)
+        public IActionResult ChangeStatus(int agent, int showingID, ShowingStatus showingStatus)
         {
             if(WriteShowing.UpdateShowingStatusByShowingID(showingID, showingStatus))
             {
@@ -28,7 +31,6 @@ namespace Project4.Controllers
                 TempData["ErrorMessage"] = $"{showingID} status NOT updated";
             }
             ViewShowingsViewModel model = new ViewShowingsViewModel();
-            model.Agent = agent;
             return View("ViewShowings", model);
         }
         public IActionResult ScheduleShowing(ScheduleShowingsViewModel model)
