@@ -1,6 +1,6 @@
 ﻿namespace Project4.Models
 {
-    public class Rooms : ListOfObjects<Room>
+    public class Rooms : ListOfObjects<Room> , ICloneable<Rooms>
     {
         public Rooms() { }
         public Rooms(List<Room> list) { List = list; }
