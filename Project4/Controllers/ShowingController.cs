@@ -17,5 +17,10 @@ namespace Project4.Controllers
             //call the model to do stuff with showing
             return View(vm);
         }
+        public IActionResult ChangeStatus(int showingID, ShowingStatus showingStatus)
+        {
+            //use showingID and showing status to update the showing status
+            return View();
+        }
     }
 }
