@@ -19,8 +19,9 @@ namespace Project4.Controllers
             model.Showings = ReadShowing.GetShowingsByAgentID(agent.AgentID);
             return View(model);
         }
+
         [HttpPost]
-        public IActionResult ChangeStatus(int agent, int showingID, ShowingStatus showingStatus)
+        public IActionResult ChangeStatus(int showingID, ShowingStatus showingStatus)
         {
             if(WriteShowing.UpdateShowingStatusByShowingID(showingID, showingStatus))
             {
@@ -30,13 +31,15 @@ namespace Project4.Controllers
             {
                 TempData["ErrorMessage"] = $"{showingID} status NOT updated";
             }
-            ViewShowingsViewModel model = new ViewShowingsViewModel();
-            return View("ViewShowings", model);
+            return View("ViewShowings", new ViewShowingsViewModel());
         }
+
         public IActionResult ScheduleShowing(ScheduleShowingsViewModel model)
         {
             return View(model);
         }
+
+        [HttpPost]
         public IActionResult ShowingRequest(Agent? agent, Showing showing)
         {
             if(WriteShowing.Create(showing))
