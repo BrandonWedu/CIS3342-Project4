@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Project4.Models;
+using Project4.Models.ViewModels;
 
 namespace Project4.Controllers
 {
@@ -8,6 +10,12 @@ namespace Project4.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+        public IActionResult ScheduleShowing(ShowingViewModel vm)
+        {
+            Showing showing = new Showing(vm.Home, vm.Client, DateTime.Now, vm.Showing.ShowingTime, ShowingStatus.Pending);
+            //call the model to do stuff with showing
+            return View(vm);
         }
     }
 }

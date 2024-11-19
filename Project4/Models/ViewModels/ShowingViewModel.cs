@@ -7,5 +7,6 @@
         public Showing Showing { get; set; }
         public ShowingStatus Status { get; set; }
         public States States { get; set; }
+        public bool Success { get; set; }
     }
 }
