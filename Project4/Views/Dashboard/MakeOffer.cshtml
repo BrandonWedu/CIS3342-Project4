@@ -1,13 +1,9 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@model Project4.Models.Property
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-	List<Property> allProperties = (List<Property>)ViewBag.AllProperties;
-	DateTime currentDate = DateTime.Now.Date;
-
 }
-
 <div class="row">
 	<div class="col-md-3 col-lg-2 sidebar bg-light p-3" id="sidebar">
 		<form asp-controller="Dashboard" asp-action="AgentLogin" method="POST">
@@ -105,49 +101,55 @@
 		</form>
 	</div>
 
+	<div class="container my-4">
+		<form method="POST" asp-controller="Dashboard" asp-action="MakeShowingRequest" asp-route-propertyID="@Model.PropertyID">
+		<span id="ShowingRequestError" class="text-danger">@ViewBag.RequestError</span>
+		<div class="row">
+			<div class="col-md-6 mb-3">
+				<label for="txtShowingFirstName" class="form-label">First Name</label>
+				<input type="text" id="txtShowingFirstName" name="firstName" class="form-control" />
+			</div>
+			<div class="col-md-6 mb-3">
+				<label for="txtShowingLastName" class="form-label">Last Name</label>
+				<input type="text" id="txtShowingLastName" name="lastName" class="form-control" />
+			</div>
+			<div class="col-md-6 mb-3">
+				<label for="txtShowingEmail" class="form-label">Email Address</label>
+				<input type="text" id="txtShowingEmail" name="showingEmail" class="form-control" />
+			</div>
+			<div class="col-md-6 mb-3">
+				<label for="txtShowingPhone" class="form-label">Phone Number</label>
+				<input type="text" id="txtShowingPhone" name="showingPhone" class="form-control" />
+			</div>
 
-	<div class="col-md-9 col-lg-10 p-4" id="listingContent">
-		<div class="container">
 			<div class="row">
-				<div class="col-md-4 mb-4">
-					@foreach (Property currentProperty in allProperties)
-					{
-						<div class="card">
-							<img src="" class="card-img-top" alt="Property Image" />
-							<div class="card-body">
-
-								<h5 class="card-title">Address Goes Here</h5>
-								<p class="card-text">
-									<strong>Type: @currentProperty.PropertyType</strong> <br />
-									<strong>SqFt: @currentProperty.PropertySize</strong> <br />
-									<strong>Bedrooms: @currentProperty.NumberOfBedrooms</strong> <br />
-									<strong>Bathrooms: @currentProperty.NumberOfBathrooms</strong> <br />
-									<strong>Asking Price: @currentProperty.AskingPrice</strong><br />
-									<strong>Days Listed: @((currentDate - currentProperty.CreationDate).Days)</strong> <br />
-								</p>
-								<div class="d-flex gap-2">
-									<form method="POST" asp-controller="Dashboard" asp-action="ViewDetail" asp-route-propertyID="@currentProperty.PropertyID">
-										@*<input type="hidden" name="PropertyID" value="@currentProperty.PropertyID" />*@
-										<button type="submit" class="btn btn-primary btn-sm me-2" name="btnViewDetials" id="btnViewDetails">View Details</button>
-									</form>
-									<form method="POST" asp-controller="Dashboard" asp-action="RequestShowing" asp-route-propertyID="@currentProperty.PropertyID">
-										@*<input type="hidden" name="PropertyID" value="@currentProperty.PropertyID" />*@
-										<button type="submit" class="btn btn-primary btn-sm me-2" name="btnRequestShowing" id="btnRequestShowing">Request Showing</button>
-									</form>
-									<form method="POST" asp-controller="Dashboard" asp-action="MakeOffer" asp-route-propertyID="@currentProperty.PropertyID">
-										@*<input type="hidden" name="PropertyID" value="@currentProperty.PropertyID" />*@
-										<button type="submit" class="btn btn-primary btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Make Offer</button>
-									</form>
-
-								</div>
-							</div>
-
-						</div>
-					}
-
-
+				<div class="col-md-6 mb-3">
+					<label for="datepicker" class="form-label">Best Date For Showing</label>
+					<div class="input-group">
+						<input type="text" id="datepicker" class="form-control" placeholder="Select a date" />
+						<span class="input-group-text">
+							<i class="bi bi-calender"></i>
+						</span>
+					</div>
+				</div>
+				<div class="col-md-6 mb-3">
+					<label for="txtShowingTime" class="form-label">Best Time For Showing</label>
+					<div class="input-group">
+						<input type="text" id="txtShowingTime" class="form-control" />
+						<select id="drplAmPm" class="form-select">
+							<option>AM</option>
+							<option>PM</option>
+						</select>
+					</div>
 				</div>
 			</div>
+
 		</div>
+		<div class="d-flex justify-content-end">
+			<button type="submit" id="btnConfirmShowing" name="submitShowing" class="btn btn-primary me-2">Schedule Showing</button>
+			<a asp-controller="Dashboard" asp-action="Dashboard" id="btnCancelShowing" name="cancelShowing" class="btn btn-primary me-2">Cancel Showing</a>
+		</div>
+		</form>
 	</div>
+
 </div>
