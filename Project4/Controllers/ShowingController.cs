@@ -23,7 +23,7 @@ namespace Project4.Controllers
         [HttpPost]
         public IActionResult ChangeStatus(int showingID, ShowingStatus showingStatus)
         {
-            if(WriteShowing.UpdateShowingStatusByShowingID(showingID, showingStatus))
+            if(WriteShowing.UpdateStatus(showingID, showingStatus))
             {
                 TempData["SuccessMessage"] = $"{showingID} status updated to {showingStatus.ToString()}";
             }
@@ -40,17 +40,28 @@ namespace Project4.Controllers
         }
 
         [HttpPost]
-        public IActionResult ShowingRequest(Agent? agent, Showing showing)
+        public IActionResult ShowingRequest()
         {
-            if(WriteShowing.Create(showing))
+            //maybe temp data 
+            Client client = new Client(
+                
+                );
+            Showing showing = new Showing(
+                //get home
+                client,
+                DateTime.Now,
+                //get showing time
+                ShowingStatus.Pending
+                );
+
+            if(WriteShowing.CreateNew(showing))
             {
-                HomeProfileViewModel model = new HomeProfileViewModel();
-                model.Agent = agent;
+                HomeProfileModel model = new HomeProfileModel();
+                model.Home = showing.Home;
                 return View("HomeProfile", model);
             } else
             {
                 ScheduleShowingsViewModel model = new ScheduleShowingsViewModel();
-                model.Agent = agent;
                 model.Home = showing.Home;
                 //make error text
                 return View("ScheduleShowing", model);
