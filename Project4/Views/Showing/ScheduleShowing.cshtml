@@ -1,5 +1,5 @@
 ﻿@using Project4.Models.ViewModels
-@model ViewShowingsViewModel
+@model ScheduleShowingsViewModel
 @*WHEN ATTEMPTING TO NAVIGATE TO THIS PAGE YOU MUST PROVIDE A HOME OBJECT IN THE VIEW MODEL*@
 @{
     Layout = null;
@@ -13,7 +13,10 @@
         <meta charset="utf-8" />
     </head>
     <body>
-        <form asp-controller="Showing" asp-action="ScheduleShowing" asp-route-showingID="@Model.Home.HomeID" method="POST">
+    @if(Model.Home != null)
+    {
+        <form asp-controller="Showing" asp-action="ShowingRequest" method="POST">
+            <input type="hidden" name="agent" value="@Model.Agent" />
             <h1>Schedule Showing</h1>
             <h2>Home Information</h2>
             <p>
@@ -22,35 +25,45 @@
                 Home Address: @Model.Home.Address.ToString()<br/>
             </p>
             <h2>Client Information</h2>
-            <span>First Name:</span>
-            <input asp-for="Showing.Client.FirstName" id="clientFirstName" type="text" />
-            <span>Last Name:</span>
-            <input asp-for="Showing.Client.LastName" id="clientLastName" type="text" />
-            <span>Street:</span>
-            <input asp-for="Showing.Client.Address.Street" id="clientStreet" type="text" />
-            <span>City:</span>
-            <input asp-for="Showing.Client.Address.City" id="clientCity" type="text" />
-            <span>State:</span>
-            <select  asp-for="Showing.Client.Address.State" id="clientState">
-                @foreach(string state in Enum.GetValues(typeof(States)))
+
+            <label for="clientFirstName">First Name:</label>
+            <input asp-for="Showing.Client.FirstName" id="clientFirstName" class="form-control" />
+
+            <label for="clientLastName">Last Name:</label>
+            <input asp-for="Showing.Client.LastName" id="clientLastName" class="form-control" />
+
+            <label for="clientStreet">Street:</label>
+            <input asp-for="Showing.Client.Address.Street" id="clientStreet" class="form-control" />
+
+            <label for="clientCity">City:</label>
+            <input asp-for="Showing.Client.Address.City" id="clientCity" class="form-control" />
+
+            <label for="clientState">State:</label>
+            <select asp-for="Showing.Client.Address.State" id="clientState" class="form-control">
+                @foreach (string state in Enum.GetValues(typeof(States)))
                 {
-                   <option value="@state">@state</option> 
+                    <option value="@state">@state</option>
                 }
             </select>
-            <span>Zip Code:</span>
-            <input asp-for="Showing.Client.Address.ZipCode" id="clientZipCode" type="text" />
-            <span>Phone Number:</span>
-            <input asp-for="Showing.Client.PhoneNumber" id="clientPhoneNumber" type="text" />
-            <span>Email: </span>
-            <input asp-for="Showing.Client.Email" id="clientEmail" type="text" />
-            <span>Showing Time: </span>
-            <input asp-for="Showing.ShowingTime" id="showingTime" type="date" />
+
+            <label for="clientZipCode">Zip Code:</label>
+            <input asp-for="Showing.Client.Address.ZipCode" id="clientZipCode" class="form-control" />
+
+            <label for="clientPhoneNumber">Phone Number:</label>
+            <input asp-for="Showing.Client.PhoneNumber" id="clientPhoneNumber" class="form-control" />
+
+            <label for="clientEmail">Email:</label>
+            <input asp-for="Showing.Client.Email" id="clientEmail" class="form-control" />
+
+            <label for="showingTime">Showing Time:</label>
+            <input asp-for="Showing.ShowingTime" id="showingTime" type="date" class="form-control" />
+
             <button id="btnSubmitShowing" type="submit">Schedule</button>
-            @*VALIDATION ERRORS / SUCCESS MESSAGE*@
-            @if (Model.Success)
-            {
-                <p>Showing Request Submitted!</p>
-            }
         </form>
-    </body>
+    }
+    else
+    {
+        <p>No Home Provided to make a showing for...</p>
+    }
+</body>
 </html>

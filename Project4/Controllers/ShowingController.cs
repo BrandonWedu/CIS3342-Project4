@@ -13,10 +13,7 @@ namespace Project4.Controllers
             {
                 return View("Dashboard");
             }
-            if (model.Showings == null)
-            {
-                model.Showings = ReadShowing.GetShowingsByAgentID(agent.AgentID);
-            }
+            model.Showings = ReadShowing.GetShowingsByAgentID(agent.AgentID);
             return View(model);
         }
         [HttpPost]
@@ -34,19 +31,25 @@ namespace Project4.Controllers
             model.Agent = agent;
             return View("ViewShowings", model);
         }
-        public IActionResult ScheduleShowing(Agent agent, Home home)
+        public IActionResult ScheduleShowing(ScheduleShowingsViewModel model)
         {
-            ViewShowingsViewModel model = new ViewShowingsViewModel();
-            if (agent != null)
-            {
-                model.Agent = agent;
-            }
-            model.Home = home;
             return View(model);
         }
-        public IActionResult ScheduleShowing(ViewShowingsViewModel model)
+        public IActionResult ShowingRequest(Agent? agent, Showing showing)
         {
-            View("HomeProfile", mogent, HomeID);
+            if(WriteShowing.Create(showing))
+            {
+                HomeProfileViewModel model = new HomeProfileViewModel();
+                model.Agent = agent;
+                return View("HomeProfile", model);
+            } else
+            {
+                ScheduleShowingsViewModel model = new ScheduleShowingsViewModel();
+                model.Agent = agent;
+                model.Home = showing.Home;
+                //make error text
+                return View("ScheduleShowing", model);
+            }
         }
     }
 }

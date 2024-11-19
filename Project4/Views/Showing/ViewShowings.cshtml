@@ -26,7 +26,8 @@
         {
             @foreach (Showing showing in @Model.Showings.List)
                 {
-                <form asp-controller="Showing" asp-action="ChangeStatus" asp-route-agent="@Model.Agent" asp-route-model="@Model" asp-route-showingID="@showing.ShowingID" method="POST">
+                <form asp-controller="Showing" asp-action="ChangeStatus" asp-route-showingID="@showing.ShowingID" method="POST">
+                    <input type="hidden" name="agent" value="@Model.Agent" />
                     <div>
                         <h2>Showing</h2>
                         <span>Home: @showing.Home.Address.ToString()</span><br />
