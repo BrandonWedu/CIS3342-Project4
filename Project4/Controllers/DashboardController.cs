@@ -12,7 +12,7 @@ namespace Project4.Controllers
 			return View();
 		}
 
-		public IActionResult ApplyFilter()
+		public IActionResult ApplyFilter(string txtFilterCity)
 		{
 			return View();
 		}

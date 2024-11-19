@@ -1,36 +1,17 @@
-﻿namespace Project4.Models
+﻿using Microsoft.Data.SqlClient;
+using System.Data;
+
+namespace Project4.Models
 {
-	public class AgentList
+	public class AgentList : ListOfObjects<Agent>
 	{
-		private List<Agent> allAgents = new List<Agent>();
-		private PasswordHasher passwordHasher = new PasswordHasher();
+		public AgentList() { }
 
-		public AgentList()
+		public AgentList(List<Agent> list) { List = list; }
+
+		public AgentList Clone()
 		{
-
-		}
-
-		public List<Agent> GetAllAgents()
-		{
-			return allAgents;
-		}
-
-		public Agent GetAgentByUsername(string username)
-		{
-			List<Agent> currentAgent = new List<Agent>() ;
-			foreach (Agent agent in allAgents)
-			{
-				if (agent.AgentUsername == username)
-				{
-					currentAgent.Add(agent);
-				}
-			}
-			return currentAgent[0];
-		}
-
-		public void CreateNewAgent()
-		{
-
+			return new AgentList(List);
 		}
 
 	}
