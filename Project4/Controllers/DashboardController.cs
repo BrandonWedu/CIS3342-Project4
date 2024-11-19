@@ -22,20 +22,26 @@ namespace Project4.Controllers
 			return View();
 		}
 
-		public IActionResult ViewDetail(int PropertyID)
+		public IActionResult ViewDetail(int propertyID)
 		{
-			Property currentProperty = allProperties.GetPropertyByPropertyID(PropertyID);
+			Property currentProperty = allProperties.GetPropertyByPropertyID(propertyID);
 			return View(currentProperty);
 		}
-		public IActionResult RequestShowing(int PropertyID)
+		public IActionResult RequestShowing(int propertyID)
 		{
-			Property currentProperty = allProperties.GetPropertyByPropertyID(PropertyID);
+			Property currentProperty = allProperties.GetPropertyByPropertyID(propertyID);
 			return View(currentProperty);
 		}
-		public IActionResult MakeOffer(int PropertyID)
+		public IActionResult MakeOffer(int propertyID)
 		{
-			Property currentProperty = allProperties.GetPropertyByPropertyID(PropertyID);
+			Property currentProperty = allProperties.GetPropertyByPropertyID(propertyID);
 			return View(currentProperty);
+		}
+
+		public IActionResult MakeShowingRequest(string message)
+		{
+			ViewBag.ConfirmationMessage = message;
+			return View("Confirmation");
 		}
 	}
 }
