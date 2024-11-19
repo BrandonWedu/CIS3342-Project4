@@ -1,6 +1,6 @@
 ﻿namespace Project4.Models
 {
-	public class Agent
+	public class Agent : ICloneable<Agent>
 	{
 		private int agentID;
 		private string agentUsername;
@@ -136,6 +136,11 @@
 			AgentWorkPhoneNumber = agentPhoneNumber;
 			AgentCompanyName = companyName;
 			SignupDate = singup;
+		}
+
+		public Agent Clone()
+		{
+			return new Agent(AgentID, AgentUsername, AgentPassword, AgentSalt, AgentFirstName, AgentLastName, AgentAddress, WorkAddress, AgentEmail, AgentPhoneNumber, AgentWorkEmail, AgentWorkPhoneNumber, AgentCompanyName, SignupDate);
 		}
 
 
