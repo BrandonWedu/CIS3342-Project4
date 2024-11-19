@@ -1,26 +1,60 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project4.Models;
 using Project4.Models.ViewModels;
+using System.Text.Json;
 
 namespace Project4.Controllers
 {
     //Handles Showing Create and Manage
     public class ShowingController : Controller
     {
-        public IActionResult Index()
+        public IActionResult ViewShowings(ViewShowingsViewModel model)
         {
-            return View();
+            string agentJson = HttpContext.Session.GetString("Agent");
+            if (agentJson == null)
+            {
+                return View("Dashboard");
+            }
+            Agent agent = JsonSerializer.Deserialize<Agent>(agentJson);
+            model.Showings = ReadShowing.GetShowingsByAgentID(agent.AgentID);
+            return View(model);
         }
-        public IActionResult ScheduleShowing(ShowingViewModel vm)
-        {
-            Showing showing = new Showing(vm.Home, vm.Client, DateTime.Now, vm.Showing.ShowingTime, ShowingStatus.Pending);
-            //call the model to do stuff with showing
-            return View(vm);
-        }
+
+        [HttpPost]
         public IActionResult ChangeStatus(int showingID, ShowingStatus showingStatus)
         {
-            //use showingID and showing status to update the showing status
-            return View();
+            if(WriteShowing.UpdateShowingStatusByShowingID(showingID, showingStatus))
+            {
+                TempData["SuccessMessage"] = $"{showingID} status updated to {showingStatus.ToString()}";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"{showingID} status NOT updated";
+            }
+            return View("ViewShowings", new ViewShowingsViewModel());
+        }
+
+        public IActionResult ScheduleShowing(ScheduleShowingsViewModel model)
+        {
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult ShowingRequest(Agent? agent, Showing showing)
+        {
+            if(WriteShowing.Create(showing))
+            {
+                HomeProfileViewModel model = new HomeProfileViewModel();
+                model.Agent = agent;
+                return View("HomeProfile", model);
+            } else
+            {
+                ScheduleShowingsViewModel model = new ScheduleShowingsViewModel();
+                model.Agent = agent;
+                model.Home = showing.Home;
+                //make error text
+                return View("ScheduleShowing", model);
+            }
         }
     }
 }
