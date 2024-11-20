@@ -18,7 +18,7 @@ namespace Project4.Models
 
 			foreach (DataRow row in agentContactData.Rows)
 			{
-				allAgentPersonalInfo.Add(new AgentPersonalInformation((int)row["AgentInfoID"], (int)row["AgentID"], row["FirstName"].ToString(), row["LastName"].ToString(), (Address)row["HomeAddress"], row["PhoneNumber"].ToString(), row["Email"].ToString()));
+				allAgentPersonalInfo.Add(new AgentPersonalInformation((int)row["AgentInfoID"], (int)row["AgentID"], row["FirstName"].ToString(), row["LastName"].ToString(), Serializer.DeserializeData<Address>((byte[])row["HomeAddress"]), row["PhoneNumber"].ToString(), row["Email"].ToString()));
 			}
 		}
 

@@ -18,7 +18,7 @@ namespace Project4.Models
 
 			foreach (DataRow row in agentContactData.Rows)
 			{
-				allCompanies.Add(new Company((int)row["CompanyID"], row["CompanyName"].ToString(), (Address)row["CompanyAddress"], row["PhoneNumber"].ToString(), row["Email"].ToString()));
+				allCompanies.Add(new Company((int)row["CompanyID"], row["CompanyName"].ToString(), Serializer.DeserializeData<Address>((byte[])row["CompanyAddress"]), row["PhoneNumber"].ToString(), row["Email"].ToString()));
 			}
 		}
 

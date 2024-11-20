@@ -27,21 +27,5 @@ namespace Project4.Controllers
 			Property currentProperty = allProperties.GetPropertyByPropertyID(propertyID);
 			return View(currentProperty);
 		}
-		public IActionResult RequestShowing(int propertyID)
-		{
-			Property currentProperty = allProperties.GetPropertyByPropertyID(propertyID);
-			return View(currentProperty);
-		}
-		public IActionResult MakeOffer(int propertyID)
-		{
-			Property currentProperty = allProperties.GetPropertyByPropertyID(propertyID);
-			return View(currentProperty);
-		}
-
-		public IActionResult MakeShowingRequest(string message)
-		{
-			ViewBag.ConfirmationMessage = message;
-			return View("Confirmation");
-		}
 	}
 }
