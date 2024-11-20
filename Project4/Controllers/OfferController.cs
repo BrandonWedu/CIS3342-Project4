@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project4.Models;
+using Project4.Models.ViewModels;
 
 namespace Project4.Controllers
 {
@@ -8,18 +9,25 @@ namespace Project4.Controllers
     {
 		private PropertyList allProperties = new PropertyList();
         private ReadOffers allOffers = new ReadOffers();
-        //private WriteOffers newOffer = new WriteOffers();
-		public IActionResult MakeOffer(int propertyID)
+        private MakeOfferViewModel makeOfferModel = new MakeOfferViewModel();
+        private WriteOffer newOffer = new WriteOffer();
+        private WriteContingencies newContingencies = new WriteContingencies();
+		public IActionResult MakeOffer(Home currentHome)
         {
-            Property currentProperty = allProperties.GetPropertyByPropertyID(propertyID);
-            return View(currentProperty);
+            makeOfferModel.home = ReadHome.GetHomeByID((int)currentHome.HomeID);
+            return View(makeOfferModel);
         }
 
-        public IActionResult ViewOffer(int offerID)
+        public IActionResult AddContingency(string contingency, MakeOfferViewModel model)
         {
-            allOffers = new ReadOffers();
-            OfferList offers = allOffers.GetOfferByOfferID(offerID);
-            return View(offers);
+            model.contingencies.Add(new Contingency(contingency));
+            return View("MakeOffer", model);
+        }
+
+        public IActionResult RemoveContingency(int index, MakeOfferViewModel model)
+        {
+            model.contingencies.RemoveAtIndex(index);
+            return View("MakeOffer", model);
         }
 
         public IActionResult AllOffers()
@@ -28,15 +36,25 @@ namespace Project4.Controllers
             return View(allOffers.GetAllOffers());
         }
 
-        public IActionResult UpdateOffer(int offerID, OfferStatus newStatus)
+        public IActionResult UpdateOffer(Offer currentOffer, OfferStatus newStatus)
         {
 
             return View();
         }
 
-        public IActionResult FinalizeOffer()
+        public IActionResult FinalizeOffer(MakeOfferViewModel model)
         {
-            return View();
+
+            //Create a new client with info from the form
+            //Get the clientID from the newly created client
+            //Create a new offer with info from the form
+            //Get the offerID from the newly created offer
+            //Create any contingencies with info from the model
+            ViewBag.Message = "Congraulations! Your offer was sucessfully placed!";
+            model.offer.Home = model.home;
+			newOffer.CreateNewOffer(model.offer);
+            newContingencies.CreateNewContingencies(model.contingencies, ReadOffers.GetOfferIDByClientHomeID());
+            return View("Confirmation");
         }
     }
 }

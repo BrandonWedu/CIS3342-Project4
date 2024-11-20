@@ -1,4 +1,4 @@
-﻿@model Project4.Models.Property
+﻿@model Project4.Models.ViewModels.MakeOfferViewModel
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -6,7 +6,7 @@
 }
 <div class="container my-4">
 	<span class="text-danger">@ViewBag.OfferError</span>
-	<form asp-controller="Offer" asp-action="ApplyFilter" method="POST">
+	<form asp-controller="Offer" asp-action="FinalizeOffer" method="POST">
 		<div class="row mb-3">
 			<div class="col-md-6">
 				<label for="txtOfferFirstName" class="form-label">First Name</label>
