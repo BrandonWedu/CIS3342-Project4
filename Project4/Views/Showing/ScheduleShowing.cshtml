@@ -16,12 +16,11 @@
     @if(Model.Home != null)
     {
         <form asp-controller="Showing" asp-action="ShowingRequest" method="POST">
-            <input type="hidden" name="agent" value="@Model.Agent" />
             <h1>Schedule Showing</h1>
             <h2>Home Information</h2>
             <p>
-                Company: @Model.Home.Agent.Company.Name<br/>
-                Agent: @Model.Home.Agent.FirstName @Model.Home.Agent.LastName | Agent Email: @Model.Home.Agent.WorkEmail<br/>
+                Company: @Model.Home.Agent.WorkCompany.CompanyName<br/>
+                Agent: @Model.Home.Agent.PersonalInformation.FirstName @Model.Home.Agent.PersonalInformation.LastName | Agent Email: @Model.Home.Agent.AgentContactInfo.Email<br/>
                 Home Address: @Model.Home.Address.ToString()<br/>
             </p>
             <h2>Client Information</h2>
@@ -33,13 +32,13 @@
             <input asp-for="Showing.Client.LastName" id="clientLastName" class="form-control" />
 
             <label for="clientStreet">Street:</label>
-            <input asp-for="Showing.Client.Address.Street" id="clientStreet" class="form-control" />
+            <input asp-for="Showing.Client.ClientAddress.Street" id="clientStreet" class="form-control" />
 
             <label for="clientCity">City:</label>
-            <input asp-for="Showing.Client.Address.City" id="clientCity" class="form-control" />
+            <input asp-for="Showing.Client.ClientAddress.City" id="clientCity" class="form-control" />
 
             <label for="clientState">State:</label>
-            <select asp-for="Showing.Client.Address.State" id="clientState" class="form-control">
+            <select asp-for="Showing.Client.ClientAddress.State" id="clientState" class="form-control">
                 @foreach (string state in Enum.GetValues(typeof(States)))
                 {
                     <option value="@state">@state</option>
@@ -47,7 +46,7 @@
             </select>
 
             <label for="clientZipCode">Zip Code:</label>
-            <input asp-for="Showing.Client.Address.ZipCode" id="clientZipCode" class="form-control" />
+            <input asp-for="Showing.Client.ClientAddress.ZipCode" id="clientZipCode" class="form-control" />
 
             <label for="clientPhoneNumber">Phone Number:</label>
             <input asp-for="Showing.Client.PhoneNumber" id="clientPhoneNumber" class="form-control" />
