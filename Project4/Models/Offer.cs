@@ -6,13 +6,18 @@
 		Rejected,
 		Accepted
 	}
+
+	public enum TypeOfSale
+	{
+		
+	}
 	public class Offer : ICloneable<Offer>
 	{
 		private int offerID;
-		private int homeID;
-		private int clientID;
+		private Home home;
+		private Client client;
 		private decimal amount;
-		private string typeOfSale;
+		private TypeOfSale typeOfSale;
 		private bool sellHomePrior;
 		private DateTime moveInDate;
 		private OfferStatus status;
@@ -23,16 +28,16 @@
 			set { offerID = value; }
 		}
 
-		public int HomeID
+		public Home Home
 		{
-			get { return homeID; }
-			set { homeID = value; }
+			get { return home; }
+			set { home = value; }
 		}
 
-		public int ClientID
+		public Client Client
 		{
-			get { return clientID; }
-			set { clientID = value; }
+			get { return client; }
+			set { client = value; }
 		}
 
 		public decimal Amount
@@ -41,7 +46,7 @@
 			set { amount = value; }
 		}
 
-		public string TypeOfSale
+		public TypeOfSale TypeOfSale
 		{
 			get { return typeOfSale; }
 			set { typeOfSale = value; }
@@ -65,11 +70,11 @@
 			set { status = value; }
 		}
 
-		public Offer(int id, int homeID, int clientID, decimal offerAmount, string saleType, bool sellHome, DateTime moveInDate, OfferStatus status)
+		public Offer(int id, Home home, Client client, decimal offerAmount, TypeOfSale saleType, bool sellHome, DateTime moveInDate, OfferStatus status)
 		{
 			OfferID = id;
-			HomeID = homeID;
-			ClientID = clientID;
+			Home = home;
+			Client = client;
 			Amount = offerAmount;
 			TypeOfSale = saleType;
 			SellHomePrior = sellHome;
@@ -79,7 +84,7 @@
 
 		public Offer Clone()
 		{
-			return new Offer(OfferID, HomeID, ClientID, Amount, TypeOfSale, SellHomePrior, MoveInDate, Status);
+			return new Offer(OfferID, Home, Client, Amount, TypeOfSale, SellHomePrior, MoveInDate, Status);
 		}
 	}
 }
