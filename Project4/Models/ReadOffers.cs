@@ -18,7 +18,7 @@ namespace Project4.Models
 
 			foreach (DataRow row in agentContactData.Rows)
 			{
-				allOffers.Add(new Offer((int)row["OfferID"], (int)row["HomeID"], (int)row["ClientID"], (decimal)row["Amount"], row["TypeOfSale"].ToString(), (bool)row["SellHomePrior"], (DateTime)row["MoveInDate"], (OfferStatus)Enum.Parse(typeof(OfferStatus), (string)row["Status"])));
+				allOffers.Add(new Offer((int)row["OfferID"], ReadHome.GetHomeByID((int)row["HomeID"]), ReadClient.GetClientByID((int)row["ClientID"]), (decimal)row["Amount"], (TypeOfSale)Enum.Parse(typeof(TypeOfSale), (string)row["TypeOfSale"]), (bool)row["SellHomePrior"], (DateTime)row["MoveInDate"], (OfferStatus)Enum.Parse(typeof(OfferStatus), (string)row["Status"])));
 			}
 		}
 

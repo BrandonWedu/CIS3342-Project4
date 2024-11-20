@@ -8,6 +8,7 @@ namespace Project4.Controllers
     {
 		private PropertyList allProperties = new PropertyList();
         private ReadOffers allOffers = new ReadOffers();
+        //private WriteOffers newOffer = new WriteOffers();
 		public IActionResult MakeOffer(int propertyID)
         {
             Property currentProperty = allProperties.GetPropertyByPropertyID(propertyID);
@@ -30,6 +31,11 @@ namespace Project4.Controllers
         public IActionResult UpdateOffer(int offerID, OfferStatus newStatus)
         {
 
+            return View();
+        }
+
+        public IActionResult FinalizeOffer()
+        {
             return View();
         }
     }

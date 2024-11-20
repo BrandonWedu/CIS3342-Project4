@@ -1,5 +1,97 @@
-﻿@*
+﻿@model Project4.Models.Property
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
+<div class="container my-4">
+	<span class="text-danger">@ViewBag.OfferError</span>
+	<form asp-controller="Offer" asp-action="ApplyFilter" method="POST">
+		<div class="row mb-3">
+			<div class="col-md-6">
+				<label for="txtOfferFirstName" class="form-label">First Name</label>
+				<input type="text" id="txtOfferFirstName" name="txtOfferFirstName" class="form-control" />
+			</div>
+			<div class="col-md-6">
+				<label for="txtOfferLastName" class="form-label">Last Name</label>
+				<input type="text" id="txtOfferLastName" name="txtOfferLastName" class="form-control" />
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-md-6">
+				<label for="txtOfferEmail" class="form-label">Email</label>
+				<input type="email" id="txtOfferEmail" name="txtOfferEmail" class="form-control" />
+			</div>
+			<div class="col-md-6">
+				<label for="txtOfferPhone" class="form-label">Phone Number</label>
+				<input type="tel" id="txtOfferPhone" name="txtOfferPhone" class="form-control" />
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-md-6">
+				<label for="txtOfferAmount" class="form-label">Offer Amount</label>
+				<input type="text" id="txtOfferAmount" name="txtOfferAmount" class="form-control" />
+			</div>
+			<div class="col-md-6">
+				<label for="drplOfferType" class="form-label">Offer Type</label>
+				<select id="drplOfferType" name="drplOfferType" class="form-control">
+					<option>Test</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-12">
+				<label for="txtOfferContingency" class="form-label">Offer Contingency</label>
+				<input type="text" id="txtOfferContingency" name="txtOfferContingency" class="form-control mb-2" />
+				<button id="btnAddContingency" type="button" class="btn btn-primary">Add Contingency</button>
+
+				<table class="table mt-3">
+					<thead>
+						<tr>
+							<th>Contingency</th>
+							<th>Remove Contingency</th>
+						</tr>
+					</thead>
+					<tbody>
+						@*
+						@foreach (Contingency item in Model.NewContingecnies.List)
+						{
+						<tr>
+						<td>@item.Contingency</td>
+						<td>
+						<button type="button" class="btn btn-danger">Remove Contingency</button>
+						</td>
+						</tr>
+						}
+
+						*@
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-md-6">
+				<label class="form-label">Selling Current Home?</label>
+				<div>
+					<input type="radio" id="yes" name="SellCurrentHome" value="true" class="form-check-input" />
+					<label for="yes" class="form-check-label">Yes</label>
+					<input type="radio" id="no" name="SellCurrentHome" value="false" class="form-check-input" />
+					<label for="no" class="form-check-label">No</label>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<label for="moveInDate" class="form-label">Move-In Date</label>
+				<input type="date" id="moveInDate" name="moveInDate" class="form-control" />
+			</div>
+		</div>
+
+		<div class="d-flex justify-content-end mt-4">
+			<button type="submit" class="btn btn-success me-2">Submit Offer</button>
+			<button type="reset" class="btn btn-secondary">Cancel Offer</button>
+		</div>
+	</form>
+</div>

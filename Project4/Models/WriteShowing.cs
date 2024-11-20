@@ -32,7 +32,7 @@ namespace Project4.Models
 
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@firstName", showing.Client.FirstName, SqlDbType.VarChar, 50));
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@lastName", showing.Client.LastName, SqlDbType.VarChar, 50));
-            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<byte[]>("@clientAddress", Serializer.SerializeData<Address>(showing.Client.Address), SqlDbType.VarBinary));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<byte[]>("@clientAddress", Serializer.SerializeData<Address>(showing.Client.ClientAddress), SqlDbType.VarBinary));
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@clientPhoneNumber", showing.Client.PhoneNumber, SqlDbType.VarChar, 50));
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@clientEmail", showing.Client.Email, SqlDbType.VarChar, 50));
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@homeID", (int)showing.Home.HomeID, SqlDbType.Int, 8));
