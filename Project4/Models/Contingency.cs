@@ -4,7 +4,7 @@
 	{
 		private int contingencyID;
 		private int offerID;
-		private string contingecny;
+		private string contingency;
 
 		public int ContingencyID
 		{
@@ -18,22 +18,27 @@
 			set { offerID = value; }
 		}
 
-		public string Contingecny
+		public string OfferContingency
 		{
-			get { return contingecny; }
-			set { contingecny = value; }
+			get { return contingency; }
+			set { contingency = value; }
 		}
 
 		public Contingency(int id, int offerID, string contingency)
 		{
 			ContingencyID = id;
 			OfferID = offerID;
-			Contingecny = contingency;
+			OfferContingency = contingency;
+		}
+
+		public Contingency(string contingency)
+		{
+			OfferContingency = contingency;
 		}
 
 		public Contingency Clone()
 		{
-			return new Contingency(ContingencyID, OfferID, Contingecny);
+			return new Contingency(ContingencyID, OfferID, OfferContingency);
 		}
 
 	}
