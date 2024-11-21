@@ -3,41 +3,53 @@ using System.Data;
 
 namespace Project4.Models
 {
-	public class ReadContingencies
-	{
-		private DBConnect databaseHandler = new DBConnect();
-		private ContingencyList allContingencies = new ContingencyList();
+    public class ReadContingencies
+    {
+        private DBConnect databaseHandler = new DBConnect();
+        private Contingencies allContingencies = new Contingencies();
 
-		public ReadContingencies()
-		{
-			allContingencies = new ContingencyList();
-			SqlCommand sqlCommand = new SqlCommand();
-			sqlCommand.CommandType = CommandType.StoredProcedure;
-			sqlCommand.CommandText = "SelectAllContingencies";
-			DataTable agentContactData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
+        internal static Contingencies ReadAllContingencies()
+        {
 
-			foreach (DataRow row in agentContactData.Rows)
-			{
-				allContingencies.Add(new Contingency((int)row["ContingencyID"], (int)row["OfferID"], row["Contingency"].ToString()));
-			}
-		}
+            DBConnect databaseHandler = new DBConnect();
+            Contingencies allContingencies = new Contingencies();
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.CommandText = "SelectAllContingencies";
+            DataTable agentContactData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
 
-		public ContingencyList GetAllOffers()
-		{
-			return allContingencies;
-		}
+            foreach (DataRow row in agentContactData.Rows)
+            {
+                allContingencies.Add(new Contingency((int)row["ContingencyID"], (int)row["OfferID"], row["Contingency"].ToString()));
+            }
 
-		public ContingencyList GetContingenciesByOfferID(int id)
-		{
-			ContingencyList selectedContingencies = new ContingencyList();
-			foreach (Contingency currentContingency in allContingencies.List)
-			{
-				if (currentContingency.OfferID == id)
-				{
-					selectedContingencies.Add(currentContingency);
-				}
-			}
-			return selectedContingencies;
-		}
-	}
+            return allContingencies;
+        }
+
+
+        internal static Contingencies GetContingenciesByOfferID(int id)
+        {
+            DBConnect databaseHandler = new DBConnect();
+            Contingencies allContingencies = new Contingencies();
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.CommandText = "SelectAllContingencies";
+            DataTable agentContactData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
+
+            foreach (DataRow row in agentContactData.Rows)
+            {
+                allContingencies.Add(new Contingency((int)row["ContingencyID"], (int)row["OfferID"], row["Contingency"].ToString()));
+            }
+
+            Contingencies selectedContingencies = new Contingencies();
+            foreach (Contingency currentContingency in allContingencies.List)
+            {
+                if (currentContingency.OfferID == id)
+                {
+                    selectedContingencies.Add(currentContingency);
+                }
+            }
+            return selectedContingencies;
+        }
+    }
 }
