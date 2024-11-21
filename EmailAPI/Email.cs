@@ -41,6 +41,25 @@ namespace EmailAPI
                 return false;
             }
         }
+        public Boolean SendMail()
+        {
+            try
+            {
+                objMail.To.Add(this.toAddress);
+                objMail.From = this.fromAddress;
+                objMail.Subject = this.subject;
+                objMail.Body = this.messageBody;
+                objMail.IsBodyHtml = this.isHTMLBody;
+                objMail.Priority = this.priority;
+                SmtpClient smtpMailClient = new SmtpClient(this.mailHost);
+                smtpMailClient.Send(objMail);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public String Recipient
         {
             get { return this.toAddress.ToString(); }
