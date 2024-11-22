@@ -6,6 +6,6 @@
 
 		public Offer offer { get; set; }
 
-		public ContingencyList contingencies { get; set; }
+		public Contingencies contingencies { get; set; }
 	}
 }

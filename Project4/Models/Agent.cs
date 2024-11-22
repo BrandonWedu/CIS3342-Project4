@@ -11,7 +11,11 @@ namespace Project4.Models
 		private Company workCompany;
 		private AgentContact agentContactInfo;
 		private AgentPersonalInformation personalInformation;
+<<<<<<< Updated upstream
 		private AgentSecurityList agentSecurityQuestions;
+=======
+		private AgentSecuritys agentSecuirtyQuestions;
+>>>>>>> Stashed changes
 
 		public int AgentID
 		{
@@ -54,13 +58,17 @@ namespace Project4.Models
 			set { personalInformation = value; }
 		}
 
+<<<<<<< Updated upstream
 		public AgentSecurityList AgentSecurityQuestions
+=======
+		public AgentSecuritys AgentSecuirtyQuestions
+>>>>>>> Stashed changes
 		{
 			get { return agentSecurityQuestions; }
 			set { agentSecurityQuestions = value; }
 		}
 
-		public Agent(int id, string username, string password, string salt, Company work, AgentContact contactInfo, AgentPersonalInformation agentInfo, AgentSecurityList questions)
+		public Agent(int id, string username, string password, string salt, Company work, AgentContact contactInfo, AgentPersonalInformation agentInfo, AgentSecuritys questions)
 		{
 			AgentID = id;
 			AgentUsername = username;

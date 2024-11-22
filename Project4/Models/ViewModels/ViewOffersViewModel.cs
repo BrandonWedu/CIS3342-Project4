@@ -2,6 +2,6 @@
 {
 	public class ViewOffersViewModel
 	{
-		public OfferList allOffers { get; set; }
+		public Offers allOffers { get; set; }
 	}
 }

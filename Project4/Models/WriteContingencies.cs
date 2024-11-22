@@ -7,7 +7,7 @@ namespace Project4.Models
 	{
 		private DBConnect databaseHandler = new DBConnect();
 
-		public void CreateNewContingencies(ContingencyList contingencies, int offerID)
+		public void CreateNewContingencies(Contingencies contingencies, int offerID)
 		{
 			foreach (Contingency currentContingency in contingencies.List)
 			{
