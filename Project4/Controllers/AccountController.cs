@@ -57,7 +57,7 @@ namespace Project4.Controllers
 
 
                 //Create Agent PersonalInfo
-                Address personalAddress = new Address(model.Street, model.City, model.State, model.Zip);
+                Address personalAddress = new Address(model.Street, model.City, Enum.Parse<States>(model.WorkState), model.Zip);
                 model.personalInformation = new AgentPersonalInformation(actualAgentID, model.FirstName, model.LastName, personalAddress, model.Phone, model.Email);
                 int personalInfoID = WriteAgentPersonalInformation.CreateNew(model.personalInformation);
                 model.personalInformation.AgentInfoID = personalInfoID;
