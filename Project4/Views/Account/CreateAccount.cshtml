@@ -1,5 +1,116 @@
-﻿@*
+﻿@model Project4.Models.ViewModels.CreateAccountViewModel;
+
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+
 }
+
+<div>
+    <form asp-controller="Account" asp-action="FinalizeAccountCreation" method="POST">
+        <h4>Account Info</h4>
+        <label asp-for="Username">Username:</label>
+        <input asp-for="Username" id="username" type="text" />
+
+        <label asp-for="Password">Password:</label>
+        <input asp-for="Password" id="password" type="password" />
+
+        <h4>Agent Personal Info</h4>
+        <label asp-for="FirstName">First Name:</label>
+        <input asp-for="FirstName" id="fName" type="text" />
+
+        <label asp-for="LastName">Last Name:</label>
+        <input asp-for="LastName" id="lName" type="text" />
+
+        <label asp-for="Street">Street:</label>
+        <input asp-for="Street" id="street" type="text" />
+
+        <label asp-for="City">City:</label>
+        <input asp-for="City" id="city" type="text" />
+
+        <label asp-for="State">State:</label>
+        <select asp-for="State" id="workstate">
+            @foreach (var state in Enum.GetNames(typeof(States)))
+            {
+                <option value="@state">@state</option>
+            }
+        </select>
+
+        <label asp-for="Zip">Zip Code:</label>
+        <input asp-for="Zip" id="zip" type="text" />
+
+        <label asp-for="Phone">Personal Phone:</label>
+        <input asp-for="Phone" id="phone" type="text" />
+
+        <label asp-for="Email">Email:</label>
+        <input asp-for="Email" id="email" type="text" />
+
+        <h4>Agent Work Contact Info</h4>
+        <label asp-for="WorkStreet">Street:</label>
+        <input asp-for="WorkStreet" id="workstreet" type="text" />
+
+        <label asp-for="WorkCity">City:</label>
+        <input asp-for="WorkCity" id="workcity" type="text" />
+
+        <label asp-for="WorkState">State:</label>
+        <select asp-for="WorkState" id="workstate">
+            @foreach (var state in Enum.GetNames(typeof(States)))
+            {
+                <option value="@state">@state</option>
+            }
+        </select>
+
+        <label asp-for="WorkZip">Zip Code:</label>
+        <input asp-for="WorkZip" id="workzip" type="text" />
+
+        <label asp-for="WorkPhone">Work Phone:</label>
+        <input asp-for="WorkPhone" id="workphone" type="text" />
+
+        <label asp-for="WorkEmail">Work Email:</label>
+        <input asp-for="WorkEmail" id="workemail" type="text" />
+
+        <h4>Company Info</h4>
+        <label asp-for="CompanyName">Name:</label>
+        <input asp-for="CompanyName" id="companyname" type="text" />
+
+        <label asp-for="CompanyStreet">Street:</label>
+        <input asp-for="CompanyStreet" id="companystreet" type="text" />
+
+        <label asp-for="CompanyCity">City:</label>
+        <input asp-for="CompanyCity" id="comapanycity" type="text" />
+
+        <label asp-for="CompanyState">State:</label>
+        <select asp-for="CompanyState" id="companystate">
+            @foreach (var state in Enum.GetNames(typeof(States)))
+            {
+                <option value="@state">@state</option>
+            }
+        </select>
+
+        <label asp-for="CompanyZip">Zip Code:</label>
+        <input asp-for="CompanyZip" id="companyzip" type="text" />
+
+        <label asp-for="CompanyPhone">Company Phone:</label>
+        <input asp-for="CompanyPhone" id="companyphone" type="text" />
+
+        <label asp-for="CompanyEmail">Company Email:</label>
+        <input asp-for="CompanyEmail" id="companyemail" type="text" />
+
+        <h4>Security Questions</h4>
+        <label asp-for="QuestionOne">@SecurityQuestionList.GetAllQuestions()[0]</label>
+        <input asp-for="AnswerOne" id="answerone" type="text" />
+
+        <label asp-for="QuestionTwo">@SecurityQuestionList.GetAllQuestions()[1]</label>
+        <input asp-for="AnswerTwo" id="answertwo" type="text" />
+
+        <label asp-for="QuestionThree">@SecurityQuestionList.GetAllQuestions()[2]</label>
+        <input asp-for="AnswerThree" id="answerthree" type="text" />
+
+        <button type="submit" name="createaccount">Create Account</button>
+        <a>Cancel</a>
+    </form>
+</div>
+
+
+
