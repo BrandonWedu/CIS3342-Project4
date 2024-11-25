@@ -12,12 +12,12 @@ namespace Project4.Models
             AgentContacts allAgentContact = new AgentContacts();
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "SelectAllAgentContact";
+            sqlCommand.CommandText = "P4_SelectAgentContacts";
             DataTable agentContactData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
 
             foreach (DataRow row in agentContactData.Rows)
             {
-                allAgentContact.Add(new AgentContact((int)row["AgentContactID"], (int)row["AgentID"], Serializer.DeserializeData<Address>((byte[])row["WorkAddress"]), row["PhoneNumber"].ToString(), row["Email"].ToString()));
+                allAgentContact.Add(new AgentContact((int)row["AgentContactID"], (int)row["AgentID"], Serializer.DeserializeData<Address>((byte[])row["WorkAddress"]), row["WorkPhoneNumber"].ToString(), row["WorkEmail"].ToString()));
             }
 
             return allAgentContact;
@@ -30,12 +30,12 @@ namespace Project4.Models
             AgentContacts allAgentContact = new AgentContacts();
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "SelectAllAgentContact";
+            sqlCommand.CommandText = "P4_SelectAgentContacts";
             DataTable agentContactData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
 
             foreach (DataRow row in agentContactData.Rows)
             {
-                allAgentContact.Add(new AgentContact((int)row["AgentContactID"], (int)row["AgentID"], Serializer.DeserializeData<Address>((byte[])row["WorkAddress"]), row["PhoneNumber"].ToString(), row["Email"].ToString()));
+                allAgentContact.Add(new AgentContact((int)row["AgentContactID"], (int)row["AgentID"], Serializer.DeserializeData<Address>((byte[])row["WorkAddress"]), row["WorkPhoneNumber"].ToString(), row["WorkEmail"].ToString()));
             }
             AgentContacts agentContact = new AgentContacts();
 

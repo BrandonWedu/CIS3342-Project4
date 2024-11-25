@@ -1,5 +1,6 @@
+using System.Runtime.Serialization;
 var builder = WebApplication.CreateBuilder(args);
-
+AppContext.SetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", true);
 // Add session
 builder.Services.AddSession(options =>
 {
