@@ -10,7 +10,6 @@ namespace Project4.Controllers
     public class AccountController : Controller
     {
         private PasswordHasher hasher = new PasswordHasher();
-        // Going to need to make some ViewModels to include all the information I need
         public IActionResult Login(LoginViewModel model)
         {
             return View("Login");
