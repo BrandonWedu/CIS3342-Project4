@@ -2,22 +2,22 @@
 {
     public class CreateAccountViewModel
     {
-        public Agent agent {get; set; }
+        public Agent agent { get; set; }
 
         public AgentContact contact { get; set; }
 
         public AgentPersonalInformation personalInformation { get; set; }
 
-        public Company company { get; set; }
+        public Company agentCompany { get; set; }
 
 
-        public Address address { get; set;}
+        public Address address { get; set; }
 
         public PasswordHasher passwordHasher { get; set; }
 
         public SecurityQuestionList securityQuestionList = new SecurityQuestionList();
 
-        public AgentSecurity agentQuestionOne {  get; set; }
+        public AgentSecurity agentQuestionOne { get; set; }
         public AgentSecurity agentQuestionTwo { get; set; }
         public AgentSecurity agentQuestionThree { get; set; }
 
@@ -44,13 +44,9 @@
         public string WorkEmail { get; set; }
 
         // Company Info
-        public string CompanyName { get; set; }
-        public string CompanyStreet { get; set; }
-        public string CompanyCity { get; set; }
-        public string CompanyState { get; set; }
-        public string CompanyZip { get; set; }
-        public string CompanyPhone { get; set; }
-        public string CompanyEmail { get; set; }
+
+        public int Company { get; set; }
+
 
         // Security Question Info
 
@@ -58,7 +54,7 @@
         public string QuestionTwo { get; set; }
         public string QuestionThree { get; set; }
         public string AnswerOne { get; set; }
-        public string AnswerTwo { get;set; }
-        public string AnswerThree { get;set; }
+        public string AnswerTwo { get; set; }
+        public string AnswerThree { get; set; }
     }
 }

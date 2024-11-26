@@ -18,7 +18,7 @@ namespace Project4.Models
             {
                 int agentID = (int)row["AgentID"];
                 int companyID = (int)row["CompanyID"];
-                allAgents.Add(new Agent((int)row["AgentID"], row["AgentUsername"].ToString(), row["AgentPassword"].ToString(), row["AgentPasswordSalt"].ToString(), ReadCompanies.GetCompanyByCompanyID(companyID).List[0], ReadAgentContact.GetAgentContactByAgentID(agentID).List[0], ReadAgentPersonalInformation.GetAgentPeronsalInformationByAgentID(agentID).List[0], ReadAgentSecurity.GetAgentSecurityQuestionsByAgentID(agentID)));
+                allAgents.Add(new Agent((int)row["AgentID"], row["AgentUsername"].ToString(), row["AgentPassword"].ToString(), row["AgentPasswordSalt"].ToString(), (bool)row["AgentVerified"], ReadCompanies.GetCompanyByCompanyID(companyID).List[0], ReadAgentContact.GetAgentContactByAgentID(agentID).List[0], ReadAgentPersonalInformation.GetAgentPeronsalInformationByAgentID(agentID).List[0], ReadAgentSecurity.GetAgentSecurityQuestionsByAgentID(agentID)));
             }
 
             return allAgents;
@@ -41,7 +41,7 @@ namespace Project4.Models
                 {
                     int agentID = (int)row["AgentID"];
                     int companyID = (int)row["CompanyID"];
-                    selectedAgent = new Agent((int)row["AgentID"], row["AgentUsername"].ToString(), row["AgentPassword"].ToString(), row["AgentPasswordSalt"].ToString(), ReadCompanies.GetCompanyByCompanyID(companyID).List[0], ReadAgentContact.GetAgentContactByAgentID(agentID).List[0], ReadAgentPersonalInformation.GetAgentPeronsalInformationByAgentID(agentID).List[0], ReadAgentSecurity.GetAgentSecurityQuestionsByAgentID(agentID));
+                    selectedAgent = new Agent((int)row["AgentID"], row["AgentUsername"].ToString(), row["AgentPassword"].ToString(), row["AgentPasswordSalt"].ToString(), (bool)row["AgentVerified"], ReadCompanies.GetCompanyByCompanyID(companyID).List[0], ReadAgentContact.GetAgentContactByAgentID(agentID).List[0], ReadAgentPersonalInformation.GetAgentPeronsalInformationByAgentID(agentID).List[0], ReadAgentSecurity.GetAgentSecurityQuestionsByAgentID(agentID));
                 }
 
             }
@@ -65,7 +65,7 @@ namespace Project4.Models
                 {
                     int agentID = (int)row["AgentID"];
                     int companyID = (int)row["CompanyID"];
-                    selectedAgent = new Agent((int)row["AgentID"], row["AgentUsername"].ToString(), row["AgentPassword"].ToString(), row["AgentPasswordSalt"].ToString(), ReadCompanies.GetCompanyByCompanyID(companyID).List[0], ReadAgentContact.GetAgentContactByAgentID(agentID).List[0], ReadAgentPersonalInformation.GetAgentPeronsalInformationByAgentID(agentID).List[0], ReadAgentSecurity.GetAgentSecurityQuestionsByAgentID(agentID));
+                    selectedAgent = new Agent((int)row["AgentID"], row["AgentUsername"].ToString(), row["AgentPassword"].ToString(), row["AgentPasswordSalt"].ToString(), (bool)row["AgentVerified"], ReadCompanies.GetCompanyByCompanyID(companyID).List[0], ReadAgentContact.GetAgentContactByAgentID(agentID).List[0], ReadAgentPersonalInformation.GetAgentPeronsalInformationByAgentID(agentID).List[0], ReadAgentSecurity.GetAgentSecurityQuestionsByAgentID(agentID));
 
                 }
             }

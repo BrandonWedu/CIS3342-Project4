@@ -8,6 +8,7 @@ namespace Project4.Models
         private string agentUsername;
         private string agentPassword;
         private string agentPasswordSalt;
+        private bool agentVerified;
         private Company workCompany;
         private AgentContact agentContactInfo;
         private AgentPersonalInformation personalInformation;
@@ -36,6 +37,12 @@ namespace Project4.Models
             set { agentPasswordSalt = value; }
         }
 
+        public bool AgentVerified
+        {
+            get { return agentVerified; }
+            set { agentVerified = value; }
+        }
+
         public Company WorkCompany
         {
             get { return workCompany; }
@@ -61,12 +68,13 @@ namespace Project4.Models
             set { agentSecurityQuestions = value; }
         }
 
-        public Agent(int id, string username, string password, string salt, Company work, AgentContact contactInfo, AgentPersonalInformation agentInfo, AgentSecuritys questions)
+        public Agent(int id, string username, string password, string salt, bool verified, Company work, AgentContact contactInfo, AgentPersonalInformation agentInfo, AgentSecuritys questions)
         {
             AgentID = id;
             AgentUsername = username;
             AgentPassword = password;
             AgentPasswordSalt = salt;
+            AgentVerified = verified;
             WorkCompany = work;
             AgentContactInfo = contactInfo;
             PersonalInformation = agentInfo;
@@ -92,7 +100,7 @@ namespace Project4.Models
 
         public Agent Clone()
         {
-            return new Agent(AgentID, AgentUsername, AgentPassword, AgentPasswordSalt, WorkCompany, AgentContactInfo, PersonalInformation, AgentSecuirtyQuestions);
+            return new Agent(AgentID, AgentUsername, AgentPassword, AgentPasswordSalt, AgentVerified, WorkCompany, AgentContactInfo, PersonalInformation, AgentSecuirtyQuestions);
         }
 
 

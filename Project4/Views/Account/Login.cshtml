@@ -16,11 +16,19 @@
             <label asp-for="Password" class="control-label"></label>
             <input asp-for="Password" type="password" class="form-control" />
         </div>
-
+        <div>
+            <label asp-for="SaveCookie" class="control-label"></label>
+            <input asp-for="SaveCookie" type="checkbox" value="true" />
+        </div>
 
         <button type="submit" name="btnLogin" class="btn btn-primary">Login</button>
 
-        
-        <a href="" class="btn btn-secondary">Register</a>
     </form>
+    <form asp-controller="Account" asp-action="CreateAccount" method="POST">
+        <button type="submit" name="btnCreateAccount" class="btn btn-secondary">Create Account</button>
+    </form>
+    <form asp-controller="Account" asp-action="ForgotPassword" method="get">
+        <button type="submit" name="btnForogtPassword" class="btn btn-warning">Forgot Password</button>
+    </form>
+    <a asp-controller="Dashboard" asp-action="Dashboard" class="btn btn-secondary">Cancel</a>
 </div>

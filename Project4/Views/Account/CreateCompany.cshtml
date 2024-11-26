@@ -1,0 +1,39 @@
+﻿@model Project4.Models.ViewModels.CreateCompanyViewModel;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div>
+    <form asp-controller="Account" asp-action="FinalizeCompanyCreation" method="POST">
+        <label asp-for="CompanyName">Name:</label>
+        <input asp-for="CompanyName" id="companyname" type="text" />
+
+        <label asp-for="CompanyStreet">Street:</label>
+        <input asp-for="CompanyStreet" id="companystreet" type="text" />
+
+        <label asp-for="CompanyCity">City:</label>
+        <input asp-for="CompanyCity" id="comapanycity" type="text" />
+
+        <label asp-for="CompanyState">State:</label>
+        <select asp-for="CompanyState" id="companystate">
+            @foreach (var state in Enum.GetNames(typeof(States)))
+            {
+                <option value="@state">@state</option>
+            }
+        </select>
+
+        <label asp-for="CompanyZip">Zip Code:</label>
+        <input asp-for="CompanyZip" id="companyzip" type="text" />
+
+        <label asp-for="CompanyPhone">Company Phone:</label>
+        <input asp-for="CompanyPhone" id="companyphone" type="text" />
+
+        <label asp-for="CompanyEmail">Company Email:</label>
+        <input asp-for="CompanyEmail" id="companyemail" type="text" />
+        <button type="submit">Create New Company</button>
+        <a asp-controller="Account" asp-action="CreateAccount" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+

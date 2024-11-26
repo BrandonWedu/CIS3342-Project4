@@ -4,7 +4,7 @@ namespace Project4.Models.ViewModels
 {
     public class LoginViewModel
     {
-        public PasswordHasher hasher {  get; set; }
+        public PasswordHasher hasher { get; set; }
 
         public Agent agent { get; set; }
 
@@ -13,5 +13,7 @@ namespace Project4.Models.ViewModels
 
         [Required]
         public string Password { get; set; }
+
+        public string SaveCookie { get; set; }
     }
 }
