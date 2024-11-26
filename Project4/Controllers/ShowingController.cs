@@ -42,30 +42,31 @@ namespace Project4.Controllers
         [HttpPost]
         public IActionResult ShowingRequest()
         {
+            return View();
             //maybe temp data 
-            Client client = new Client(
+            //Client client = new Client(
                 
-                );
-            Showing showing = new Showing(
+                //);
+            //Showing showing = new Showing(
                 //get home
-                client,
-                DateTime.Now,
+              //  client,
+                //DateTime.Now,
                 //get showing time
-                ShowingStatus.Pending
-                );
+                //ShowingStatus.Pending
+                //);
 
-            if(WriteShowing.CreateNew(showing))
-            {
-                HomeProfileModel model = new HomeProfileModel();
-                model.Home = showing.Home;
-                return View("HomeProfile", model);
-            } else
-            {
-                ScheduleShowingsViewModel model = new ScheduleShowingsViewModel();
-                model.Home = showing.Home;
+         //   if(WriteShowing.CreateNew(showing))
+          //  {
+                //HomeProfileModel model = new HomeProfileModel();
+                //model.Home = showing.Home;
+                //return View("HomeProfile", model);
+            //} else
+        //    {
+        //        ScheduleShowingsViewModel model = new ScheduleShowingsViewModel();
+                //model.Home = showing.Home;
                 //make error text
-                return View("ScheduleShowing", model);
-            }
+        //        return View("ScheduleShowing", model);
+           // }
         }
     }
 }

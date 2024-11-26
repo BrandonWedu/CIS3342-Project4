@@ -14,7 +14,7 @@ namespace Project4.Controllers
         private WriteContingencies newContingencies = new WriteContingencies();
 		public IActionResult MakeOffer(Home currentHome)
         {
-            makeOfferModel.home = ReadHome.GetHomeByID((int)currentHome.HomeID);
+            //makeOfferModel.home = ReadHome.GetHomeByID((int)currentHome.HomeID);
             return View(makeOfferModel);
         }
 
@@ -32,8 +32,9 @@ namespace Project4.Controllers
 
         public IActionResult AllOffers()
         {
-            allOffers = new ReadOffers();
-            return View(allOffers.GetAllOffers());
+            return View();
+            //allOffers = new ReadOffers();
+            //return View(allOffers.GetAllOffers());
         }
 
         public IActionResult UpdateOffer(Offer currentOffer, OfferStatus newStatus)
@@ -53,7 +54,7 @@ namespace Project4.Controllers
             ViewBag.Message = "Congraulations! Your offer was sucessfully placed!";
             model.offer.Home = model.home;
 			newOffer.CreateNewOffer(model.offer);
-            newContingencies.CreateNewContingencies(model.contingencies, ReadOffers.GetOfferIDByClientHomeID());
+            //newContingencies.CreateNewContingencies(model.contingencies, ReadOffers.GetOfferIDByClientHomeID());
             return View("Confirmation");
         }
     }

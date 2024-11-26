@@ -19,18 +19,18 @@ namespace Project4.Models
 
             if (dataSet.Tables.Count > 0 && dataSet.Tables[0].Rows.Count > 0)
             {
-                foreach (DataRow row in dataSet.Tables[0].Rows)
-                {
-                    showings.Add(new Showing
-                    (
-                        (int)row["ShowingID"],
-                        ReadHome.GetHomeByID((int)row["HomeID"]),
-                        ReadClient.GetClientByID((int)row["ClientID"]),
-                        (DateTime)row["TimeRequestCreated"],
-                        (DateTime)row["ShowingTime"],
-                        (ShowingStatus)Enum.Parse(typeof(ShowingStatus), (string)row["ShowingStatus"])
-                    ));
-                }
+                //foreach (DataRow row in dataSet.Tables[0].Rows)
+                //{
+                    //showings.Add(new Showing
+                    //(
+                        //(int)row["ShowingID"],
+                        //ReadHome.GetHomeByID((int)row["HomeID"]),
+                        //ReadClient.GetClientByID((int)row["ClientID"]),
+                        //(DateTime)row["TimeRequestCreated"],
+                        //(DateTime)row["ShowingTime"],
+                        //(ShowingStatus)Enum.Parse(typeof(ShowingStatus), (string)row["ShowingStatus"])
+                    //));
+                //}
             }
             return showings;
         }

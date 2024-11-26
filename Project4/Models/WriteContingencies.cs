@@ -17,7 +17,7 @@ namespace Project4.Models
 				insertProcedure.CommandType = CommandType.StoredProcedure;
 				insertProcedure.CommandText = "InsertNewContingency";
 				insertProcedure.Parameters.AddWithValue("@OfferID", offerID);
-				insertProcedure.Parameters.AddWithValue("@Contingency", currentContingency.Contingecny);
+				insertProcedure.Parameters.AddWithValue("@Contingency", currentContingency.OfferContingency);
 				databaseHandler.DoUpdate(insertProcedure);
 			}
 		}
