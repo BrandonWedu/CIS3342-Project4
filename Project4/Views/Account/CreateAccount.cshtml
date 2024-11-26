@@ -71,44 +71,48 @@
         <input asp-for="WorkEmail" id="workemail" type="text" />
 
         <h4>Company Info</h4>
-        <label asp-for="CompanyName">Name:</label>
-        <input asp-for="CompanyName" id="companyname" type="text" />
-
-        <label asp-for="CompanyStreet">Street:</label>
-        <input asp-for="CompanyStreet" id="companystreet" type="text" />
-
-        <label asp-for="CompanyCity">City:</label>
-        <input asp-for="CompanyCity" id="comapanycity" type="text" />
-
-        <label asp-for="CompanyState">State:</label>
-        <select asp-for="CompanyState" id="companystate">
-            @foreach (var state in Enum.GetNames(typeof(States)))
+        <p>Select a company, if your company is not listed you can add your company by pressing "Add New Company"</p>
+        <label asp-for="Company">Company</label>
+        <select asp-for="Company" id="company">
+            @foreach (Company company in ReadCompanies.ReadAllCompanies().List)
             {
-                <option value="@state">@state</option>
+                <option value="@company.CompanyID">@company.CompanyName</option>
             }
         </select>
 
-        <label asp-for="CompanyZip">Zip Code:</label>
-        <input asp-for="CompanyZip" id="companyzip" type="text" />
+        <a asp-controller="Account" asp-action="CreateCompany" class="btn btn-primary">Add New Company</a>
 
-        <label asp-for="CompanyPhone">Company Phone:</label>
-        <input asp-for="CompanyPhone" id="companyphone" type="text" />
-
-        <label asp-for="CompanyEmail">Company Email:</label>
-        <input asp-for="CompanyEmail" id="companyemail" type="text" />
 
         <h4>Security Questions</h4>
-        <label asp-for="QuestionOne">@SecurityQuestionList.GetAllQuestions()[0]</label>
+        <label asp-for="QuestionOne">Security Question One</label>
+        <select asp-for="QuestionOne" id="questionOne">
+            @foreach (string question in SecurityQuestionList.GetFirstQuestionList())
+            {
+                <option value="@question">@question</option>
+            }
+        </select>
         <input asp-for="AnswerOne" id="answerone" type="text" />
 
-        <label asp-for="QuestionTwo">@SecurityQuestionList.GetAllQuestions()[1]</label>
+        <label asp-for="QuestionTwo">Security Question Two</label>
+        <select asp-for="QuestionTwo" id="questionTwo">
+            @foreach (string question in SecurityQuestionList.GetSecondQuestionList())
+            {
+                <option value="@question">@question</option>
+            }
+        </select>
         <input asp-for="AnswerTwo" id="answertwo" type="text" />
 
-        <label asp-for="QuestionThree">@SecurityQuestionList.GetAllQuestions()[2]</label>
+        <label asp-for="QuestionThree">Security Question Three</label>
+        <select asp-for="QuestionThree" id="questionThree">
+            @foreach (string question in SecurityQuestionList.GetThirdQuestionList())
+            {
+                <option value="@question">@question</option>
+            }
+        </select>
         <input asp-for="AnswerThree" id="answerthree" type="text" />
 
         <button type="submit" name="createaccount">Create Account</button>
-        <a>Cancel</a>
+        <a asp-controller="Account" asp-action="Login" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 

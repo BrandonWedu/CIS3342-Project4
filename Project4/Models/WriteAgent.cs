@@ -15,16 +15,11 @@ namespace Project4.Models
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@CompanyID", agent.WorkCompany.CompanyID, SqlDbType.Int, 8));
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@AgentUsername", agent.AgentUsername, SqlDbType.VarChar, 50));
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@AgentPassword", agent.AgentPassword, SqlDbType.VarChar));
-            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@AgentPasswordSalt", agent.AgentPassword, SqlDbType.VarChar));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@AgentPasswordSalt", agent.AgentPasswordSalt, SqlDbType.VarChar));
 
             SqlParameter outputParam = DBParameterHelper.OutputParameter("@AgentID", SqlDbType.Int, 8);
             sqlCommand.Parameters.Add(outputParam);
 
-            Console.WriteLine("Executing stored procedure with parameters:");
-            foreach (SqlParameter param in sqlCommand.Parameters)
-            {
-                Console.WriteLine($"{param.ParameterName}: {param.Value}");
-            }
 
             dbConnect.DoUpdate(sqlCommand);
 
@@ -34,6 +29,18 @@ namespace Project4.Models
             }
 
             return (int)outputParam.Value;
+        }
+
+        internal static void UpdateAgentPassword(Agent agent, string hashedPW, string salt)
+        {
+            DBConnect dbConnect = new DBConnect();
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.CommandText = "P4_UpdateAgentPassword";
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@AgentID", agent.AgentID, SqlDbType.Int, 8));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@AgentPassword", hashedPW, SqlDbType.VarChar));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@AgentPasswordSalt", salt, SqlDbType.VarChar));
+            dbConnect.DoUpdate(sqlCommand);
         }
     }
 }

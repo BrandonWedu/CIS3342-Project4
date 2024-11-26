@@ -26,6 +26,7 @@ namespace Project4.Models
 
         internal static AgentSecuritys GetAgentSecurityQuestionsByAgentID(int id)
         {
+
             DBConnect databaseHandler = new DBConnect();
             AgentSecuritys allAgentSecurity = new AgentSecuritys();
             SqlCommand sqlCommand = new SqlCommand();
@@ -35,17 +36,14 @@ namespace Project4.Models
 
             foreach (DataRow row in agentContactData.Rows)
             {
-                allAgentSecurity.Add(new AgentSecurity((int)row["SecurityQuestionsID"], (int)row["AgentID"], row["Question"].ToString(), row["Answer"].ToString()));
-            }
-            AgentSecuritys selectedQuestions = new AgentSecuritys();
-            foreach (AgentSecurity currentSecurity in allAgentSecurity.List)
-            {
-                if (currentSecurity.AgentID == id)
+                if ((int)row["AgentID"] == id)
                 {
-                    selectedQuestions.Add(currentSecurity);
+                    allAgentSecurity.Add(new AgentSecurity((int)row["SecurityQuestionsID"], (int)row["AgentID"], row["Question"].ToString(), row["Answer"].ToString()));
                 }
             }
-            return selectedQuestions;
+
+
+            return allAgentSecurity;
         }
     }
 }
