@@ -1,4 +1,6 @@
-﻿namespace HomeListingAPI
+﻿
+
+namespace HomeListingAPI
 {
     //Property Type Enum
     public enum PropertyType
@@ -27,7 +29,7 @@
     public class Home : ICloneable<Home>
     {
         private int? homeID;
-        private Agent agent;
+        private  Agent agent;
         private int cost;
         private Address address;
         private PropertyType propertyType;
