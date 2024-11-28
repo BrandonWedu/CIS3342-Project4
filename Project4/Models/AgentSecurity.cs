@@ -31,6 +31,7 @@
             set { answer = value; }
         }
 
+        public AgentSecurity() { }
         public AgentSecurity(int id, int agentID, string question, string answer)
         {
             SecurityQuestionsID = id;

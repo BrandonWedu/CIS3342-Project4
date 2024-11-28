@@ -62,6 +62,7 @@
         private States state;
         private string zipCode;
 
+        public Address() { }
         public Address(string street, string city, States state, string zipCode)
         {
             addressID = null;

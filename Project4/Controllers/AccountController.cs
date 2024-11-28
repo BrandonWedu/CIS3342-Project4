@@ -227,6 +227,11 @@ namespace Project4.Controllers
                         HttpContext.Response.Cookies.Append("LoggedInAgent", agentJSON, agentCookieOptions);
                     }
                     Console.WriteLine("Password verified!");
+
+                    //Add Agent to Session
+                    string agentJSONSession = System.Text.Json.JsonSerializer.Serialize(agent);
+                    HttpContext.Session.SetString("Agent", agentJSONSession);
+
                     Agent loggedInAccount = ReadAgents.GetAgentByAgentID(agent.AgentID);
                     return RedirectToAction("AgentDashboard", "AgentDashboard"); // confirmation just sits for a few seconds then redirects to agent dashboard
                 }

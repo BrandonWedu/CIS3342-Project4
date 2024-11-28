@@ -1,6 +1,7 @@
 ﻿@*
     You must be a logged in agent to access this page.
 *@
+@model Home
 
 @{
     ViewData["Title"] = "Project 4 - Schedule Showing";
@@ -21,7 +22,7 @@
                 <input name="txtHomeStreet" type="text" id="txtHomeStreet" placeholder="Enter Street">
                 <span id="lblHomeCity">City</span>
                 <select name="ddlHomeCity" type="text" id="ddlHomeCity">
-                    @foreach (string state in Enum.GetValues(typeof(States)))
+                    @foreach (States state in Enum.GetValues(typeof(States)))
                     {
                         <option value="@state">@state</option>
                     }
@@ -37,7 +38,7 @@
                 <input name="txtHomeCost" type="text" id="txtHomeCost" placeholder="Enter Asking Price">
                 <span id="lblPropertyType">Property Type</span>
                 <select name="ddlPropertyType" id="ddlPropertyType">
-                    @foreach (string propertyType in Enum.GetValues(typeof(PropertyType)))
+                    @foreach (PropertyType propertyType in Enum.GetValues(typeof(PropertyType)))
                     {
                         <option value="@propertyType">@propertyType</option>
                     }
@@ -46,7 +47,7 @@
                 <input name="txtYearConstructed" type="text" id="txtYearConstructed" placeholder="Enter Year Constructed">
                 <span id="lblGarageType">Garage Type</span>
                 <select name="ddlGarageType" id="ddlGarageType">
-                    @foreach (string garageType in Enum.GetValues(typeof(GarageType)))
+                    @foreach (GarageType garageType in Enum.GetValues(typeof(GarageType)))
                     {
                         <option value="@garageType">@garageType</option>
                     }
@@ -55,7 +56,7 @@
                 <textarea name="txtHomeDescription" rows="4" cols="20" id="txtHomeDescription" placeholder="Home Description"></textarea>
                 <span id="lblSaleStatus">SaleStatus</span>
                 <select name="ddlSaleStatus" id="ddlSaleStatus">
-                    @foreach (string saleStatus in Enum.GetValues(typeof(SaleStatus)))
+                    @foreach (SaleStatus saleStatus in Enum.GetValues(typeof(SaleStatus)))
                     {
                         <option value="@saleStatus">@saleStatus</option>
                     }
@@ -65,33 +66,100 @@
                 <h2>Add Temperature Control Information</h2>
                 <span id="lblCooling">Cooling</span>
                 <select name="ddlCooling" id="ddlCooling">
-                    @foreach (string coolingType in Enum.GetValues(typeof(CoolingTypes)))
+                    @foreach (CoolingTypes coolingType in Enum.GetValues(typeof(CoolingTypes)))
                     {
                         <option value="@coolingType">@coolingType</option>
                     }
                 </select>
                 <span id="lblHeating">Heating</span>
                 <select name="ddlHeating" id="ddlHeating">
-                    @foreach (string heatingType in Enum.GetValues(typeof(HeatingTypes)))
+                    @foreach (HeatingTypes heatingType in Enum.GetValues(typeof(HeatingTypes)))
                     {
                         <option value="@heatingType">@heatingType</option>
                     }
                 </select>
             </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
             <div class="item-container">
                 <h2>Add Room Information</h2>
-
                 <div id="pnlRoomContainer0" class="item-container">
-                    <span id="lblHeight0">Height: </span><input name="txtHeight0" type="text" id="txtHeight0" placeholder="Enter Height"><span id="lblWidth0">Width: </span><input name="txtWidth0" type="text" id="txtWidth0" placeholder="Enter Width"><span id="lblRoomType0">RoomType: </span><select name="ddlRoomType0" id="ddlRoomType0">
-                    @foreach (string roomType in Enum.GetValues(typeof(RoomType)))
+                    <span id="lblHeight0">Height: </span>
+                    <input name="txtHeight0" type="text" id="txtHeight0" placeholder="Enter Height">
+                    <span id="lblWidth0">Width: </span>
+                    <input name="txtWidth0" type="text" id="txtWidth0" placeholder="Enter Width">
+                    <span id="lblRoomType0">RoomType: </span>
+                    <select name="ddlRoomType0" id="ddlRoomType0">
+                    @foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
                     {
                         <option value="@roomType">@roomType</option>
                     }
-                    </select><input type="submit" name="btnRoomDelete_0" value="Delete" id="btnRoomDelete_0">
+                    </select>
+                    <input type="submit" name="btnRoomDelete_0" value="Delete" id="btnRoomDelete_0">
                 </div>
 
                 <input type="submit" name="btnGenerateRoom" value="Add Room" id="btnGenerateRoom">
             </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <div class="item-container">
+                <h2>Add Utility Information</h2>
+                <div id="pnlUtilityContainer0" class="item-container">
+                    <span id="lblInformation0">Information: </span>
+                    <input name="txtInformation0" type="text" id="txtInformation0" placeholder="Enter Information">
+                    <span id="lblUtilityType0">Utility Type: </span>
+                    <select name="ddlUtilityType0" id="ddlUtilityType0">
+                    @foreach (UtilityTypes utilityType in Enum.GetValues(typeof(UtilityTypes)))
+                    {
+                        <option value="@utilityType">@utilityType</option>
+                    }
+                    </select>
+                    <input type="submit" name="btnutilitydelete_0" value="delete" id="btnutilitydelete_0">
+                </div>
+                <input type="submit" name="btnGenerateUtility" value="Add Utility" id="btnGenerateUtility">
+            </div>
+        <div class="item-container">
+            <h2>Add Amenity Information</h2>
+            <div id="pnlAmenityContainer0" class="item-container">
+                <span id="lblDescription0">Description: </span>
+                <input name="txtDescription0" type="text" id="txtDescription0" placeholder="Enter Description">
+                <span id="lblAmenityType0">Amenity Type: </span>
+                <select name="ddlAmenityType0" id="ddlAmenityType0">
+                    @foreach (AmenityType amenityType in Enum.GetValues(typeof(AmenityType)))
+                    {
+                        <option value="@amenityType">@amenityType</option>
+                    }
+
+                </select>
+                <input type="submit" name="btnAmenityDelete_0" value="Delete" id="btnAmenityDelete_0">
+            </div>
+            <input type="submit" name="btnGenerateAmenity" value="Add Amenity" id="btnGenerateAmenity">
+        </div>
+        <div class="item-container">
+            <h2>Add Image (upload images individually before submitting listing)</h2>
+            <div id="pnlImageContainer0" class="item-container">
+                <h2>Main Image</h2>
+                <span id="lblImageDescription0">Description: </span>
+                <input name="txtImageDescription0" type="text" id="txtImageDescription0" placeholder="Enter Description">
+                <span id="lblImageRoomType0">Room Type: </span>
+                <select name="ddlImageRoomType0" id="ddlImageRoomType0">
+                    @foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
+                    {
+                        <option value="@roomType">@roomType</option>
+                    }
+                </select>
+                <span id="lblImageUpload0">Image Upload: </span>
+                <input type="file" name="fuImage0" id="fuImage0">
+                <input type="submit" name="btnUpload_0" value="Upload" id="btnUpload_0">
+            </div>
+            <input type="submit" name="btnGenerateImage" value="Add Image" id="btnGenerateImage">
+        </div>
             <button type="submit" value="Submit Home Listing"></button>
         </form>
     </body>

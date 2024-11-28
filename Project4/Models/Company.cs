@@ -37,6 +37,7 @@
             set { email = value; }
         }
 
+        public Company() { }
         public Company(int id, string name, Address address, string phone, string email)
         {
             companyID = id;
