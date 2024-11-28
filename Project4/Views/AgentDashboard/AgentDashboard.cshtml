@@ -17,7 +17,12 @@
     <form asp-controller="Offer" asp-action="ViewAllOffers" method="POST">
         <button type="submit">View Offers</button>
     </form>
-
+    @if (Context.Request.Cookies["LoggedInAgent"] != null)
+    {
+        <form asp-controller="AgentDashboard" asp-action="DeleteCookie" method="POST">
+            <button type="submit">Delete Cookie</button>
+        </form>
+    }
 
     <a asp-controller="Dashboard" asp-action="Dashboard" class="btn btn-secondary">Logout</a>
 
