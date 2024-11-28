@@ -17,7 +17,7 @@ namespace Project4.Controllers
             }
             string agentJson = HttpContext.Session.GetString("Agent");
             Agent agent = JsonSerializer.Deserialize<Agent>(agentJson);
-            return View(new Home(
+            Home home = new Home(
                 agent,
                 0,
                 new Address("", "", States.Alabama, ""),
@@ -32,7 +32,9 @@ namespace Project4.Controllers
                 new TemperatureControl(HeatingTypes.CentralHeating, CoolingTypes.CentralAir),
                 new Rooms(), 
                 new Utilities()
-                ));
+                );
+            //TempData["Home"] = home;
+            return View(home);
         }
         [HttpPost]
         public IActionResult CreateHome(Home home)
@@ -41,6 +43,7 @@ namespace Project4.Controllers
             {
                 return View("Dashboard");
             }
+            TempData["Home"] = home;   
             return View(home);
         }
         [HttpPost]

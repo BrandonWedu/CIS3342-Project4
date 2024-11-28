@@ -14,12 +14,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <form asp-controller="RealEstateHome" asp-action="AddHome" method="POST">
+        <form asp-controller="RealEstateHome" asp-action="CreateHome" method="POST">
             <h1>Create a Home Listing</h1>
             <div>
                 <h2>Home Address</h2>
                 <span id="lblHomeStreet">Street</span>
-                <input name="txtHomeStreet" type="text" id="txtHomeStreet" placeholder="Enter Street">
+                <input name="txtHomeStreet" type="text" id="txtHomeStreet" placeholder="Enter Street" value="@Model.Address.Street">
                 <span id="lblHomeCity">City</span>
                 <select name="ddlHomeCity" type="text" id="ddlHomeCity">
                     @foreach (States state in Enum.GetValues(typeof(States)))
@@ -79,11 +79,6 @@
                     }
                 </select>
             </div>
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
             <div class="item-container">
                 <h2>Add Room Information</h2>
                 <div id="pnlRoomContainer0" class="item-container">
@@ -103,11 +98,6 @@
 
                 <input type="submit" name="btnGenerateRoom" value="Add Room" id="btnGenerateRoom">
             </div>
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
             <div class="item-container">
                 <h2>Add Utility Information</h2>
                 <div id="pnlUtilityContainer0" class="item-container">
@@ -160,7 +150,7 @@
             </div>
             <input type="submit" name="btnGenerateImage" value="Add Image" id="btnGenerateImage">
         </div>
-            <button type="submit" value="Submit Home Listing"></button>
+            <button type="submit">Submit Home</button>
         </form>
     </body>
 </html>
