@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Project4.Controllers
 {
@@ -10,13 +11,31 @@ namespace Project4.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CalculateMortgage(double homeValue, double downPayment, double interestRate, int durationYears)
+        public async Task<IActionResult> CalculateMortgage(string homeValue, string downPayment, string interestRate, string durationYears)
         {
             //Validation
+            List<string> error = new List<string>();
+            
             //everything must be TryParsed as a double
-            //homeValue > downPayment
-            //interestRate < 10000
-            //durationYears > 0 %% durationYears < 10000
+            if (!double.TryParse(homeValue, out double parsedHomeValue) || double.TryParse(downPayment, out double parsedDownPayment) && parsedHomeValue < parsedDownPayment)
+            {
+                error.Add("Home Value and Down Payment MUST be numbers and Home value MUST be greater than down payment");
+            }
+            if (!double.TryParse(interestRate, out double parsedInterestRate) || parsedInterestRate < 0 || parsedInterestRate > 10000)
+            {
+                error.Add("Interest rate MUST be a valid number greater than 0 and less than 10000.");
+            }
+
+            if (!int.TryParse(durationYears, out int parsedDurationYears) || parsedDurationYears < 1 || parsedDurationYears > 10000)
+            {
+                error.Add("Duration in years MUST be a valid number greater than 1 and less than 10000.");
+            }
+            if (error.Count > 0)
+            {
+                TempData["Error"] = error;
+                return View("MortgageCalculator");
+            }
+
             //Credit: Code snippet from API website
             //--------------------------------
             var client = new HttpClient();

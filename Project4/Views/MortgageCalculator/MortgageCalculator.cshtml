@@ -17,7 +17,10 @@
         }
         @if (TempData["Error"] != null)
         {
-            <p>@TempData["Error"]</p>
+            @foreach (string error in (List<string>)TempData["Error"])
+            {
+                <p>@error</p>
+            }
         }
     </form>
 </div>
