@@ -1,0 +1,23 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div>
+    <form asp-controller="MortgageCalculator" asp-action="CalculateMortgage" method="GET">
+        <h1>Mortgage Calculator</h1>
+        <input type="text" id="homeValue" name="homeValue" placeholder="Enter home value Here" />
+        <input type="text" id="downPayment" name="downPayment" placeholder="Enter down payment Here" />
+        <input type="text" id="interestRate" name="interestRate" placeholder="Enter interest rate Here" />
+        <input type="text" id="durationYears" name="durationYears" placeholder="Enter duration in years Here" />
+        <input type="submit" value="Submit">
+        @if (TempData["Result"] != null)
+        {
+            <p>@TempData["Result"]</p>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <p>@TempData["Error"]</p>
+        }
+    </form>
+</div>
