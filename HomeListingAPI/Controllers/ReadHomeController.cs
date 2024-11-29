@@ -6,9 +6,9 @@ namespace HomeListingAPI.Controllers
 	[Route("[controller]")]
 	public class ReadHomeController : Controller
 	{
-		[HttpPost("ReadHomes")]
+		[HttpGet("ReadHomeListings")]
 
-		public Homes Post()
+		public Homes Get()
 		{
 			Homes allHomeListings = new Homes();
 			allHomeListings = ReadHome.ReadAllHomes();

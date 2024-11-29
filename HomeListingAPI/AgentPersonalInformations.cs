@@ -2,6 +2,7 @@
 
 namespace HomeListingAPI
 {
+	[Serializable]
 	public class AgentPersonalInformations : ListOfObjects<AgentPersonalInformation>
 	{
 		public AgentPersonalInformations() { }

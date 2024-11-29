@@ -2,6 +2,7 @@
 
 namespace HomeListingAPI
 {
+	[Serializable]
 	public class Companies : ListOfObjects<Company>
 	{
 		public Companies() { }

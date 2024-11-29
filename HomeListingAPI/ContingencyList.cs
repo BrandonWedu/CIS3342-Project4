@@ -2,6 +2,7 @@
 
 namespace HomeListingAPI
 {
+	[Serializable]
 	public class ContingencyList : ListOfObjects<Contingency>
 	{
 		public ContingencyList() { }

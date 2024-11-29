@@ -15,7 +15,8 @@
         WasteManagement,
         StormwaterManagement
     }
-    public class Utility : ICloneable<Utility>
+	[Serializable]
+	public class Utility : ICloneable<Utility>
     {
         private int? utilityID;
         private UtilityTypes type;
@@ -32,6 +33,11 @@
             this.utilityID = utilityID;
             this.type = type;
             this.information = information;
+        }
+
+        public Utility()
+        {
+
         }
 
         public int? UtilityID

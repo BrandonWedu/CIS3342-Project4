@@ -2,6 +2,7 @@
 
 namespace HomeListingAPI
 {
+    [Serializable]
     public class Serializer
     {
          public static byte[] SerializeData<T>(T data)

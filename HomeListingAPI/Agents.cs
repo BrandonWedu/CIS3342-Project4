@@ -3,6 +3,7 @@ using System.Data;
 
 namespace HomeListingAPI
 {
+	[Serializable]
 	public class Agents : ListOfObjects<Agent>
 	{
 		public Agents() { }

@@ -1,6 +1,7 @@
 ﻿namespace HomeListingAPI
 {
-    public class Image : ICloneable<Image>
+	[Serializable]
+	public class Image : ICloneable<Image>
     {
         //Fields
         private int? imageID;
@@ -24,6 +25,11 @@
             this.type = type;
             this.description = description;
             this.mainImage = mainImage;
+        }
+
+        public Image()
+        {
+
         }
 
         public int? ImageID

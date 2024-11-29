@@ -1,6 +1,7 @@
 ﻿namespace HomeListingAPI
 {
-    public class Images : ListOfObjects<Image>, ICloneable<Images>
+	[Serializable]
+	public class Images : ListOfObjects<Image>, ICloneable<Images>
     {
         public Images() { }
         public Images(List<Image> list) { List = list; }

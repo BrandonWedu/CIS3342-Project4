@@ -1,6 +1,7 @@
 ﻿namespace HomeListingAPI
 {
-    public class AgentContact : ICloneable<AgentContact>
+	[Serializable]
+	public class AgentContact : ICloneable<AgentContact>
     {
         private int agentContactID;
         private int agentID;
@@ -54,6 +55,11 @@
             WorkAddress = workAddress;
             PhoneNumber = phone;
             Email = email;
+        }
+
+        public AgentContact()
+        {
+
         }
 
 

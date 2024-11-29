@@ -11,7 +11,7 @@ namespace HomeListingAPI
 			Utilities allUtilties = new Utilities();
 			SqlCommand sqlCommand = new SqlCommand();
 			sqlCommand.CommandType = CommandType.StoredProcedure;
-			sqlCommand.CommandText = "P4_SelectAllUtilities";
+			sqlCommand.CommandText = "P4_SelectAllUtilites";
 			DataTable utilitesData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
 
 			foreach (DataRow row in utilitesData.Rows)
@@ -28,7 +28,7 @@ namespace HomeListingAPI
 			Utilities allUtilties = new Utilities();
 			SqlCommand sqlCommand = new SqlCommand();
 			sqlCommand.CommandType = CommandType.StoredProcedure;
-			sqlCommand.CommandText = "P4_SelectAllUtilities";
+			sqlCommand.CommandText = "P4_SelectAllUtilites";
 			DataTable utilitesData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
 
 			foreach (DataRow row in utilitesData.Rows)

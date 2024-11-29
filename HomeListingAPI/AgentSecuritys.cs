@@ -2,6 +2,7 @@
 
 namespace HomeListingAPI
 {
+	[Serializable]
 	public class AgentSecuritys : ListOfObjects<AgentSecurity>
 	{
 		public AgentSecuritys() { }

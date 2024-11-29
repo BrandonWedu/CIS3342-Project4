@@ -1,6 +1,7 @@
 ﻿namespace HomeListingAPI
 {
-    public class AgentSecurity : ICloneable<AgentSecurity>
+	[Serializable]
+	public class AgentSecurity : ICloneable<AgentSecurity>
     {
         private int securityQuestionsID;
         private int agentID;
@@ -44,6 +45,11 @@
             AgentID = agentID;
             Question = question;
             Answer = answer;
+        }
+
+        public AgentSecurity()
+        {
+
         }
 
         public AgentSecurity Clone()

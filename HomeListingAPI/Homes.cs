@@ -1,5 +1,6 @@
 ﻿namespace HomeListingAPI
 {
+	[Serializable]
 	public class Homes : ListOfObjects<Home>
 	{
 		public Homes() { }

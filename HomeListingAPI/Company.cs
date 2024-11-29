@@ -1,6 +1,7 @@
 ﻿namespace HomeListingAPI
 {
-    public class Company : ICloneable<Company>
+	[Serializable]
+	public class Company : ICloneable<Company>
     {
         private int companyID;
         private string companyName;
@@ -52,6 +53,11 @@
             companyAddress = address;
             phoneNumber = phone;
             Email = email;
+        }
+
+        public Company()
+        {
+
         }
 
         public Company Clone()

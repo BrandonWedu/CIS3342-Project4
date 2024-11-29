@@ -26,6 +26,7 @@ namespace HomeListingAPI
         DoubleCar,
         MultiCar
     }
+    [Serializable]
     public class Home : ICloneable<Home>
     {
         private int? homeID;
@@ -80,6 +81,11 @@ namespace HomeListingAPI
             this.temperatureControl = temperatureControl.Clone();
             this.rooms = rooms.Clone();
             this.utilities = utilities.Clone();
+        }
+
+        public Home()
+        {
+
         }
 
         public int? HomeID

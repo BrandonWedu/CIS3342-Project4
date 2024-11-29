@@ -2,7 +2,8 @@
 
 namespace HomeListingAPI
 {
-    public class Agent : ICloneable<Agent>
+	[Serializable]
+	public class Agent : ICloneable<Agent>
     {
         private int agentID;
         private string agentUsername;
@@ -95,6 +96,11 @@ namespace HomeListingAPI
             AgentPassword = password;
             AgentPasswordSalt = salt;
             WorkCompany = work;
+        }
+
+        public Agent()
+        {
+
         }
 
 
