@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project4.Models;
 using Project4.Models.ViewModels;
+using System.Net.Http;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 
 namespace Project4.Controllers
 {
@@ -20,7 +23,7 @@ namespace Project4.Controllers
             return View("CreateAccount");
         }
 
-        public IActionResult FinalizeAccountCreation(CreateAccountViewModel model)
+        public async Task<IActionResult> FinalizeAccountCreationAsync(CreateAccountViewModel model)
         {
             bool uniqueName = true;
             foreach (Agent currentAgent in ReadAgents.ReadAllAgents().List)
@@ -84,9 +87,74 @@ namespace Project4.Controllers
                 questionID = WriteAgentSecurityQuestion.CreateNew(model.agentQuestionThree);
                 model.agentQuestionThree.SecurityQuestionsID = questionID;
 
-                return View("Login");
+                //Send User an email with a like and code
+                Random random = new Random();
+                int code = random.Next(1000, 10000);
+                //set code in db
+                WriteVerification.CreateNew(agentID, code);
+
+                EmailInfo info = new EmailInfo(
+                        model.WorkEmail, 
+                        "tui78495@temple.edu",
+                        "Account Verification",
+                        $"Please click this link or enter the code on the website to verify your account\n" +
+                        $"Code: {code}\n" +
+                        $"<a>https://localhost:7252/VerifyAccountWithLink/{agentID}/{code}</a>"
+                        //$"<a>https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/Project4/VerifyAccountWithLink/{agentID}/{code}</a>"
+                    );
+
+                //Call the Email API and send the email
+                StringContent content = new StringContent(JsonSerializer.Serialize(info), Encoding.UTF8, "application/json");
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    try
+                    {
+                        HttpResponseMessage response = await httpClient.PostAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPITest/Email/SendToTempleEmail", content);
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"Response Body: {responseBody}");
+                    } catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+                TempData["AgentID"] = agentID;
+                return View("VerifyAccount");
             }
         }
+
+        public IActionResult VerifyAccount()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult VerifyAccountWithCode(int code) 
+        {
+            if (ReadVerification.GetVerifiedCode((int)TempData["AgentID"]) == code)
+            {
+                //Set agent verified to true
+                WriteVerification.Verify((int)TempData["AgentID"]);
+                return View("Login"); 
+            }
+            TempData["AgentID"] = TempData["AgentID"];
+            TempData["Error"] = "Code Invalid";
+            return View("VerifyAccount");
+        }
+
+        [HttpGet("VerifyAccountWithLink/{agentID}/{code}")]
+        public IActionResult VerifyAccountWithLink(int agentID, int code)
+        {
+            //Check if code and AgentID are valid
+            if (ReadVerification.GetVerifiedCode(agentID) == code)
+            {
+                //Set agent verified to true
+                WriteVerification.Verify((int)TempData["AgentID"]);
+                return View("Login"); 
+            }
+            TempData["Error"] = "Code Invalid";
+            return View("VerifyAccount");
+        }
+
         public IActionResult CreateCompany()
         {
             return View();
