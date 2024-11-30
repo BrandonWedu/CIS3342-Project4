@@ -5,10 +5,10 @@ namespace Project4.Controllers
 {
     public class DashboardController : Controller
     {
-        private PropertyList allProperties = new PropertyList();
+        //private PropertyList allProperties = new PropertyList();
         public IActionResult Dashboard()
         {
-            ViewBag.AllProperties = allProperties.GetAllProperties();
+            //ViewBag.AllProperties = allProperties.GetAllProperties();
             return View();
         }
 
@@ -24,8 +24,8 @@ namespace Project4.Controllers
 
         public IActionResult ViewDetail(int propertyID)
         {
-            Property currentProperty = allProperties.GetPropertyByPropertyID(propertyID);
-            return View(currentProperty);
+            //Property currentProperty = allProperties.GetPropertyByPropertyID(propertyID);
+            return View();
         }
     }
 }

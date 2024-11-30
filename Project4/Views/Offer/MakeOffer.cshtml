@@ -6,47 +6,55 @@
 }
 <div class="container my-4">
 	<span class="text-danger">@ViewBag.OfferError</span>
-	<form asp-controller="Offer" asp-action="FinalizeOffer" method="POST">
 		<div class="row mb-3">
 			<div class="col-md-6">
-				<label for="txtOfferFirstName" class="form-label">First Name</label>
-				<input type="text" id="txtOfferFirstName" name="txtOfferFirstName" class="form-control" />
+				<label asp-for="FirstName" class="form-label">First Name</label>
+				<input type="text" id="txtOfferFirstName" asp-for="FirstName" class="form-control" />
 			</div>
 			<div class="col-md-6">
-				<label for="txtOfferLastName" class="form-label">Last Name</label>
-				<input type="text" id="txtOfferLastName" name="txtOfferLastName" class="form-control" />
+				<label asp-for="LastName" class="form-label">Last Name</label>
+				<input type="text" id="txtOfferLastName" asp-for="LastName" class="form-control" />
 			</div>
 		</div>
 
 		<div class="row mb-3">
 			<div class="col-md-6">
-				<label for="txtOfferEmail" class="form-label">Email</label>
-				<input type="email" id="txtOfferEmail" name="txtOfferEmail" class="form-control" />
+				<label asp-for="Email" class="form-label">Email</label>
+				<input type="email" id="txtOfferEmail" asp-for="Email" class="form-control" />
 			</div>
 			<div class="col-md-6">
-				<label for="txtOfferPhone" class="form-label">Phone Number</label>
-				<input type="tel" id="txtOfferPhone" name="txtOfferPhone" class="form-control" />
+				<label asp-for="Phone" class="form-label">Phone Number</label>
+				<input type="tel" id="OfferPhone" asp-for="Phone" class="form-control" />
 			</div>
 		</div>
 
 		<div class="row mb-3">
 			<div class="col-md-6">
-				<label for="txtOfferAmount" class="form-label">Offer Amount</label>
-				<input type="text" id="txtOfferAmount" name="txtOfferAmount" class="form-control" />
+				<label asp-for="OfferAmount" class="form-label">Offer Amount</label>
+				<input type="text" id="txtOfferAmount" asp-for="OfferAmount" class="form-control" />
 			</div>
 			<div class="col-md-6">
-				<label for="drplOfferType" class="form-label">Offer Type</label>
-				<select id="drplOfferType" name="drplOfferType" class="form-control">
-					<option>Test</option>
+				<label asp-for="SaleType" class="form-label">Offer Type</label>
+				<select id="OfferType" asp-for="SaleType" class="form-control">
+					@foreach (var saleType in Enum.GetNames(typeof(TypeOfSale)))
+					{
+						<option value="@saleType">@saleType</option>
+					}
 				</select>
 			</div>
 		</div>
 
 		<div class="row mb-3">
+			<a asp-controller="Offer" asp-action="CalculateMortgage" class="btn btn-primary">Mortgage Calculator</a>
+		</div>
+
+		<div class="row mb-3">
 			<div class="col-12">
-				<label for="txtOfferContingency" class="form-label">Offer Contingency</label>
-				<input type="text" id="txtOfferContingency" name="txtOfferContingency" class="form-control mb-2" />
-				<button id="btnAddContingency" type="button" class="btn btn-primary">Add Contingency</button>
+				<form asp-controller="Offer" asp-action="AddContingency" method="POST">
+					<label asp-for="NewContingency" class="form-label">Offer Contingency</label>
+					<input type="text" id="txtOfferContingency" asp-for="NewContingency" class="form-control mb-2" />
+					<button type="submit" class="btn btn-primary">Add Contingency</button>
+				</form>
 
 				<table class="table mt-3">
 					<thead>
@@ -56,42 +64,52 @@
 						</tr>
 					</thead>
 					<tbody>
-						@*
-						@foreach (Contingency item in Model.NewContingecnies.List)
+						@if (Model.offerContingencies == null)
 						{
-						<tr>
-						<td>@item.Contingency</td>
-						<td>
-						<button type="button" class="btn btn-danger">Remove Contingency</button>
-						</td>
-						</tr>
+							<tr>
+								<td colspan="2">No Contingencies!</td>
+							</tr>
 						}
-
-						*@
+						else
+						{
+							foreach (Contingency offerContingency in Model.offerContingencies.List)
+							{
+								<tr>
+									<td>@offerContingency.OfferContingency</td>
+									<td>
+										<form asp-controller="Offer" asp-action="RemoveContingency" method="POST">
+										<input type="hidden" name="removedContingency" value="@offerContingency.OfferContingency" />
+											<button type="submit" class="btn btn-danger">Remove Contingency</button>
+										</form>
+									</td>
+								</tr>
+							}
+						}
 					</tbody>
 				</table>
 			</div>
 		</div>
 
+
 		<div class="row mb-3">
 			<div class="col-md-6">
 				<label class="form-label">Selling Current Home?</label>
 				<div>
-					<input type="radio" id="yes" name="SellCurrentHome" value="true" class="form-check-input" />
-					<label for="yes" class="form-check-label">Yes</label>
-					<input type="radio" id="no" name="SellCurrentHome" value="false" class="form-check-input" />
-					<label for="no" class="form-check-label">No</label>
+					<input type="radio" id="yes" asp-for="SellCurrentHome" value="true" class="form-check-input" />
+					<label asp-for="SellCurrentHome" class="form-check-label">Yes</label>
+					<input type="radio" id="no" asp-for="SellCurrentHome" value="false" class="form-check-input" />
+					<label asp-for="SellCurrentHome" class="form-check-label">No</label>
 				</div>
 			</div>
 			<div class="col-md-6">
-				<label for="moveInDate" class="form-label">Move-In Date</label>
-				<input type="date" id="moveInDate" name="moveInDate" class="form-control" />
+				<label asp-for="MoveInDate" class="form-label">Move-In Date</label>
+				<input type="date" id="moveInDate" asp-for="MoveInDate" class="form-control" />
 			</div>
 		</div>
-
+	<form asp-controller="Offer" asp-action="FinalizeOffer" method="POST">
 		<div class="d-flex justify-content-end mt-4">
 			<button type="submit" class="btn btn-success me-2">Submit Offer</button>
-			<button type="reset" class="btn btn-secondary">Cancel Offer</button>
+			<a asp-controller="Dashboard" asp-action="Dashboard" class="btn btn-secondary">Cancel Offer</a>
 		</div>
 	</form>
 </div>

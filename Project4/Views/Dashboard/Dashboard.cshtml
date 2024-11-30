@@ -3,7 +3,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-	List<Property> allProperties = (List<Property>)ViewBag.AllProperties;
+	//List<Property> allProperties = (List<Property>)ViewBag.AllProperties;
 	DateTime currentDate = DateTime.Now.Date;
 
 }
@@ -110,6 +110,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-4 mb-4">
+					@*
 					@foreach (Property currentProperty in allProperties)
 					{
 						<div class="card">
@@ -127,15 +128,15 @@
 								</p>
 								<div class="d-flex gap-2">
 									<form method="POST" asp-controller="Dashboard" asp-action="ViewDetail" asp-route-propertyID="@currentProperty.PropertyID">
-										@*<input type="hidden" name="PropertyID" value="@currentProperty.PropertyID" />*@
+
 										<button type="submit" class="btn btn-primary btn-sm me-2" name="btnViewDetials" id="btnViewDetails">View Details</button>
 									</form>
 									<form method="POST" asp-controller="Dashboard" asp-action="RequestShowing" asp-route-propertyID="@currentProperty.PropertyID">
-										@*<input type="hidden" name="PropertyID" value="@currentProperty.PropertyID" />*@
+
 										<button type="submit" class="btn btn-primary btn-sm me-2" name="btnRequestShowing" id="btnRequestShowing">Request Showing</button>
 									</form>
 									<form method="POST" asp-controller="Dashboard" asp-action="MakeOffer" asp-route-propertyID="@currentProperty.PropertyID">
-										@*<input type="hidden" name="PropertyID" value="@currentProperty.PropertyID" />*@
+
 										<button type="submit" class="btn btn-primary btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Make Offer</button>
 									</form>
 
@@ -144,7 +145,7 @@
 
 						</div>
 					}
-
+					*@
 
 				</div>
 			</div>

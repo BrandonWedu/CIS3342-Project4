@@ -2,6 +2,7 @@
 
 namespace Project4.Models
 {
+	[Serializable]
 	public class Contingencies : ListOfObjects<Contingency>
 	{
 		public Contingencies() { }

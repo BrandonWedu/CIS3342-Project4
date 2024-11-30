@@ -1,5 +1,6 @@
 ﻿namespace Project4.Models
 {
+	[Serializable]
 	public class Contingency : ICloneable<Contingency>
 	{
 		private int contingencyID;
@@ -34,6 +35,11 @@
 		public Contingency(string contingency)
 		{
 			OfferContingency = contingency;
+		}
+
+		public Contingency()
+		{
+
 		}
 
 		public Contingency Clone()

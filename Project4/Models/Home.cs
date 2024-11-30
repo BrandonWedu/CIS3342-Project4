@@ -80,6 +80,7 @@
             this.utilities = utilities.Clone();
         }
 
+
         public int? HomeID
         {
             get { return homeID; }

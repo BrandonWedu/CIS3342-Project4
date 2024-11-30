@@ -1,7 +1,6 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model Project4.Models.Property
 @{
 	DateTime currentDate = DateTime.Now.Date;
 }
@@ -32,6 +31,7 @@
 
 		<div class="row mb-3">
 			<div class="col-12">
+				@*
 				<h3>@Model.AddressStreet, @Model.AddressCity, @Model.AddressState, @Model.AddressZipCode</h3>
 				<p class="mb-1"><strong>Asking Price:</strong> @Model.AskingPrice</p>
 				<p class="mb-1"><strong>Year Built:</strong> @Model.YearBuilt</p>
@@ -45,6 +45,7 @@
 				<p class="mb-1"><strong>Sewer Utilities:</strong> @Model.UtilitiesSewer</p>
 				<p class="mb-1"><strong>Listed on:</strong> @Model.CreationDate.Date</p>
 				<p class="mb-1"><strong>Days on Market:</strong> @((currentDate-Model.CreationDate.Date).Days)</p>
+				*@
 			</div>
 		</div>
 
@@ -90,13 +91,13 @@
 
 		<div class="row mb-3">
 			<div class="col-12 d-flex gap-2">
-			<form method="POST" asp-controller="Dashboard" asp-action="RequestShowing" asp-route-propertyID="@Model.PropertyID">
+			<form method="POST" asp-controller="Dashboard" asp-action="RequestShowing" asp-route-propertyID="">
 					<button type="submit" class="btn btn-primary btn-sm me-2" name="btnRequestShowing" id="btnRequestShowing">Request Showing</button>
 				</form>
-			<form method="POST" asp-controller="Dashboard" asp-action="MakeOffer" asp-route-propertyID="@Model.PropertyID">
+			<form method="POST" asp-controller="Dashboard" asp-action="MakeOffer" asp-route-propertyID="">
 					<button type="submit" class="btn btn-success btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Make Offer</button>
 				</form>
-				<form method="POST" asp-controller="Dashboard" asp-action="Dashboard" asp-route-propertyID="@Model.PropertyID">
+				<form method="POST" asp-controller="Dashboard" asp-action="Dashboard" asp-route-propertyID="">
 					<button type="submit" class="btn btn-success btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Make Offer</button>
 				</form>
 			</div>

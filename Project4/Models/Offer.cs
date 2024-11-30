@@ -9,7 +9,8 @@
 
 	public enum TypeOfSale
 	{
-		
+		Cash,
+		ConventionalMortgage
 	}
 	public class Offer : ICloneable<Offer>
 	{
