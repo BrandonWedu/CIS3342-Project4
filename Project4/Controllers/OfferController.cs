@@ -8,69 +8,62 @@ namespace Project4.Controllers
     //Handles Offer Create and Manage
     public class OfferController : Controller
     {
-        //private Contingencies offerContingencies = new Contingencies();
-		public IActionResult MakeOffer(MakeOfferViewModel model)
+		[HttpGet]        
+		
+		public IActionResult MakeOffer()
         {
-			if (TempData["OfferContingencies"] != null)
+			if (HttpContext.Session.GetString("OfferContingencies") == null)
 			{
-				string serializedContingencies = TempData["OfferContingencies"].ToString();
-				model.offerContingencies = JsonConvert.DeserializeObject<Contingencies>(serializedContingencies);
-
-				// Reassign TempData to persist the value for subsequent requests
-				TempData["OfferContingencies"] = serializedContingencies;
+				List<string> currentContingencies = new List<string>();
+				string seralizedContingencies = JsonConvert.SerializeObject(currentContingencies);
+				HttpContext.Session.SetString("OfferContingencies", seralizedContingencies);
+				ViewBag.OfferContingencies = currentContingencies;
 			}
 			else
 			{
-				// Initialize empty contingencies if TempData is null
-				Contingencies contingencies = new Contingencies();
-				TempData["OfferContingencies"] = JsonConvert.SerializeObject(contingencies);
-			}
+				string seralizedContingencies = HttpContext.Session.GetString("OfferContingencies");
+                List<string> currentContingencies = JsonConvert.DeserializeObject<List<string>>(seralizedContingencies);
+                ViewBag.OfferContingencies = currentContingencies;
+            }
 
-			return View(model);
+			return View();
 
 		}
 		[HttpPost]
-        public IActionResult AddContingency(MakeOfferViewModel model)
+        public IActionResult AddContingency(string newContingency)
         {
-			// Retrieve contingencies from TempData
-			string serializedContingencies = TempData["OfferContingencies"] as string;
-			Contingencies offerContingencies = string.IsNullOrEmpty(serializedContingencies)
-				? new Contingencies() // Initialize if TempData is empty
-				: JsonConvert.DeserializeObject<Contingencies>(serializedContingencies);
+            if (newContingency == "")
+            {
+                ViewBag.OfferError = "Contingency cannot be empty.";
+            }
+            else
+            {
+                string seralizedContingencies = HttpContext.Session.GetString("OfferContingencies");
+                List<string> currentContingencies = JsonConvert.DeserializeObject<List<string>>(seralizedContingencies);
+                currentContingencies.Add(newContingency);
+                seralizedContingencies = JsonConvert.SerializeObject(currentContingencies);
+                HttpContext.Session.SetString("OfferContingencies", seralizedContingencies);
+                ViewBag.OfferContingencies = currentContingencies;
+            }
+            return View("MakeOffer");
 
-			// Add the new contingency
-			if (!string.IsNullOrEmpty(model.NewContingency))
-			{
-				offerContingencies.Add(new Contingency(model.NewContingency));
-			}
-
-			// Clear the input field
-			model.NewContingency = "";
-			model.offerContingencies = offerContingencies;
-
-			// Save updated contingencies back to TempData
-			TempData["OfferContingencies"] = JsonConvert.SerializeObject(offerContingencies);
-
-			return RedirectToAction("MakeOffer", model);
 		}
 		[HttpPost]
-        public IActionResult RemoveContingency(MakeOfferViewModel model, string removedContingency)
+        public IActionResult RemoveContingency(string removedContingency)
         {
+            string seralizedContingencies = HttpContext.Session.GetString("OfferContingencies");
+            List<string> currentContingencies = JsonConvert.DeserializeObject<List<string>>(seralizedContingencies);
 
-			// Retrieve contingencies from TempData
-			string serializedContingencies = TempData["OfferContingencies"] as string;
-			Contingencies offerContingencies = string.IsNullOrEmpty(serializedContingencies)
-				? new Contingencies() // Initialize if TempData is empty
-				: JsonConvert.DeserializeObject<Contingencies>(serializedContingencies);
+            if (currentContingencies.Contains(removedContingency))
+            {
+                currentContingencies.Remove(removedContingency);
+            }
+            seralizedContingencies = JsonConvert.SerializeObject(currentContingencies);
+            HttpContext.Session.SetString("OfferContingencies", seralizedContingencies);
+            ViewBag.OfferContingencies = currentContingencies;
 
-			// Remove the specified contingency
-			offerContingencies.List.RemoveAll(c => c.OfferContingency == removedContingency);
-
-			// Save updated contingencies back to TempData
-			TempData["OfferContingencies"] = JsonConvert.SerializeObject(offerContingencies);
-
-			return RedirectToAction("MakeOffer", model);
-		}
+            return View("MakeOffer");
+        }
 
         public IActionResult AllOffers()
         {
