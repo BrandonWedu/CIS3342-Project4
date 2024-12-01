@@ -15,5 +15,23 @@ namespace HomeListingAPI.Controllers
 
 			return allHomeListings;
 		}
+
+
+		[HttpGet("ReadSingleHomeListing/{homeID}")]
+		public Home Get(int homeID)
+		{
+			Homes allHomeListings = new Homes();
+			allHomeListings = ReadHome.ReadAllHomes();
+			Home selectedHome = null;
+			foreach (Home currentHome in allHomeListings.List)
+			{
+				if (currentHome.HomeID == homeID)
+				{
+					selectedHome = currentHome;
+				}
+			}
+
+			return selectedHome;
+		}
 	}
 }
