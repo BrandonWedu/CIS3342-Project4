@@ -27,5 +27,18 @@ namespace Project4.Models
 
             return (int)outputParam.Value;
         }
-    }
+
+
+		internal static void UpdateOfferStatus(int offerID, OfferStatus newStatus)
+		{
+			DBConnect dbConnect = new DBConnect();
+			SqlCommand sqlCommand = new SqlCommand();
+			sqlCommand.CommandType = CommandType.StoredProcedure;
+			sqlCommand.CommandText = "P4_UpdateOfferStatus";
+
+			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@OfferID", offerID, SqlDbType.Int, 8));
+			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@Status", newStatus.ToString(), SqlDbType.VarChar, 50));
+			dbConnect.DoUpdate(sqlCommand);
+		}
+	}
 }

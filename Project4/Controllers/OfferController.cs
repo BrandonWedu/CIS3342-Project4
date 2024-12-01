@@ -85,6 +85,9 @@ namespace Project4.Controllers
 
         public IActionResult AllOffers()
         {
+            string agentCookie = HttpContext.Request.Cookies["LoggedInAgent"];
+            Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentCookie);
+            TempData["Agent"] = agentCookie;
             return View();
         }
 
@@ -146,5 +149,21 @@ namespace Project4.Controllers
             return RedirectToAction("Dashboard", "Dashboard");
 
         }
+
+        public IActionResult AcceptOffer(int offerID)
+        {
+            WriteOffer.UpdateOfferStatus(offerID, OfferStatus.Accepted);
+            return View("AllOffers");
+        }
+
+        public IActionResult DenyOffer(int offerID)
+        {
+			WriteOffer.UpdateOfferStatus(offerID, OfferStatus.Rejected);
+			return View("AllOffers");
+		}
+
+
+
+
     }
 }
