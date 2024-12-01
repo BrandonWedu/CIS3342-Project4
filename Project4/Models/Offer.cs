@@ -17,7 +17,7 @@
 		private int offerID;
 		private Home home;
 		private Client client;
-		private decimal amount;
+		private int amount;
 		private TypeOfSale typeOfSale;
 		private bool sellHomePrior;
 		private DateTime moveInDate;
@@ -41,7 +41,7 @@
 			set { client = value; }
 		}
 
-		public decimal Amount
+		public int Amount
 		{
 			get { return amount; }
 			set { amount = value; }
@@ -71,7 +71,7 @@
 			set { status = value; }
 		}
 
-		public Offer(int id, Home home, Client client, decimal offerAmount, TypeOfSale saleType, bool sellHome, DateTime moveInDate, OfferStatus status)
+		public Offer(int id, Home home, Client client, int offerAmount, TypeOfSale saleType, bool sellHome, DateTime moveInDate, OfferStatus status)
 		{
 			OfferID = id;
 			Home = home;
@@ -83,7 +83,18 @@
 			Status = status;
 		}
 
-		public Offer Clone()
+        public Offer(Home home, Client client, int offerAmount, TypeOfSale saleType, bool sellHome, DateTime moveInDate, OfferStatus status)
+        {
+            Home = home;
+            Client = client;
+            Amount = offerAmount;
+            TypeOfSale = saleType;
+            SellHomePrior = sellHome;
+            MoveInDate = moveInDate;
+            Status = status;
+        }
+
+        public Offer Clone()
 		{
 			return new Offer(OfferID, Home, Client, Amount, TypeOfSale, SellHomePrior, MoveInDate, Status);
 		}

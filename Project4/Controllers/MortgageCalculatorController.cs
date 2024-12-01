@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Project4.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Project4.Controllers
@@ -55,7 +57,22 @@ namespace Project4.Controllers
                 var body = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(body);
                 TempData["Result"] = body;
+
+                MortgageCalculatorAPI mortgageResponse = JsonConvert.DeserializeObject<MortgageCalculatorAPI>(body);
+                if (mortgageResponse == null || mortgageResponse.MonthlyPayment == null || mortgageResponse.AnnualPayment == null)
+                {
+                    Console.WriteLine("Deserialization failed or some properties are null.");
+                }
+                else
+                {
+                    Console.WriteLine("Serialized Passed");
+                }
+                TempData["MortgageResult"] = JsonConvert.SerializeObject(mortgageResponse);
+
             }
+
+            //string seralizedHome = HttpContext.Session.GetString("CurrentHome");
+            //TempData["CurrentHome"] = seralizedHome;
             //---------------------------------
             return View("MortgageCalculator");
         }

@@ -1,34 +1,28 @@
 ﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Data;
 
 namespace Project4.Models
 {
 	public class WriteContingencies
 	{
-		private DBConnect databaseHandler = new DBConnect();
+        internal static void CreateNew(Contingencies newContingencies)
+        {
 
-		public void CreateNewContingencies(Contingencies contingencies, int offerID)
-		{
-			foreach (Contingency currentContingency in contingencies.List)
-			{
+            foreach (Contingency currentContingency in newContingencies.List)
+            {
+                DBConnect dbConnect = new DBConnect();
+                SqlCommand sqlCommand = new SqlCommand();
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.CommandText = "P4_CreateNewContingency";
+
+                sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@OfferID", (int)currentContingency.OfferID, SqlDbType.Int, 8));
+                sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@Contingency", currentContingency.OfferContingency, SqlDbType.VarChar, -1));
 
 
-				SqlCommand insertProcedure = new SqlCommand();
-				insertProcedure.CommandType = CommandType.StoredProcedure;
-				insertProcedure.CommandText = "InsertNewContingency";
-				insertProcedure.Parameters.AddWithValue("@OfferID", offerID);
-				insertProcedure.Parameters.AddWithValue("@Contingency", currentContingency.OfferContingency);
-				databaseHandler.DoUpdate(insertProcedure);
-			}
-		}
+                dbConnect.DoUpdate(sqlCommand);
+            }
 
-		public void RemoveContingencies(int offerID)
-		{
-			SqlCommand deleteProcedure = new SqlCommand();
-			deleteProcedure.CommandType = CommandType.StoredProcedure;
-			deleteProcedure.CommandText = "DeleteContingencies";
-			deleteProcedure.Parameters.AddWithValue("@OfferID", offerID);
-			databaseHandler.DoUpdate(deleteProcedure);
-		}
-	}
+        }
+    }
 }

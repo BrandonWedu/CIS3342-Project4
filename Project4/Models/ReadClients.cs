@@ -14,7 +14,7 @@ namespace Project4.Models
             Clients allClients = new Clients();
             SqlCommand sqlCommand = new SqlCommand();
 			sqlCommand.CommandType = CommandType.StoredProcedure;
-			sqlCommand.CommandText = "SelectAllCompanies";
+			sqlCommand.CommandText = "P4_SelectAllClients";
 			DataTable agentContactData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
 
 			foreach (DataRow row in agentContactData.Rows)
@@ -25,28 +25,49 @@ namespace Project4.Models
 			return allClients;
 		}
 
-		internal static Clients GetClientByClientID(int id)
+		internal static Client GetClientByClientID(int id)
 		{
             DBConnect databaseHandler = new DBConnect();
             Clients allClients = new Clients();
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "SelectAllCompanies";
+            sqlCommand.CommandText = "P4_SelectAllClients";
             DataTable agentContactData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
-
+			Client selectedClient = null;
             foreach (DataRow row in agentContactData.Rows)
             {
-                allClients.Add(new Client((int)row["ClientID"], row["FirstName"].ToString(), row["LastName"].ToString(), Serializer.DeserializeData<Address>((byte[])row["ClientAddress"]), row["PhoneNumber"].ToString(), row["Email"].ToString()));
-            }
-            Clients selectedClients = new Clients();
-			foreach (Client client in allClients.List)
-			{
-				if (client.ClientID == id)
+				if ((int)row["ClientID"] == id)
 				{
-					selectedClients.Add(client);
-				}
-			}
-			return selectedClients;
+                    selectedClient = new Client((int)row["ClientID"], row["FirstName"].ToString(), row["LastName"].ToString(), Serializer.DeserializeData<Address>((byte[])row["ClientAddress"]), row["PhoneNumber"].ToString(), row["Email"].ToString());
+
+                }
+            }
+
+			return selectedClient;
+
 		}
-	}
+
+        internal static Client GetClientByLastNameAndAddress(Client client)
+        {
+            DBConnect databaseHandler = new DBConnect();
+            Clients allClients = new Clients();
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.CommandText = "P4_SelectAllClients";
+            DataTable agentContactData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
+            Client selectedClient = null;
+            foreach (DataRow row in agentContactData.Rows)
+            {
+                Address rowAddress = Serializer.DeserializeData<Address>((byte[])row["ClientAddress"]);
+                if ((row["LastName"].ToString() == client.LastName) && (rowAddress.Street == client.ClientAddress.Street))
+                {
+                    selectedClient = new Client((int)row["ClientID"], row["FirstName"].ToString(), row["LastName"].ToString(), Serializer.DeserializeData<Address>((byte[])row["ClientAddress"]), row["PhoneNumber"].ToString(), row["Email"].ToString());
+
+                }
+            }
+
+            return selectedClient;
+
+        }
+    }
 }

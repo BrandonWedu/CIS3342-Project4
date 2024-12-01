@@ -1,4 +1,7 @@
-﻿@{
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
     ViewBag.Title = "Submit Offer";
 }
 
@@ -27,6 +30,32 @@
         </div>
     </div>
 
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="OfferAddress" class="form-label">Address</label>
+            <input type="text" id="OfferAddress" name="Address" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label for="OfferCity" class="form-label">City</label>
+            <input type="text" id="OfferCity" name="City" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label for="OfferState" class="form-label">Offer Type</label>
+            <select id="OfferType" name="State" class="form-control">
+                @foreach (var state in Enum.GetNames(typeof(States)))
+                {
+                    <option value="@state">@state</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label for="OfferZip" class="form-label">Zip Code</label>
+            <input type="text" id="OfferZip" name="Zip" class="form-control" />
+        </div>
+    </div>
+
     <div class="row mb-3">
         <div class="col-md-6">
             <label for="txtOfferAmount" class="form-label">Offer Amount</label>
@@ -44,7 +73,7 @@
     </div>
 
     <div class="row mb-3">
-        <a asp-controller="Offer" asp-action="CalculateMortgage" class="btn btn-primary">Mortgage Calculator</a>
+        <a asp-controller="MortgageCalculatorController" asp-action="CalculateMortgage" class="btn btn-primary">Mortgage Calculator</a>
     </div>
 
     <div class="row mb-3">
@@ -86,6 +115,26 @@
                     }
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Sell Current Home</label>
+            <div class="form-check">
+                <input type="radio" id="SellHomeYes" name="SellHomePrior" value="true" class="form-check-input" />
+                <label for="SellHomeYes" class="form-check-label">Yes</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" id="SellHomeNo" name="SellHomePrior" value="false" class="form-check-input" />
+                <label for="SellHomeNo" class="form-check-label">No</label>
+            </div>
+         </div>
+
+
+        <div class="col-md-6">
+            <label for="OfferMoveInDate" class="form-label">MoveInDate</label>
+            <input type="date" id="OfferZip" name="MoveInDate" class="form-control" />
         </div>
     </div>
 

@@ -5,39 +5,27 @@ namespace Project4.Models
 {
 	public class WriteOffer
 	{
-		private DBConnect databaseHandler = new DBConnect();
-		public void CreateNewOffer(Offer newOffer)
-		{
-			SqlCommand insertProcedure = new SqlCommand();
-			insertProcedure.CommandType = CommandType.StoredProcedure;
-			insertProcedure.CommandText = "InsertNewOffer";
-			insertProcedure.Parameters.AddWithValue("@HomeID", newOffer.Home.HomeID);
-			insertProcedure.Parameters.AddWithValue("@ClientID", newOffer.Client.ClientID);
-			insertProcedure.Parameters.AddWithValue("@Amount", newOffer.Amount);
-			insertProcedure.Parameters.AddWithValue("@TypeOfSale", newOffer.TypeOfSale);
-			insertProcedure.Parameters.AddWithValue("@SellHomePrior", newOffer.SellHomePrior);
-			insertProcedure.Parameters.AddWithValue("@MoveInDate", newOffer.MoveInDate);
-			insertProcedure.Parameters.AddWithValue("@Status", newOffer.Status);
-			databaseHandler.DoUpdate(insertProcedure);
-		}
+        internal static int CreateNew(Offer offer)
+        {
+            DBConnect dbConnect = new DBConnect();
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.CommandText = "P4_CreateNewOffer";
 
-		public void UpdateOffer(Offer offer, OfferStatus newStatus)
-		{
-			SqlCommand updateProcedure = new SqlCommand();
-			updateProcedure.CommandType = CommandType.StoredProcedure;
-			updateProcedure.CommandText = "UpdateOfferStatus";
-			updateProcedure.Parameters.AddWithValue("@OfferID", offer.OfferID);
-			updateProcedure.Parameters.AddWithValue("@Status", newStatus);
-			databaseHandler.DoUpdate(updateProcedure);
-		}
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@HomeID", (int)offer.Home.HomeID, SqlDbType.Int, 8));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@ClientID", offer.Client.ClientID, SqlDbType.Int, 8));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@Amount", (int)offer.Amount, SqlDbType.Int, 8));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@TypeOfSale", offer.TypeOfSale.ToString(), SqlDbType.VarChar, 50));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<bool>("@SellHomePrior", offer.SellHomePrior, SqlDbType.Bit));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<DateTime>("@MoveInDate", offer.MoveInDate, SqlDbType.Date));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@Status", offer.Status.ToString(), SqlDbType.VarChar, 50));
 
-		public void RemoveOffer(Offer offer)
-		{
-			SqlCommand deleteProcedure = new SqlCommand();
-			deleteProcedure.CommandType = CommandType.StoredProcedure;
-			deleteProcedure.CommandText = "DeleteOffer";
-			deleteProcedure.Parameters.AddWithValue("@OfferID", offer.OfferID);
-			databaseHandler.DoUpdate(deleteProcedure);
-		}
-	}
+            SqlParameter outputParam = DBParameterHelper.OutputParameter("@OfferID", SqlDbType.Int, 8);
+            sqlCommand.Parameters.Add(outputParam);
+
+            dbConnect.DoUpdate(sqlCommand);
+
+            return (int)outputParam.Value;
+        }
+    }
 }

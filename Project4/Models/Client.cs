@@ -55,7 +55,16 @@
 			Email = email;
 		}
 
-		public Client Clone()
+        public Client(string fName, string lName, Address address, string phone, string email)
+        {
+            FirstName = fName;
+            LastName = lName;
+            ClientAddress = address;
+            PhoneNumber = phone;
+            Email = email;
+        }
+
+        public Client Clone()
 		{
 			return new Client(ClientID, FirstName, LastName, ClientAddress, PhoneNumber, Email);
 		}

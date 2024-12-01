@@ -32,9 +32,10 @@
 			OfferContingency = contingency;
 		}
 
-		public Contingency(string contingency)
+		public Contingency(int offerID, string contingency)
 		{
-			OfferContingency = contingency;
+            OfferID = offerID;
+            OfferContingency = contingency;
 		}
 
 		public Contingency()
