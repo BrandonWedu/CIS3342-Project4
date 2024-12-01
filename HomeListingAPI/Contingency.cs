@@ -1,5 +1,6 @@
 ﻿namespace HomeListingAPI
 {
+	[Serializable]
 	public class Contingency : ICloneable<Contingency>
 	{
 		private int contingencyID;

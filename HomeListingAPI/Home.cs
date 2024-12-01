@@ -1,4 +1,6 @@
-﻿namespace HomeListingAPI
+﻿
+
+namespace HomeListingAPI
 {
     //Property Type Enum
     public enum PropertyType
@@ -24,10 +26,11 @@
         DoubleCar,
         MultiCar
     }
+    [Serializable]
     public class Home : ICloneable<Home>
     {
         private int? homeID;
-        private Agent agent;
+        private  Agent agent;
         private int cost;
         private Address address;
         private PropertyType propertyType;
@@ -78,6 +81,11 @@
             this.temperatureControl = temperatureControl.Clone();
             this.rooms = rooms.Clone();
             this.utilities = utilities.Clone();
+        }
+
+        public Home()
+        {
+
         }
 
         public int? HomeID

@@ -29,8 +29,9 @@
         RadiantCooling
     }
 
-    //Holds all data for heating and cooling
-    public class TemperatureControl : ICloneable<TemperatureControl>
+	//Holds all data for heating and cooling
+	[Serializable]
+	public class TemperatureControl : ICloneable<TemperatureControl>
     {
         //Fields 
         private int? temperatureControlID;
@@ -50,6 +51,11 @@
             this.temperatureControlID = temperatureControlID;
             this.heating = heating;
             this.cooling = cooling;
+        }
+
+        public TemperatureControl()
+        {
+
         }
 
         //Get Set

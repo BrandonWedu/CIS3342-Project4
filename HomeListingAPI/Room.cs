@@ -21,7 +21,8 @@
         Storage,
         Outside
     }
-    public class Room : ICloneable<Room>
+	[Serializable]
+	public class Room : ICloneable<Room>
     {
         private int? roomID;
         private RoomType type;
@@ -41,6 +42,11 @@
             this.type = type;
             this.height = height;
             this.width = width;
+        }
+
+        public Room()
+        {
+
         }
 
         public int? RoomID

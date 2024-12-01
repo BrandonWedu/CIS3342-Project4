@@ -18,10 +18,12 @@ namespace HomeListingAPI
         //String SqlConnectString = $"server=cis-mssql1.temple.edu;Database=FA24_3342_tur31103;User id=tur31103;Password={password}"; // Nathan connection string
 
         // Home Connection String - used for working from home using SSH Tunneling.
-        String SqlConnectString = $"server=127.0.0.1,5555;Database=FA24_3342_tui78495;User id=tui78495;Password={password}"; // Brandon home connection
-        //String SqlConnectString = $"server=127.0.0.1,5555;Database=FA24_3342_tur31103;User id=tur31103;Password={password};Encrypt=True;TrustServerCertificate=True;"; // Nathan home connection
+        String SqlConnectString = $"server=127.0.0.1,5555;Database=FA24_3342_tui78495;User id=tui78495;Password={password};Encrypt=True;TrustServerCertificate=True;"; // Brandon home connection
 
-        SqlConnection myConnectionSql;
+
+		//String SqlConnectString = $"server=127.0.0.1,5555;Database=FA24_3342_tur31103;User id=tur31103;Password={password};Encrypt=True;TrustServerCertificate=True;"; // Nathan home connection
+
+		SqlConnection myConnectionSql;
         SqlCommand objCmd;
         SqlDataReader objDataReader;
         DataSet ds;

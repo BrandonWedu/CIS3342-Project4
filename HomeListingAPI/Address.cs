@@ -53,7 +53,8 @@
         Wisconsin,
         Wyoming
     }
-    public class Address : ICloneable<Address>
+	[Serializable]
+	public class Address : ICloneable<Address>
     {
         private int? addressID;
         private string street;
@@ -76,6 +77,11 @@
             this.city = city;
             this.state = state;
             this.zipCode = zipCode;
+        }
+
+        public Address()
+        {
+
         }
 
         public string Street

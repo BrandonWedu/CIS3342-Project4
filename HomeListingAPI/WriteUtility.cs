@@ -22,5 +22,21 @@ namespace HomeListingAPI
             dbConnect.DoUpdate(sqlCommand);
             return (int)outputParam.Value;
         }
+
+        internal static void UpdateUtilities(int homeID, Utilities updatedUtilites)
+        {
+            foreach (Utility currentUtility in updatedUtilites.List)
+            {
+				DBConnect dbConnect = new DBConnect();
+				SqlCommand sqlCommand = new SqlCommand();
+				sqlCommand.CommandType = CommandType.StoredProcedure;
+				sqlCommand.CommandText = "P4_UpdateUtility";
+				sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@UtilityID", (int)currentUtility.UtilityID, SqlDbType.Int, 8));
+				sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@HomeID", homeID, SqlDbType.Int, 8));
+				sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@UtilityType", currentUtility.Type.ToString(), SqlDbType.VarChar, 50));
+				sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@UtilityInformation", currentUtility.Information, SqlDbType.VarChar));
+				dbConnect.DoUpdate(sqlCommand);
+			}
+        }
     }
 }
