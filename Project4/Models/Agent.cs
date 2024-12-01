@@ -68,6 +68,10 @@ namespace Project4.Models
             set { agentSecurityQuestions = value; }
         }
 
+        public Agent()
+        {
+
+        }
         public Agent(int id, string username, string password, string salt, bool verified, Company work, AgentContact contactInfo, AgentPersonalInformation agentInfo, AgentSecuritys questions)
         {
             AgentID = id;

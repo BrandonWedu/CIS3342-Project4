@@ -38,7 +38,7 @@
             set { email = value; }
         }
 
-
+        public AgentContact() { }
         public AgentContact(int id, int agentID, Address workAddress, string phone, string email)
         {
             AgentContactID = id;

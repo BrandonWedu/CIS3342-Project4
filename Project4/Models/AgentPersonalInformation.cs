@@ -52,6 +52,7 @@
             set { email = value; }
         }
 
+        public AgentPersonalInformation() { }
         public AgentPersonalInformation(int id, int agentId, string fName, string lName, Address homeAddress, string phone, string email)
         {
             AgentInfoID = id;

@@ -1,0 +1,17 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div>
+    <form asp-controller="Account" asp-action="VerifyAccountWithCode" method="POST">
+        <h1>Account Verification</h1>
+        <p>Please enter the verification code or click the link send to your email</p>
+        <input type="text" id="code" name="code" placeholder="Enter Code Here" />
+        <input type="submit" value="Submit">
+        @if (TempData["Error"] != null)
+        {
+            <p>@TempData["Error"]</p>
+        }
+    </form>
+</div>

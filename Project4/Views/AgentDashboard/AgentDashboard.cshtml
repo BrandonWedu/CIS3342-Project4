@@ -5,7 +5,7 @@
 }
 
 <div>
-    <form asp-controller="Home" asp-action="CreateNewHome" method="POST">
+    <form asp-controller="RealEstateHome" asp-action="CreateHome" method="GET">
         <button type="submit">Create New Home</button>
     </form>
     <form asp-controller="Home" asp-action="ManageHome" method="POST">
@@ -17,7 +17,12 @@
     <form asp-controller="Offer" asp-action="ViewAllOffers" method="POST">
         <button type="submit">View Offers</button>
     </form>
-
+    @if (Context.Request.Cookies["LoggedInAgent"] != null)
+    {
+        <form asp-controller="AgentDashboard" asp-action="DeleteCookie" method="POST">
+            <button type="submit">Delete Cookie</button>
+        </form>
+    }
 
     <a asp-controller="Dashboard" asp-action="Dashboard" class="btn btn-secondary">Logout</a>
 
