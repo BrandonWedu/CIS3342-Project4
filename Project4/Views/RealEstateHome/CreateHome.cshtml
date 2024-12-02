@@ -15,148 +15,258 @@
     <body>
         <form asp-controller="RealEstateHome" asp-action="HomeForm" method="POST">
             <h1>Create a Home Listing</h1>
+
             <div>
                 <h2>Home Address</h2>
-                <span id="lblHomeStreet">Street</span>
-                <input name="txtHomeStreet" type="text" placeholder="Enter Street" value="@if (TempData["txtHomeStreet"] != null){@TempData["txtHomeStreet"]}">
-                <span id="lblHomeCity">City</span>
-                <select name="ddlHomeCity" type="text" >
+                <span>Street</span>
+                <input name="txtHomeStreet" type="text" placeholder="Enter Street" value="@TempData["txtHomeStreet"]">
+                <span>City</span>
+                <input name="txtHomeCity" type="text" placeholder="Enter City" value="@TempData["txtHomeCity"]">
+                <span>State</span>
+                <select name="ddlHomeState" type="text" >
                     @foreach (States state in Enum.GetValues(typeof(States)))
                     {
-                        <option value="@state">@state</option>
+                        if(TempData["ddlHomeState"] != null && TempData["ddlHomeState"].ToString() == state.ToString())
+                        {
+                            <option value="@state" selected="selected">@state</option>
+                        }
+                        else
+                        {
+                            <option value="@state">@state</option>
+                        }
                     }
                 </select>
-                <span id="lblHomeState">State</span>
-                <input name="txtHomeState" type="text" placeholder="Enter State" value="@TempData["txtHomeState"]">
-                <span id="lblHomeZipCode">Zip Code</span><input name="txtHomeZipCode" type="text" id="txtHomeZipCode" placeholder="Enter Zip Code">
+                <span>Zip Code</span>
+                <input name="txtHomeZipCode" type="text" placeholder="Enter Zip Code" value="@TempData["txtHomeZipCode"]">
 
             </div>
+
             <div>
                 <h2>Home Information</h2>
-                <span id="lblHomeCost">Asking Price</span>
-                <input name="txtHomeCost" type="text" id="txtHomeCost" placeholder="Enter Asking Price">
+                <span>Asking Price</span>
+                <input name="txtHomeCost" type="text" placeholder="Enter Asking Price" value="@TempData["txtHomeCost"]">
                 <span id="lblPropertyType">Property Type</span>
-                <select name="ddlPropertyType" id="ddlPropertyType">
+                <select name="ddlPropertyType">
                     @foreach (PropertyType propertyType in Enum.GetValues(typeof(PropertyType)))
                     {
-                        <option value="@propertyType">@propertyType</option>
+                        if(TempData["ddlPropertyType"] != null && TempData["ddlPropertyType"].ToString() == propertyType.ToString())
+                        {
+                            <option value="@propertyType" selected="selected">@propertyType</option>
+                        }
+                        else
+                        {
+                            <option value="@propertyType">@propertyType</option>
+                        }
                     }
                 </select>
-                <span id="lblYearConstructed">Year Constructed</span>
-                <input name="txtYearConstructed" type="text" id="txtYearConstructed" placeholder="Enter Year Constructed">
-                <span id="lblGarageType">Garage Type</span>
-                <select name="ddlGarageType" id="ddlGarageType">
+                <span>Year Constructed</span>
+                <input name="txtYearConstructed" type="text" placeholder="Enter Year Constructed" value="@TempData["txtYearConstructed"]">
+                <span>Garage Type</span>
+                <select name="ddlGarageType">
                     @foreach (GarageType garageType in Enum.GetValues(typeof(GarageType)))
                     {
-                        <option value="@garageType">@garageType</option>
+                        if(TempData["ddlGarageType"] != null && TempData["ddlGarageType"].ToString() == garageType.ToString())
+                        {
+                            <option value="@garageType" selected="selected">@garageType</option>
+                        }
+                        else
+                        {
+                            <option value="@garageType">@garageType</option>
+                        }
                     }
                 </select>
-                <span id="lblHomeDescription">Home Description</span>
-                <textarea name="txtHomeDescription" rows="4" cols="20" id="txtHomeDescription" placeholder="Home Description"></textarea>
-                <span id="lblSaleStatus">SaleStatus</span>
-                <select name="ddlSaleStatus" id="ddlSaleStatus">
+                <span>Home Description</span>
+                <textarea name="txtHomeDescription" rows="4" cols="20" placeholder="Home Description">@TempData["txtHomeDescription"]</textarea>
+                <span>SaleStatus</span>
+                <select name="ddlSaleStatus">
                     @foreach (SaleStatus saleStatus in Enum.GetValues(typeof(SaleStatus)))
                     {
-                        <option value="@saleStatus">@saleStatus</option>
+                        if(TempData["ddlSaleStatus"] != null && TempData["ddlSaleStatus"].ToString() == saleStatus.ToString())
+                        {
+                            <option value="@saleStatus" selected="selected">@saleStatus</option>
+                        }
+                        else
+                        {
+                            <option value="@saleStatus">@saleStatus</option>
+                        }
                     }
                 </select>
             </div>
-            <div class="item-container">
+
+            <div>
                 <h2>Add Temperature Control Information</h2>
-                <span id="lblCooling">Cooling</span>
-                <select name="ddlCooling" id="ddlCooling">
+                <span>Cooling</span>
+                <select name="ddlCooling">
                     @foreach (CoolingTypes coolingType in Enum.GetValues(typeof(CoolingTypes)))
                     {
-                        <option value="@coolingType">@coolingType</option>
+                        if(TempData["ddlCooling"] != null && TempData["ddlCooling"].ToString() == coolingType.ToString())
+                        {
+                            <option value="@coolingType" selected="selected">@coolingType</option>
+                        }
+                        else
+                        {
+                            <option value="@coolingType">@coolingType</option>
+                        }
                     }
                 </select>
-                <span id="lblHeating">Heating</span>
-                <select name="ddlHeating" id="ddlHeating">
+                <span>Heating</span>
+                <select name="ddlHeating">
                     @foreach (HeatingTypes heatingType in Enum.GetValues(typeof(HeatingTypes)))
                     {
-                        <option value="@heatingType">@heatingType</option>
+                        if(TempData["ddlHeating"] != null && TempData["ddlHeating"].ToString() == heatingType.ToString())
+                        {
+                            <option value="@heatingType" selected="selected">@heatingType</option>
+                        }
+                        else
+                        {
+                            <option value="@heatingType">@heatingType</option>
+                        }
                     }
                 </select>
             </div>
-            <div class="item-container">
-                <h2>Add Room Information</h2>
-            @if(TempData["RoomCount"] == null)
-            {
-                TempData["RoomCount"] = 0;
-            }
-            @for(int i = 0; i < (int)TempData["RoomCount"]; i++)
-            {
-                <div class="item-container">
-                    <span>Length: </span>
-                    <input name="@($"txtLength{i}")" type="text" placeholder="Enter Height" value="@TempData[$"txtLength{i}"]">
-                    <span id="lblWidth{@i}">Width: </span>
-                    <input name="txtWidth{@i}" type="text" id="txtWidth0" placeholder="Enter Width">
-                    <span id="lblRoomType{@i}">RoomType: </span>
-                    <select name="ddlRoomType{@i}" id="ddlRoomType0">
-                    @foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
-                    {
-                        <option value="@roomType">@roomType</option>
-                    }
-                    </select>
-                    <input type="submit" name="btnRoomDelete_0" value="Delete" id="btnRoomDelete_0">
-                </div>
-            }
 
+            <div>
+                <h2>Add Room Information</h2>
+                @if (TempData["RoomCount"] == null)
+                {
+                    TempData["RoomCount"] = 1;
+                }
+                @for(int i = 0; i < (int)TempData["RoomCount"]; i++)
+                {
+                if (TempData[$"RoomHidden_{i}"] == null)
+                {
+                    TempData[$"RoomHidden_{i}"] = false;
+                }
+                    <div @((bool)TempData[$"RoomHidden_{i}"] ? "hidden" : "")>
+                        <span>Length: </span>
+                        <input name="txtLength_@i" type="text" placeholder="Enter Length" value="@TempData[$"txtLength_{i}"]">
+                        <span>Width: </span>
+                        <input name="txtWidth_@i" type="text" placeholder="Enter Width" value="@TempData[$"txtWidth_{i}"]">
+                        <span>RoomType: </span>
+                        <select name="ddlRoomType_@i">
+                        @foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
+                        {
+                            if(TempData[$"ddlRoomType_{i}"] != null && TempData[$"ddlRoomType_{i}"].ToString() == roomType.ToString())
+                            {
+                                <option value="@roomType" selected="selected">@roomType</option>
+                            }
+                            else
+                            {
+                                <option value="@roomType">@roomType</option>
+                            }
+                        }
+                        </select>
+                        <button type="submit" name="button" value="DeleteRoom_@i">Delete Room</button>
+                    </div>
+                }
                 <button type="submit" name="button" value="AddRoom">Add Room</button>
             </div>
-            <div class="item-container">
-                <h2>Add Utility Information</h2>
-                <div id="pnlUtilityContainer0" class="item-container">
-                    <span id="lblInformation0">Information: </span>
-                    <input name="txtInformation0" type="text" id="txtInformation0" placeholder="Enter Information">
-                    <span id="lblUtilityType0">Utility Type: </span>
-                    <select name="ddlUtilityType0" id="ddlUtilityType0">
-                    @foreach (UtilityTypes utilityType in Enum.GetValues(typeof(UtilityTypes)))
-                    {
-                        <option value="@utilityType">@utilityType</option>
-                    }
-                    </select>
-                    <input type="submit" name="btnutilitydelete_0" value="delete" id="btnutilitydelete_0">
-                </div>
-                <input type="submit" name="btnGenerateUtility" value="Add Utility" id="btnGenerateUtility">
-            </div>
-        <div class="item-container">
-            <h2>Add Amenity Information</h2>
-            <div id="pnlAmenityContainer0" class="item-container">
-                <span id="lblDescription0">Description: </span>
-                <input name="txtDescription0" type="text" id="txtDescription0" placeholder="Enter Description">
-                <span id="lblAmenityType0">Amenity Type: </span>
-                <select name="ddlAmenityType0" id="ddlAmenityType0">
-                    @foreach (AmenityType amenityType in Enum.GetValues(typeof(AmenityType)))
-                    {
-                        <option value="@amenityType">@amenityType</option>
-                    }
 
-                </select>
-                <input type="submit" name="btnAmenityDelete_0" value="Delete" id="btnAmenityDelete_0">
+            <div>
+                <h2>Add Utility Information</h2>
+                @if (TempData["UtilityCount"] == null)
+                {
+                    TempData["UtilityCount"] = 1;
+                }
+                @for(int i = 0; i < (int)TempData["UtilityCount"]; i++)
+                {
+                if (TempData[$"UtilityHidden_{i}"] == null)
+                {
+                    TempData[$"UtilityHidden_{i}"] = false;
+                }
+                    <div @((bool)TempData[$"UtilityHidden_{i}"] ? "hidden" : "")>
+                        <span>Utility Information: </span>
+                        <input name="txtUtilityInformation_@i" type="text" placeholder="Enter Utility Information" value="@TempData[$"txtUtilityInformation_{i}"]">
+                        <span>Utility Type: </span>
+                        <select name="ddlUtilityType_@i">
+                        @foreach (UtilityTypes utilityType in Enum.GetValues(typeof(UtilityTypes)))
+                        {
+                        if(TempData[$"ddlUtilityType_{i}"] != null && TempData[$"ddlUtilityType_{i}"].ToString() == utilityType.ToString())
+                        {
+                            <option value="@utilityType" selected="selected">@utilityType</option>
+                        }
+                        else
+                        {
+                            <option value="@utilityType">@utilityType</option>
+                        }
+                        }
+                        </select>
+                        <button type="submit" name="button" value="DeleteUtility_@i">Delete Utility</button>
+                    </div>
+                }
+                <button type="submit" name="button" value="AddUtility">Add Utility</button>
             </div>
-            <input type="submit" name="btnGenerateAmenity" value="Add Amenity" id="btnGenerateAmenity">
-        </div>
-        <div class="item-container">
-            <h2>Add Image (upload images individually before submitting listing)</h2>
-            <div id="pnlImageContainer0" class="item-container">
-                <h2>Main Image</h2>
-                <span id="lblImageDescription0">Description: </span>
-                <input name="txtImageDescription0" type="text" id="txtImageDescription0" placeholder="Enter Description">
-                <span id="lblImageRoomType0">Room Type: </span>
-                <select name="ddlImageRoomType0" id="ddlImageRoomType0">
-                    @foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
-                    {
-                        <option value="@roomType">@roomType</option>
-                    }
-                </select>
-                <span id="lblImageUpload0">Image Upload: </span>
-                <input type="file" name="fuImage0" id="fuImage0">
-                <input type="submit" name="btnUpload_0" value="Upload" id="btnUpload_0">
+
+            <div>
+                <h2>Add Amenity Information</h2>
+                @if (TempData["AmenityCount"] == null)
+                {
+                    TempData["AmenityCount"] = 1;
+                }
+                @for(int i = 0; i < (int)TempData["AmenityCount"]; i++)
+                {
+                if (TempData[$"AmenityHidden_{i}"] == null)
+                {
+                    TempData[$"AmenityHidden_{i}"] = false;
+                }
+                    <div @((bool)TempData[$"AmenityHidden_{i}"] ? "hidden" : "")>
+                        <span>Amenity Information: </span>
+                        <input name="txtAmenityInformation_@i" type="text" placeholder="Enter Amenity Information" value="@TempData[$"txtAmenityInformation_{i}"]">
+                        <span>Amenity Type: </span>
+                        <select name="ddlAmenityType_@i">
+                        @foreach (AmenityType amenityType in Enum.GetValues(typeof(AmenityType)))
+                        {
+                        if(TempData[$"ddlAmenityType_{i}"] != null && TempData[$"ddlAmenityType_{i}"].ToString() == amenityType.ToString())
+                        {
+                            <option value="@amenityType" selected="selected">@amenityType</option>
+                        }
+                        else
+                        {
+                            <option value="@amenityType">@amenityType</option>
+                        }
+                        }
+                        </select>
+                        <button type="submit" name="button" value="DeleteAmenity_@i">Delete Amenity</button>
+                    </div>
+                }
+                <button type="submit" name="button" value="AddAmenity">Add Amenity</button>
             </div>
-            <input type="submit" name="btnGenerateImage" value="Add Image" id="btnGenerateImage">
-        </div>
-            <button type="submit">Submit Home</button>
+
+            <div>
+                <h2>Add Image Information</h2>
+                @if (TempData["ImageCount"] == null)
+                {
+                    TempData["ImageCount"] = 1;
+                }
+                @for(int i = 0; i < (int)TempData["ImageCount"]; i++)
+                {
+                if (TempData[$"ImageHidden_{i}"] == null)
+                {
+                    TempData[$"ImageHidden_{i}"] = false;
+                }
+                    <div @((bool)TempData[$"ImageHidden_{i}"] ? "hidden" : "")>
+                        <span>Image Information: </span>
+                        <input name="txtImageInformation_@i" type="text" placeholder="Enter Image Information" value="@TempData[$"txtImageInformation_{i}"]">
+                        <span>Image Type: </span>
+                        <select name="ddlImageType_@i">
+                        @foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
+                        {
+                            if(TempData[$"ddlImageRoomType_{i}"] != null && TempData[$"ddlImageRoomType_{i}"].ToString() == roomType.ToString())
+                            {
+                                <option value="@roomType" selected="selected">@roomType</option>
+                            }
+                            else
+                            {
+                                <option value="@roomType">@roomType</option>
+                            }
+                        }
+                        </select>
+                        <input type="file" name="fuImage_@i">
+                        <button type="submit" name="button" value="DeleteImage_@i">Delete Image</button>
+                    </div>
+                }
+                <button type="submit" name="button" value="AddImage">Add Image</button>
+            </div>
         </form>
     </body>
 </html>
