@@ -67,6 +67,9 @@ namespace Project4.Controllers
                 case "DeleteImage":
                     DeleteImage(buttonNumber);
                     break;
+                case "UploadImage":
+                    UploadImage(buttonNumber);
+                    break;
 
             }
             return View("CreateHome");
@@ -125,6 +128,13 @@ namespace Project4.Controllers
         public void DeleteImage(int i)
         {
             TempData[$"ImageHidden_{i}"] = true;
+            RetainData();
+        }
+        public void UploadImage(int i)
+        {
+            //Save Image To Server
+
+            TempData[$"ImageUploaded_{i}"] = true;
             RetainData();
         }
 

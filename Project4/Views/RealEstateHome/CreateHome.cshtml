@@ -244,6 +244,10 @@
                 {
                     TempData[$"ImageHidden_{i}"] = false;
                 }
+                if (TempData[$"ImageUploaded_{i}"] == null)
+                {
+                    TempData[$"ImageUploaded_{i}"] = false;
+                }
                     <div @((bool)TempData[$"ImageHidden_{i}"] ? "hidden" : "")>
                         <span>Image Information: </span>
                         <input name="txtImageInformation_@i" type="text" placeholder="Enter Image Information" value="@TempData[$"txtImageInformation_{i}"]">
@@ -261,7 +265,15 @@
                             }
                         }
                         </select>
-                        <input type="file" name="fuImage_@i">
+                        @if ((bool)TempData[$"ImageUploaded_{i}"])
+                        {
+                            <span>Image Uploaded To Server.</span>
+                        }
+                        else
+                        {
+                            <input type="file" name="fuImage_@i">
+                            <button type="submit" name="button" value="UploadImage_@i">Upload Image</button>
+                        }
                         <button type="submit" name="button" value="DeleteImage_@i">Delete Image</button>
                     </div>
                 }
