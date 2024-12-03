@@ -192,7 +192,7 @@ namespace Project4.Controllers
             //https://img.freepik.com/premium-vector/isolated-home-vector-illustration_1076263-25.jpg
 
             Home home = new Home(
-                agent,
+                agent.AgentID,
                 cost,
                 address,
                 propertyType,

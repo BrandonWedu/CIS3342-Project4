@@ -19,8 +19,9 @@
             <h1>Schedule Showing</h1>
             <h2>Home Information</h2>
             <p>
-                Company: @Model.Home.Agent.WorkCompany.CompanyName<br/>
-                Agent: @Model.Home.Agent.PersonalInformation.FirstName @Model.Home.Agent.PersonalInformation.LastName | Agent Email: @Model.Home.Agent.AgentContactInfo.Email<br/>
+                
+                Company: @*@Model.Home.Agent.WorkCompany.CompanyName *@<br/>
+                Agent: @*@Model.Home.Agent.PersonalInformation.FirstName @Model.Home.Agent.PersonalInformation.LastName | Agent Email: @Model.Home.Agent.AgentContactInfo.Email *@<br/>
                 Home Address: @Model.Home.Address.ToString()<br/>
             </p>
             <h2>Client Information</h2>
