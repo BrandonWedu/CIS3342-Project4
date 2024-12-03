@@ -116,7 +116,7 @@
 
 		<div class="row mb-3">
 			<div class="col-12 d-flex gap-2">
-			<form method="POST" asp-controller="Showing" asp-action="RequestShowing" asp-route-homeID="">
+			<form method="POST" asp-controller="Showing" asp-action="ScheduleShowing" asp-route-homeID="@currentHome.HomeID">
 					<button type="submit" class="btn btn-primary btn-sm me-2" name="btnRequestShowing" id="btnRequestShowing">Request Showing</button>
 				</form>
 			<form method="POST" asp-controller="Offer" asp-action="MakeOffer" asp-route-homeID="@currentHome.HomeID">

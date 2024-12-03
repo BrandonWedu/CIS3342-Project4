@@ -94,10 +94,10 @@ namespace Project4.Controllers
 
         public IActionResult AllOffers()
         {
-            string agentCookie = HttpContext.Request.Cookies["LoggedInAgent"];
-            Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentCookie);
-            TempData["Agent"] = agentCookie;
-            return View();
+            string agentSession = HttpContext.Session.GetString("Agent");
+            Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentSession);
+            ViewBag.Agent = currentAgent;
+            return View("AllOffers");
         }
 
 
@@ -126,7 +126,6 @@ namespace Project4.Controllers
             Offer newOffer = new Offer(home, actualClient, int.Parse(offerAmount), Enum.Parse<TypeOfSale>(saleType), bool.Parse(sellHome), DateTime.Parse(moveInDate), OfferStatus.Pending);
             
             int offerID = WriteOffer.CreateNew(newOffer);
-            // Read Offers will need updated to use the HOME api call
             Offer actualOffer = ReadOffers.GetOfferByHomeClientAmount(home, actualClient, int.Parse(offerAmount));
 
             string seralizedContingencies = HttpContext.Session.GetString("OfferContingencies");
@@ -162,12 +161,18 @@ namespace Project4.Controllers
         public IActionResult AcceptOffer(int offerID)
         {
             WriteOffer.UpdateOfferStatus(offerID, OfferStatus.Accepted);
-            return View("AllOffers");
+			string agentSession = HttpContext.Session.GetString("Agent");
+			Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentSession);
+			ViewBag.Agent = currentAgent;
+			return View("AllOffers");
         }
 
         public IActionResult DenyOffer(int offerID)
         {
 			WriteOffer.UpdateOfferStatus(offerID, OfferStatus.Rejected);
+			string agentSession = HttpContext.Session.GetString("Agent");
+			Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentSession);
+			ViewBag.Agent = currentAgent;
 			return View("AllOffers");
 		}
 

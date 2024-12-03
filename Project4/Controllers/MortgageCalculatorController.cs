@@ -9,14 +9,21 @@ namespace Project4.Controllers
     {
         public IActionResult MortgageCalculator()
         {
+            Home currentHome = JsonConvert.DeserializeObject<Home>(HttpContext.Session.GetString("CurrentHome"));
+            ViewBag.Home = currentHome;
             return View();
         }
 
         [HttpGet]
         public async Task<IActionResult> CalculateMortgage(string homeValue, string downPayment, string interestRate, string durationYears)
         {
+            Home currentHome = JsonConvert.DeserializeObject<Home>(HttpContext.Session.GetString("CurrentHome"));
+            ViewBag.Home = currentHome;
+
             //Validation
             List<string> error = new List<string>();
+
+            Console.WriteLine(homeValue);
             
             //everything must be TryParsed as a double
             if (!double.TryParse(homeValue, out double parsedHomeValue) || double.TryParse(downPayment, out double parsedDownPayment) && parsedHomeValue < parsedDownPayment)

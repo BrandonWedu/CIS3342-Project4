@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Project4.Models;
 using Project4.Models.ViewModels;
 using System.Text.Json;
@@ -15,7 +16,7 @@ namespace Project4.Controllers
             {
                 return View("Dashboard");
             }
-            Agent agent = JsonSerializer.Deserialize<Agent>(agentJson);
+            Agent agent = JsonConvert.DeserializeObject<Agent>(agentJson);
             model.Showings = ReadShowing.GetShowingsByAgentID(agent.AgentID);
             return View(model);
         }
@@ -34,8 +35,16 @@ namespace Project4.Controllers
             return View("ViewShowings", new ViewShowingsViewModel());
         }
 
-        public IActionResult ScheduleShowing(ScheduleShowingsViewModel model)
+        public IActionResult ScheduleShowing(int homeID)
         {
+            ScheduleShowingsViewModel model = new ScheduleShowingsViewModel();
+            string apiUrl = $"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadSingleHomeListing/{homeID}";
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(apiUrl).Result;
+            string jsonString = response.Content.ReadAsStringAsync().Result;
+            Home currentHome = JsonConvert.DeserializeObject<Home>(jsonString);
+            HttpContext.Session.SetString("CurrentHome", jsonString);
+            model.Home = currentHome;
             return View(model);
         }
 

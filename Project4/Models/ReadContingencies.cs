@@ -15,7 +15,7 @@ namespace Project4.Models
             Contingencies allContingencies = new Contingencies();
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "SelectAllContingencies";
+            sqlCommand.CommandText = "P4_SelectAllContingencies";
             DataTable agentContactData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
 
             foreach (DataRow row in agentContactData.Rows)
@@ -33,7 +33,7 @@ namespace Project4.Models
             Contingencies allContingencies = new Contingencies();
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "SelectAllContingencies";
+            sqlCommand.CommandText = "P4_SelectAllContingencies";
             DataTable agentContactData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
 
             foreach (DataRow row in agentContactData.Rows)

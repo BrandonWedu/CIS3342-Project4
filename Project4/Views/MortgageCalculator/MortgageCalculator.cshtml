@@ -10,24 +10,21 @@
         mortgageData = JsonConvert.DeserializeObject<MortgageCalculatorAPI>(mortgageJSON);
     }
 
-    //string homeJSON = TempData["CurrentHome"].ToString();
-    //homeData = JsonConvert.DeserializeObject<Home>(homeJSON);
-    //int homeAmount = homeData.Amount;
+    Home currentHome = null;
+    if (ViewBag.Home != null)
+    {
+        currentHome = ViewBag.Home;
+    }
 
 }
 <div>
     <form asp-controller="MortgageCalculator" asp-action="CalculateMortgage" method="GET">
         <h1>Mortgage Calculator</h1>
-        <input type="text" id="homeValue" name="homeValue" placeholder="Enter home value Here" />
-        @*<input type="text" id="homeValue" name="homeValue" value="@homeAmount" disabled />*@
+        <input type="text" id="homeValue" name="homeValue" value="@currentHome.Cost" readonly />
         <input type="text" id="downPayment" name="downPayment" placeholder="Enter down payment Here" />
         <input type="text" id="interestRate" name="interestRate" placeholder="Enter interest rate Here" />
         <input type="text" id="durationYears" name="durationYears" placeholder="Enter duration in years Here" />
         <input type="submit" value="Submit">
-        @if (TempData["Result"] != null)
-        {
-            <p>@TempData["Result"]</p>
-        }
         @if (TempData["Error"] != null)
         {
             @foreach (string error in (List<string>)TempData["Error"])
@@ -65,7 +62,6 @@
             <p>No data available. Please calculate a mortgage!</p>
         }
 
-
-        @*<a asp-controller="Offer" asp-action="MakeOffer" asp-route-homeID="@homeData.HomeID" class="btn btn-secondary">Go Back To Offer</a>*@
+        <a asp-controller="Dashboard" asp-action="Dashboard" class="btn btn-secondary">Go Back To All Listings</a>
     </form>
 </div>

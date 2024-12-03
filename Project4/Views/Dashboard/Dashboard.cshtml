@@ -3,13 +3,23 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-	//List<Property> allProperties = (List<Property>)ViewBag.AllProperties;
 	DateTime currentDate = DateTime.Now.Date;
 	Homes allHomes = null;
 	if (ViewBag.Homes != null)
 	{
 		allHomes = ViewBag.Homes;
-		Console.WriteLine(allHomes.List);
+		Homes unsortedHomes = ViewBag.Homes;
+		Homes sortedHomes = new Homes { List = new List<Home>() };
+		int index = 0;
+		foreach (Home currentHome in unsortedHomes.List.ToList())
+		{
+			if (currentHome.SaleStatus != SaleStatus.ForSale)
+			{
+				sortedHomes.List.Add(currentHome);
+			}
+			index++;
+		}
+		allHomes = sortedHomes;
 	}
 
 }
@@ -115,46 +125,44 @@
 	<div class="col-md-9 col-lg-10 p-4" id="listingContent">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-4 mb-4">
-					
+				@if (allHomes.List.Count == 0)
+				{
+					<h2>No Home Listings Are For Sale!</h2>
+				}
+				else
+				{
 					@foreach (Home currentHome in allHomes.List)
 					{
-						<div class="card">
-							<img src="" class="card-img-top" alt="Property Image" />
-							<div class="card-body">
-
-								<h5 class="card-title">Address Goes Here</h5>
-								<p class="card-text">
-									<strong>Type: @currentHome.PropertyType</strong> <br />
-									<strong>SqFt: @currentHome.HomeSize</strong> <br />
-									<strong>Bedrooms: @currentHome.Rooms.GetBedrooms()</strong> <br />
-									<strong>Full-Bathrooms: @currentHome.Rooms.GetFullBaths()</strong> <br />
-									<strong>Full-Bathrooms: @currentHome.Rooms.GetHalfBaths()</strong> <br />
-									<strong>Asking Price: @currentHome.Cost</strong><br />
-									<strong>Days Listed: @((currentDate - currentHome.DateListed).Days)</strong> <br />
-								</p>
-								<div class="d-flex gap-2">
-									<form method="POST" asp-controller="Dashboard" asp-action="ViewDetail" asp-route-homeID="@currentHome.HomeID">
-
-										<button type="submit" class="btn btn-primary btn-sm me-2" name="btnViewDetials" id="btnViewDetails">View Details</button>
-									</form>
-									<form method="POST" asp-controller="Showing" asp-action="RequestShowing" asp-route-homeID="@currentHome.HomeID">
-
-										<button type="submit" class="btn btn-primary btn-sm me-2" name="btnRequestShowing" id="btnRequestShowing">Request Showing</button>
-									</form>
-									<form method="POST" asp-controller="Offer" asp-action="MakeOffer" asp-route-homeID="@currentHome.HomeID">
-
-										<button type="submit" class="btn btn-primary btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Make Offer</button>
-									</form>
-
+						<div class="col-md-4 mb-4">
+							<div class="card">
+								<img src="" class="card-img-top" alt="Property Image" />
+								<div class="card-body">
+									<h5 class="card-title">Address Goes Here</h5>
+									<p class="card-text">
+										<strong>Type: @currentHome.PropertyType</strong> <br />
+										<strong>SqFt: @currentHome.HomeSize</strong> <br />
+										<strong>Bedrooms: @currentHome.Rooms.GetBedrooms()</strong> <br />
+										<strong>Full-Bathrooms: @currentHome.Rooms.GetFullBaths()</strong> <br />
+										<strong>Half-Bathrooms: @currentHome.Rooms.GetHalfBaths()</strong> <br />
+										<strong>Asking Price: @currentHome.Cost</strong> <br />
+										<strong>Days Listed: @((currentDate - currentHome.DateListed).Days)</strong> <br />
+									</p>
+									<div class="d-flex flex-wrap gap-2">
+										<form method="POST" asp-controller="Dashboard" asp-action="ViewDetail" asp-route-homeID="@currentHome.HomeID">
+											<button type="submit" class="btn btn-primary btn-sm" name="btnViewDetials" id="btnViewDetails">View Details</button>
+										</form>
+										<form method="POST" asp-controller="Showing" asp-action="ScheduleShowing" asp-route-homeID="@currentHome.HomeID">
+											<button type="submit" class="btn btn-primary btn-sm" name="btnRequestShowing" id="btnRequestShowing">Request Showing</button>
+										</form>
+										<form method="POST" asp-controller="Offer" asp-action="MakeOffer" asp-route-homeID="@currentHome.HomeID">
+											<button type="submit" class="btn btn-primary btn-sm" name="btnMakeOffer" id="btnMakeOffer">Make Offer</button>
+										</form>
+									</div>
 								</div>
 							</div>
-
 						</div>
 					}
-					
-
-				</div>
+				}
 			</div>
 		</div>
 	</div>

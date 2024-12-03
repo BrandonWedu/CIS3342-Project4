@@ -6,17 +6,20 @@
 	Offers allOffers = ReadOffers.ReadAllOffers();
 	Offers agentOffers = null;
 	Agent currentAgent = null;
-	//Homes allHomes = do api call & seralize
-	@*
-	if (TempData["Agent"] != null)
+	string apiUrl = "https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadHomeListings";
+	HttpClient client = new HttpClient();
+	HttpResponseMessage response = client.GetAsync(apiUrl).Result;
+	string jsonString = response.Content.ReadAsStringAsync().Result;
+	Homes allHomes = JsonConvert.DeserializeObject<Homes>(jsonString);
+	if (ViewBag.Agent != null)
 	{
-		currentAgent = JsonConvert.DeserializeObject<Agent>(TempData["Agent"].ToString());
+		currentAgent = ViewBag.Agent;
 		agentOffers = new Offers();
 		foreach (Home currentHome in allHomes.List)
 		{
 			foreach (Offer currentOffer in allOffers.List)
 			{
-				if (currentHome.Agent.AgentID == currentAgent.AgentID)
+				if (currentHome.AgentID == currentAgent.AgentID)
 				{
 					if (currentHome.HomeID == currentOffer.Home.HomeID)
 					{
@@ -30,50 +33,51 @@
 			}
 		}
 	}
-	*@
 }
 <div class="container">
-	<div class="row">
-		<div class="col-md-4 mb-4">
-			
-			@foreach (Offer currentOffer in agentOffers.List)
-			{
-			<div class="card">
-			<img src="" class="card-img-top" alt="Property Image" />
-			<div class="card-body">
-
-			<h5 class="card-title">@currentOffer.Home.Address.ToString()</h5>
-			<p class="card-text">
-			<strong>Client Name: @currentOffer.Client.FirstName + @currentOffer.Client.LastName</strong> <br />
-			<strong>Client Email: @currentOffer.Client.Email</strong> <br />
-			<strong>Asking Price For Home: @currentOffer.Home.Cost</strong> <br />
-			<strong>Offer Amount: @currentOffer.Amount</strong> <br />
-			<strong>Move In Date: @currentOffer.MoveInDate.Date</strong><br />
-			<strong>Offer Contingencies:</strong> <br />
-			<ul>
-								@foreach(Contingency currentContingency in ReadContingencies.GetContingenciesByOfferID(currentOffer.OfferID).List)
-								{
-									<li>@currentContingency.OfferContingency</li>
-								}
-			</ul>
-			</p>
-			<div class="d-flex gap-2">
-			<form method="POST" asp-controller="Offer" asp-action="AcceptOffer" asp-route-offerID="@currentOffer.OfferID">
-
-			<button type="submit" class="btn btn-primary btn-sm me-2" name="AcceptOffer" id="btnViewDetails">Accept Offer</button>
-			</form>
-			<form method="POST" asp-controller="Dashboard" asp-action="DenyOffer" asp-route-offerID="@currentOffer.OfferID">
-
-			<button type="submit" class="btn btn-primary btn-sm me-2" name="DenyOffer" id="btnRequestShowing">Deny Offer</button>
-			</form>
-
-			</div>
-			</div>
-
-			</div>
-			}
-			
-
-		</div>
-	</div>
+    <h2>Your pending offers</h2>
+    <div class="row">
+        @foreach (Offer currentOffer in agentOffers.List)
+        {
+            <div class="col-md-4 mb-4">
+                <!-- Each card occupies one-third of the row on medium+ screens -->
+                <div class="card h-100">
+                    <!-- h-100 ensures consistent card height -->
+                    <div class="card-body">
+                        <h5 class="card-title">@currentOffer.Home.Address.ToString()</h5>
+                        <p class="card-text">
+                            <strong>Client Name: @currentOffer.Client.FirstName @currentOffer.Client.LastName</strong> <br />
+                            <strong>Client Email: @currentOffer.Client.Email</strong> <br />
+                            <strong>Asking Price For Home: @currentOffer.Home.Cost</strong> <br />
+                            <strong>Offer Amount: @currentOffer.Amount</strong> <br />
+                            <strong>Move In Date: @currentOffer.MoveInDate.Date</strong><br />
+                            <strong>Offer Contingencies:</strong> <br />
+                            <ul>
+                                @if (ReadContingencies.GetContingenciesByOfferID(currentOffer.OfferID).List.Count == 0)
+                                {
+                                    <p>No Contingencies With Offer</p>
+                                }
+                                else
+                                {
+                                    @foreach (Contingency currentContingency in ReadContingencies.GetContingenciesByOfferID(currentOffer.OfferID).List)
+                                    {
+                                        <li>@currentContingency.OfferContingency</li>
+                                    }
+                                }
+     
+                            </ul>
+                        </p>
+                        <div class="d-flex gap-2">
+                            <form method="POST" asp-controller="Offer" asp-action="AcceptOffer" asp-route-offerID="@currentOffer.OfferID">
+                                <button type="submit" class="btn btn-primary btn-sm me-2" name="AcceptOffer" id="btnViewDetails">Accept Offer</button>
+                            </form>
+                            <form method="POST" asp-controller="Offer" asp-action="DenyOffer" asp-route-offerID="@currentOffer.OfferID">
+                                <button type="submit" class="btn btn-primary btn-sm me-2" name="DenyOffer" id="btnRequestShowing">Deny Offer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
