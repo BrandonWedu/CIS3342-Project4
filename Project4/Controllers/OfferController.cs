@@ -59,6 +59,15 @@ namespace Project4.Controllers
 		[HttpPost]
         public IActionResult AddContingency(string newContingency)
         {
+            ViewBag.FirstName = Request.Form["FirstName"];
+            ViewBag.LastName = Request.Form["LastName"];
+            ViewBag.Email = Request.Form["Email"];
+            ViewBag.Phone = Request.Form["Phone"];
+            ViewBag.ClientAddress = Request.Form["clientAddress"];
+            ViewBag.ClientCity = Request.Form["clientCity"];
+            ViewBag.ClientZip = Request.Form["clientZip"];
+            ViewBag.OfferAmount = Request.Form["OfferAmount"];
+            ViewBag.MoveInDate = Request.Form["MoveInDate"];
             if (newContingency == "")
             {
                 ViewBag.OfferError = "Contingency cannot be empty.";
@@ -78,6 +87,15 @@ namespace Project4.Controllers
 		[HttpPost]
         public IActionResult RemoveContingency(string removedContingency)
         {
+            ViewBag.FirstName = Request.Form["FirstName"];
+            ViewBag.LastName = Request.Form["LastName"];
+            ViewBag.Email = Request.Form["Email"];
+            ViewBag.Phone = Request.Form["Phone"];
+            ViewBag.ClientAddress = Request.Form["clientAddress"];
+            ViewBag.ClientCity = Request.Form["clientCity"];
+            ViewBag.ClientZip = Request.Form["clientZip"];
+            ViewBag.OfferAmount = Request.Form["OfferAmount"];
+            ViewBag.MoveInDate = Request.Form["MoveInDate"];
             string seralizedContingencies = HttpContext.Session.GetString("OfferContingencies");
             List<string> currentContingencies = JsonConvert.DeserializeObject<List<string>>(seralizedContingencies);
 
@@ -115,43 +133,130 @@ namespace Project4.Controllers
             string clientCity = Request.Form["clientCity"];
             string clientState = Request.Form["clientState"];
             string clientZip = Request.Form["clientZip"];
-
-            string serializedHome = HttpContext.Session.GetString("CurrentHome");
-            Home home = JsonConvert.DeserializeObject<Home>(serializedHome);
-            States stateEnum = Enum.Parse<States>(clientState);
-            Address newAddress = new Address(clientAddress, clientCity, stateEnum, clientZip);
-            Client newClient = new Client(firstName, lastName, newAddress, phone, email);
-            int clientID = WriteClient.CreateNew(newClient);
-            Client actualClient = ReadClients.GetClientByLastNameAndAddress(newClient);
-            Offer newOffer = new Offer(home, actualClient, int.Parse(offerAmount), Enum.Parse<TypeOfSale>(saleType), bool.Parse(sellHome), DateTime.Parse(moveInDate), OfferStatus.Pending);
+            List<string> inputs = new List<string>();
+            inputs.Add(firstName);
+            inputs.Add(lastName);
+            inputs.Add(email);
+            inputs.Add(phone);
+            inputs.Add(offerAmount);
+            inputs.Add(sellHome);
+            inputs.Add(moveInDate);
+            inputs.Add(clientAddress);
+            inputs.Add(clientCity);
+            inputs.Add(clientZip);
             
-            int offerID = WriteOffer.CreateNew(newOffer);
-            Offer actualOffer = ReadOffers.GetOfferByHomeClientAmount(home, actualClient, int.Parse(offerAmount));
-
-            string seralizedContingencies = HttpContext.Session.GetString("OfferContingencies");
-            List<string> currentContingencies = JsonConvert.DeserializeObject<List<string>>(seralizedContingencies);
-
-            Contingencies newContingencies = new Contingencies();
-            foreach (string contingency in currentContingencies)
+            if (ValidateOffer(inputs) == false)
             {
-                newContingencies.Add(new Contingency(actualOffer.OfferID, contingency));
+                ViewBag.OfferError = "Please fix errors below and resubmit the offer!";
+                ViewBag.FirstName = firstName;
+                ViewBag.LastName = lastName;
+                ViewBag.Email = email;
+                ViewBag.Phone = phone;
+                ViewBag.OfferAmount = offerAmount;
+                ViewBag.MoveInDate = moveInDate;
+                ViewBag.ClientAddress = clientAddress;
+                ViewBag.ClientCity = clientCity;
+                ViewBag.ClientZip = clientZip;
+                return View("MakeOffer");
             }
-            WriteContingencies.CreateNew(newContingencies);
+            else
+            {
+                string serializedHome = HttpContext.Session.GetString("CurrentHome");
+                Home home = JsonConvert.DeserializeObject<Home>(serializedHome);
+                States stateEnum = Enum.Parse<States>(clientState);
+                Address newAddress = new Address(clientAddress, clientCity, stateEnum, clientZip);
+                Client newClient = new Client(firstName, lastName, newAddress, phone, email);
+                int clientID = WriteClient.CreateNew(newClient);
+                Client actualClient = ReadClients.GetClientByLastNameAndAddress(newClient);
+                Offer newOffer = new Offer(home, actualClient, int.Parse(offerAmount), Enum.Parse<TypeOfSale>(saleType), bool.Parse(sellHome), DateTime.Parse(moveInDate), OfferStatus.Pending);
+
+                int offerID = WriteOffer.CreateNew(newOffer);
+                Offer actualOffer = ReadOffers.GetOfferByHomeClientAmount(home, actualClient, int.Parse(offerAmount));
+
+                string seralizedContingencies = HttpContext.Session.GetString("OfferContingencies");
+                List<string> currentContingencies = JsonConvert.DeserializeObject<List<string>>(seralizedContingencies);
+
+                Contingencies newContingencies = new Contingencies();
+                foreach (string contingency in currentContingencies)
+                {
+                    newContingencies.Add(new Contingency(actualOffer.OfferID, contingency));
+                }
+                WriteContingencies.CreateNew(newContingencies);
 
 
-            TempData["Message"] = "Congratulations! Your offer was successfully placed!";
-            TempData["FirstName"] = actualOffer.Client.FirstName;
-            TempData["LastName"] = actualOffer.Client.LastName;
-            TempData["OfferHomeAddress"] = actualOffer.Home.Address.Street + ", " + actualOffer.Home.Address.City + "," + actualOffer.Home.Address.State + ", " + actualOffer.Home.Address.ZipCode;
-            TempData["OfferAmount"] = actualOffer.Amount;
+                TempData["Message"] = "Congratulations! Your offer was successfully placed!";
+                TempData["FirstName"] = actualOffer.Client.FirstName;
+                TempData["LastName"] = actualOffer.Client.LastName;
+                TempData["OfferHomeAddress"] = actualOffer.Home.Address.Street + ", " + actualOffer.Home.Address.City + "," + actualOffer.Home.Address.State + ", " + actualOffer.Home.Address.ZipCode;
+                TempData["OfferAmount"] = actualOffer.Amount;
 
 
-            HttpContext.Session.Remove("OfferContingencies");
-            HttpContext.Session.Remove("CurrentHome");
+                HttpContext.Session.Remove("OfferContingencies");
+                HttpContext.Session.Remove("CurrentHome");
 
-            return RedirectToAction("Confirmation");
+                return RedirectToAction("Confirmation");
+            }
+
+
         }
 
+        private bool ValidateOffer(List<string> inputs)
+        {
+            bool isValid = true;
+            if (string.IsNullOrEmpty(inputs[0]))
+            {
+                isValid = false;
+                ViewBag.FnameError = "First Name Is Requried!";
+            }
+            if (string.IsNullOrEmpty(inputs[1]))
+            {
+                isValid = false;
+                ViewBag.LnameError = "Last Name Is Requried!";
+            }
+            if (string.IsNullOrEmpty(inputs[2]))
+            {
+                isValid = false;
+                ViewBag.EmailError = "Email Is Requried!";
+            }
+            if (string.IsNullOrEmpty(inputs[3]))
+            {
+                isValid = false;
+                ViewBag.PhoneError = "Phone Number Is Requried!";
+            }
+            if (string.IsNullOrEmpty(inputs[4]) || int.TryParse(inputs[4], out _ ) == false)
+            {
+                isValid = false;
+                ViewBag.AmountError = "Offer Amount Is Requried!";
+            }
+            if (string.IsNullOrEmpty(inputs[5]))
+            {
+                isValid = false;
+                ViewBag.HomeError = "Current Home Sale Is Requried!";
+            }
+            if (string.IsNullOrEmpty(inputs[6]) || DateTime.TryParse(inputs[6], out _) == false)
+            {
+                isValid = false;
+                ViewBag.DateError = "Move In Date Is Requried!";
+            }
+            if (string.IsNullOrEmpty(inputs[7]))
+            {
+                isValid = false;
+                ViewBag.StreetError = "Street Address Sale Is Requried!";
+            }
+            if (string.IsNullOrEmpty(inputs[8]))
+            {
+                isValid = false;
+                ViewBag.CityError = "City Sale Is Requried!";
+            }
+            if (string.IsNullOrEmpty(inputs[9]))
+            {
+                isValid = false;
+                ViewBag.ZipError = "Zip Code Sale Is Requried!";
+            }
+
+
+            return isValid;
+        }
         public async Task<IActionResult> Confirmation()
         {
             return View("Confirmation");

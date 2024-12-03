@@ -8,15 +8,17 @@
 <div class="container my-4">
     <form asp-controller="Offer" asp-action="FinalizeOffer" method="POST" class="card shadow mt-5 p-3">
         <h4 class="card-title">Make Offer</h4>
-        <p class="text-warning">@ViewBag.OfferError</p>
+        <p class="text-danger">@ViewBag.OfferError</p>
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="txtOfferFirstName" class="form-label">First Name</label>
                 <input type="text" id="txtOfferFirstName" name="FirstName" class="form-control" value="@ViewBag.FirstName"/>
+                <span class="text-danger">@ViewBag.FnameError</span>
             </div>
             <div class="col-md-6">
                 <label for="txtOfferLastName" class="form-label">Last Name</label>
                 <input type="text" id="txtOfferLastName" name="LastName" class="form-control" value="@ViewBag.LastName" />
+                <span class="text-danger">@ViewBag.FnameError</span>
             </div>
         </div>
 
@@ -24,10 +26,12 @@
             <div class="col-md-6">
                 <label for="txtOfferEmail" class="form-label">Email</label>
                 <input type="email" id="txtOfferEmail" name="Email" class="form-control" value="@ViewBag.Email" />
+                <span class="text-danger">@ViewBag.EmailError</span>
             </div>
             <div class="col-md-6">
                 <label for="OfferPhone" class="form-label">Phone Number</label>
                 <input type="tel" id="OfferPhone" name="Phone" class="form-control" value="@ViewBag.Phone" />
+                <span class="text-danger">@ViewBag.PhoneError</span>
             </div>
         </div>
 
@@ -35,10 +39,12 @@
             <div class="col-md-6">
                 <label for="OfferAddress" class="form-label">Address</label>
                 <input type="text" id="OfferAddress" name="clientAddress" class="form-control" value="@ViewBag.ClientAddress" />
+                <span class="text-danger">@ViewBag.StreetError</span>
             </div>
             <div class="col-md-6">
                 <label for="OfferCity" class="form-label">City</label>
                 <input type="text" id="OfferCity" name="clientCity" class="form-control" value="@ViewBag.ClientCity" />
+                <span class="text-danger">@ViewBag.CityError</span>
             </div>
 
             <div class="col-md-6">
@@ -53,6 +59,7 @@
             <div class="col-md-6">
                 <label for="OfferZip" class="form-label">Zip Code</label>
                 <input type="text" id="OfferZip" name="clientZip" class="form-control" value="@ViewBag.ClientZip" />
+                <span class="text-danger">@ViewBag.ZipError</span>
             </div>
         </div>
 
@@ -60,6 +67,7 @@
             <div class="col-md-6">
                 <label for="OfferAmount" class="form-label">Offer Amount</label>
                 <input type="text" id="OfferAmount" name="OfferAmount" class="form-control" value="@ViewBag.Offer" />
+                <span class="text-danger">@ViewBag.AmountError</span>
             </div>
             <div class="col-md-6">
                 <label for="SaleType" class="form-label">Offer Type</label>
@@ -83,11 +91,13 @@
                     <input type="radio" id="SellHomeNo" name="SellHomePrior" value="false" class="form-check-input" />
                     <label for="SellHomeNo" class="form-check-label">No</label>
                 </div>
+                <span class="text-danger">@ViewBag.HomeError</span>
             </div>
 
             <div class="col-md-6">
                 <label for="OfferMoveInDate" class="form-label">Move-In Date</label>
                 <input type="date" id="OfferMoveInDate" name="MoveInDate" class="form-control" value="@ViewBag.MoveInDate" />
+                <span class="text-danger">@ViewBag.DateError</span>
             </div>
         </div>
 
