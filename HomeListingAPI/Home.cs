@@ -30,7 +30,7 @@ namespace HomeListingAPI
     public class Home : ICloneable<Home>
     {
         private int? homeID;
-        private  Agent agent;
+        private int agentID;
         private int cost;
         private Address address;
         private PropertyType propertyType;
@@ -46,10 +46,10 @@ namespace HomeListingAPI
         private Rooms rooms;
         private Utilities utilities;
 
-        public Home(Agent agent, int cost, Address address, PropertyType type, int yearConstructed, GarageType garageType, string description, DateTime dateListed, SaleStatus saleStatus, Images images, Amenities amenities, TemperatureControl temperatureControl, Rooms rooms, Utilities utilities)
+        public Home(int agentID, int cost, Address address, PropertyType type, int yearConstructed, GarageType garageType, string description, DateTime dateListed, SaleStatus saleStatus, Images images, Amenities amenities, TemperatureControl temperatureControl, Rooms rooms, Utilities utilities)
         {
             this.homeID = null;
-            this.agent = agent.Clone();
+            this.agentID = agentID;
             this.cost = cost;
             this.address = address.Clone();
             this.propertyType = type;
@@ -64,10 +64,10 @@ namespace HomeListingAPI
             this.rooms = rooms.Clone();
             this.utilities = utilities.Clone();
         }
-        public Home(int? houseID, Agent agent, int cost, Address address, PropertyType type, int yearConstructed, GarageType garageType, string description, DateTime dateListed, SaleStatus saleStatus, Images images, Amenities amenities, TemperatureControl temperatureControl, Rooms rooms, Utilities utilities)
+        public Home(int? houseID, int agent, int cost, Address address, PropertyType type, int yearConstructed, GarageType garageType, string description, DateTime dateListed, SaleStatus saleStatus, Images images, Amenities amenities, TemperatureControl temperatureControl, Rooms rooms, Utilities utilities)
         {
             this.homeID = houseID;
-            this.agent = agent.Clone();
+            this.agentID = agent;
             this.cost = cost;
             this.address = address.Clone();
             this.propertyType = type;
@@ -93,10 +93,10 @@ namespace HomeListingAPI
             get { return homeID; }
             set { homeID = value; }
         }
-        public Agent Agent
+        public int AgentID
         {
-            get { return agent.Clone(); }
-            set { agent = value.Clone(); }
+            get { return agentID; }
+            set { agentID = value; }
         }
         public int Cost
         {
@@ -185,7 +185,7 @@ namespace HomeListingAPI
         }
         public Home Clone()
         {
-            return new Home(HomeID, Agent, Cost, Address, PropertyType,YearConstructed, GarageType, Description, DateListed, SaleStatus, Images, Amenities, TemperatureControl, Rooms, Utilities);
+            return new Home(HomeID, AgentID, Cost, Address, PropertyType,YearConstructed, GarageType, Description, DateListed, SaleStatus, Images, Amenities, TemperatureControl, Rooms, Utilities);
         }
     }
 }
