@@ -1,5 +1,6 @@
 var builder = WebApplication.CreateBuilder(args);
 
+AppContext.SetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", true);
 // Add services to the container.
 
 builder.Services.AddControllers();
