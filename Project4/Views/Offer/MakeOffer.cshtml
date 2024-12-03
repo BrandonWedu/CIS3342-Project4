@@ -6,39 +6,39 @@
 }
 
 <div class="container my-4">
-    <span class="text-danger">@ViewBag.OfferError</span>
-
-    <form asp-controller="Offer" asp-action="FinalizeOffer" method="POST">
+    <form asp-controller="Offer" asp-action="FinalizeOffer" method="POST" class="card shadow mt-5 p-3">
+        <h4 class="card-title">Make Offer</h4>
+        <p class="text-warning">@ViewBag.OfferError</p>
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="txtOfferFirstName" class="form-label">First Name</label>
-                <input type="text" id="txtOfferFirstName" name="FirstName" class="form-control" />
+                <input type="text" id="txtOfferFirstName" name="FirstName" class="form-control" value="@ViewBag.FirstName"/>
             </div>
             <div class="col-md-6">
                 <label for="txtOfferLastName" class="form-label">Last Name</label>
-                <input type="text" id="txtOfferLastName" name="LastName" class="form-control" />
+                <input type="text" id="txtOfferLastName" name="LastName" class="form-control" value="@ViewBag.LastName" />
             </div>
         </div>
 
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="txtOfferEmail" class="form-label">Email</label>
-                <input type="email" id="txtOfferEmail" name="Email" class="form-control" />
+                <input type="email" id="txtOfferEmail" name="Email" class="form-control" value="@ViewBag.Email" />
             </div>
             <div class="col-md-6">
                 <label for="OfferPhone" class="form-label">Phone Number</label>
-                <input type="tel" id="OfferPhone" name="Phone" class="form-control" />
+                <input type="tel" id="OfferPhone" name="Phone" class="form-control" value="@ViewBag.Phone" />
             </div>
         </div>
 
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="OfferAddress" class="form-label">Address</label>
-                <input type="text" id="OfferAddress" name="clientAddress" class="form-control" />
+                <input type="text" id="OfferAddress" name="clientAddress" class="form-control" value="@ViewBag.ClientAddress" />
             </div>
             <div class="col-md-6">
                 <label for="OfferCity" class="form-label">City</label>
-                <input type="text" id="OfferCity" name="clientCity" class="form-control" />
+                <input type="text" id="OfferCity" name="clientCity" class="form-control" value="@ViewBag.ClientCity" />
             </div>
 
             <div class="col-md-6">
@@ -52,14 +52,14 @@
             </div>
             <div class="col-md-6">
                 <label for="OfferZip" class="form-label">Zip Code</label>
-                <input type="text" id="OfferZip" name="clientZip" class="form-control" />
+                <input type="text" id="OfferZip" name="clientZip" class="form-control" value="@ViewBag.ClientZip" />
             </div>
         </div>
 
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="OfferAmount" class="form-label">Offer Amount</label>
-                <input type="text" id="OfferAmount" name="OfferAmount" class="form-control" />
+                <input type="text" id="OfferAmount" name="OfferAmount" class="form-control" value="@ViewBag.Offer" />
             </div>
             <div class="col-md-6">
                 <label for="SaleType" class="form-label">Offer Type</label>
@@ -87,7 +87,7 @@
 
             <div class="col-md-6">
                 <label for="OfferMoveInDate" class="form-label">Move-In Date</label>
-                <input type="date" id="OfferMoveInDate" name="MoveInDate" class="form-control" />
+                <input type="date" id="OfferMoveInDate" name="MoveInDate" class="form-control" value="@ViewBag.MoveInDate" />
             </div>
         </div>
 
@@ -95,6 +95,7 @@
             <div class="col-12">
                 <label for="txtOfferContingency" class="form-label">Offer Contingency</label>
                 <input type="text" id="txtOfferContingency" name="newContingency" class="form-control mb-2" />
+                <span class="text-danger">@ViewBag.ContingencyError</span>
                 <button type="submit" formaction="/Offer/AddContingency" formmethod="POST" class="btn btn-primary mb-3">Add Contingency</button>
 
                 <table class="table mt-3">
@@ -132,9 +133,10 @@
         </div>
 
         <div class="d-flex justify-content-end mt-4">
-            <button type="submit" class="btn btn-success me-2">Submit Offer</button>
-            <a asp-controller="MortgageCalculator" asp-action="MortgageCalculator" class="btn btn-primary me-2">Calculate Mortgage</a>
-            <a asp-controller="Dashboard" asp-action="Dashboard" class="btn btn-secondary">Cancel Offer</a>
+            <button type="submit" class="btn btn-success me-2 w-100">Submit Offer</button>
+            <a asp-controller="MortgageCalculator" asp-action="MortgageCalculator" class="btn btn-primary me-2 w-100">Calculate Mortgage</a>
+            <a asp-controller="Dashboard" asp-action="Dashboard" class="btn btn-secondary w-100">Cancel Offer</a>
          
         </div>
     </form>
+</div>

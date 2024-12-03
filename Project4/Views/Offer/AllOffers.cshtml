@@ -35,14 +35,12 @@
 	}
 }
 <div class="container">
-    <h2>Your pending offers</h2>
-    <div class="row">
+    <div class="row p-4 shadow mt-5 mb-5">
+        <h2 class="card-title">Your pending offers</h2>
         @foreach (Offer currentOffer in agentOffers.List)
         {
             <div class="col-md-4 mb-4">
-                <!-- Each card occupies one-third of the row on medium+ screens -->
                 <div class="card h-100">
-                    <!-- h-100 ensures consistent card height -->
                     <div class="card-body">
                         <h5 class="card-title">@currentOffer.Home.Address.ToString()</h5>
                         <p class="card-text">

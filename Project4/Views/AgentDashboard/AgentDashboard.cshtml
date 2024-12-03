@@ -4,26 +4,27 @@
 @{
 }
 
-<div>
+<div class="card p-4 shadow">
+    <h4 class="card-title">Welcome, Agent Name Here, To the Agent Dashboard</h4>
     <form asp-controller="RealEstateHome" asp-action="CreateHome" method="GET">
-        <button type="submit">Create New Home</button>
+        <button class="btn btn-primary w-100 h-25 mt-3"type="submit">Create New Home</button>
     </form>
     <form asp-controller="Home" asp-action="ManageHome" method="POST">
-        <button type="submit">Manage Homes</button>
+        <button class="btn btn-primary w-100 h-25 mt-3" type="submit">Manage Homes</button>
     </form>
     <form asp-controller="Showing" asp-action="ViewAllShowing" method="POST">
-        <button type="submit">View Showings</button>
+        <button class="btn btn-primary w-100 h-25 mt-3" type="submit">View Showings</button>
     </form>
     <form asp-controller="Offer" asp-action="AllOffers" method="POST">
-        <button type="submit">View Offers</button>
+        <button class="btn btn-primary w-100 h-25 mt-3" type="submit">View Offers</button>
     </form>
     @if (Context.Request.Cookies["LoggedInAgent"] != null)
     {
         <form asp-controller="AgentDashboard" asp-action="DeleteCookie" method="POST">
-            <button type="submit">Delete Cookie</button>
+            <button class="btn btn-secondary w-100 h-25 mt-3"type="submit">Delete Cookie</button>
         </form>
     }
 
-    <a asp-controller="Dashboard" asp-action="Dashboard" class="btn btn-secondary">Logout</a>
+    <a asp-controller="Dashboard" asp-action="Dashboard" class="btn btn-secondary w-100 h-25 mt-3">Logout</a>
 
 </div>
