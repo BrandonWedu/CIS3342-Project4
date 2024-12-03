@@ -66,6 +66,7 @@ namespace Project4.Models.ViewModels
         public string Zip { get; set; }
 
         [Required(ErrorMessage = "Personal Phone Number is required!")]
+        [RegularExpression(@"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}", ErrorMessage ="Phone Number must be a proper phone number!")]
         public string Phone { get; set; }
 
         [Required(ErrorMessage = "Personal Email is required!")]
@@ -87,6 +88,7 @@ namespace Project4.Models.ViewModels
         public string WorkZip { get; set; }
 
         [Required(ErrorMessage = "Work Phone Number is required!")]
+        [RegularExpression(@"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}", ErrorMessage = "Work Phone Number must be a proper phone number!")]
         public string WorkPhone { get; set; }
 
         [Required(ErrorMessage = "Work Email is required!")]

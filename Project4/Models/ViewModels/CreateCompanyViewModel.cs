@@ -21,7 +21,9 @@ namespace Project4.Models.ViewModels
 		public string CompanyZip { get; set; }
 
 		[Required(ErrorMessage = "Company Phone Number is required!")]
-		public string CompanyPhone { get; set; }
+        [RegularExpression(@"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}", ErrorMessage = "Company Phone Number must be a proper phone number!")]
+
+        public string CompanyPhone { get; set; }
 
 		[Required(ErrorMessage = "Company Email is required!")]
 		public string CompanyEmail { get; set; }
