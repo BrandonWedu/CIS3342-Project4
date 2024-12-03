@@ -17,7 +17,17 @@ namespace Project4.Controllers
         private PasswordHasher hasher = new PasswordHasher();
         public IActionResult Login(LoginViewModel model)
         {
-            return View("Login");
+
+            if (HttpContext.Request.Cookies.ContainsKey("LoggedInAgent"))
+            {
+                string agentJson = HttpContext.Request.Cookies["LoggedInAgent"];
+                HttpContext.Session.SetString("Agent", agentJson);
+                return RedirectToAction("AgentDashboard", "AgentDashboard");
+            }
+            else
+            {
+                return View("Login");
+            }
         }
 
         public IActionResult CreateAccount()

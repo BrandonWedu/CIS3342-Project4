@@ -36,10 +36,13 @@
 }
 <div class="container">
     <div class="row p-4 shadow mt-5 mb-5">
-        <h2 class="card-title">Your pending offers</h2>
+        <div class="card-header bg-primary text-white d-flex justify-content-between">
+            <h2 class="mb-0">Your pending offers</h2>
+            <a asp-controller="AgentDashboard" asp-action="AgentDashboard" class="btn btn-secondary">Return To Dashboard</a>
+        </div>
         @foreach (Offer currentOffer in agentOffers.List)
         {
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mt-4 mb-4">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">@currentOffer.Home.Address.ToString()</h5>
