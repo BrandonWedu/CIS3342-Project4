@@ -1,4 +1,6 @@
-﻿namespace Project4.Models
+﻿using Newtonsoft.Json;
+
+namespace Project4.Models
 {
     public class Images : ListOfObjects<Image>, ICloneable<Images>
     {
@@ -8,5 +10,7 @@
         {
             return new Images(List);
         }
-    }
+		[JsonProperty("list")]
+		public List<Image> List { get; set; }
+	}
 }

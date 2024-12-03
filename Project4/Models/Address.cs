@@ -1,4 +1,6 @@
-﻿namespace Project4.Models
+﻿using Newtonsoft.Json;
+
+namespace Project4.Models
 {
     public enum States
     {
@@ -80,22 +82,26 @@
             this.zipCode = zipCode;
         }
 
-        public string Street
+		[JsonProperty("street")]
+		public string Street
         {
             get { return street; }
             set { this.street = value; }
         }
-        public string City
+		[JsonProperty("city")]
+		public string City
         {
             get { return city; }
             set { this.city = value; }
         }
-        public States State
+		[JsonProperty("state")]
+		public States State
         {
             get { return state; }
             set { this.state = value; }
         }
-        public string ZipCode
+		[JsonProperty("zipCode")]
+		public string ZipCode
         {
             get { return zipCode; }
             set { this.zipCode = value; }

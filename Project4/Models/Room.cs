@@ -1,4 +1,6 @@
-﻿namespace Project4.Models
+﻿using Newtonsoft.Json;
+
+namespace Project4.Models
 {
     public enum RoomType
     {
@@ -43,22 +45,30 @@
             this.width = width;
         }
 
-        public int? RoomID
+        public Room()
+        {
+
+        }
+		[JsonProperty("roomID")]
+		public int? RoomID
         {
             get { return roomID; }
             set { roomID = value; }
         }
-        public RoomType Type
+		[JsonProperty("type")]
+		public RoomType Type
         {
             get { return type; }
             set { type = value; }
         }
-        public int Height
+		[JsonProperty("height")]
+		public int Height
         {
             get { return height; }
             set { height = value; }
         }
-        public int Width
+		[JsonProperty("width")]
+		public int Width
         {
             get { return width; }
             set { width = value; }

@@ -1,4 +1,6 @@
-﻿namespace Project4.Models
+﻿using Newtonsoft.Json;
+
+namespace Project4.Models
 {
     public enum UtilityTypes
     {
@@ -34,17 +36,25 @@
             this.information = information;
         }
 
-        public int? UtilityID
+        public Utility()
+        {
+
+        }
+
+		[JsonProperty("utilityID")]
+		public int? UtilityID
         {
             get { return utilityID; }
             set { utilityID = value; }
         }
-        public UtilityTypes Type
+		[JsonProperty("type")]
+		public UtilityTypes Type
         {
             get { return type; }
             set { type = value; }
         }
-        public string Information
+		[JsonProperty("information")]
+		public string Information
         {
             get { return information; }
             set { information = value; }

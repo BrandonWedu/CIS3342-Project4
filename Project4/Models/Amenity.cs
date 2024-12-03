@@ -1,4 +1,6 @@
-﻿namespace Project4.Models
+﻿using Newtonsoft.Json;
+
+namespace Project4.Models
 {
     //emun for all amenity types
     public enum AmenityType
@@ -42,17 +44,24 @@
             this.description = description;
         }
 
-        public int? AmenityID
+        public Amenity()
+        {
+
+        }
+		[JsonProperty("amenityID")]
+		public int? AmenityID
         {
             get { return amenityID; }
             set { amenityID = value; }
         }
-        public AmenityType Type
+		[JsonProperty("type")]
+		public AmenityType Type
         {
             get { return type; }
             set { type = value; }
         }
-        public string Description
+		[JsonProperty("description")]
+		public string Description
         {
             get { return description; }
             set { description = value; }

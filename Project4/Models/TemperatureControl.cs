@@ -1,4 +1,6 @@
-﻿namespace Project4.Models
+﻿using Newtonsoft.Json;
+
+namespace Project4.Models
 {
     //Enum for heating types
     public enum HeatingTypes
@@ -52,18 +54,26 @@
             this.cooling = cooling;
         }
 
-        //Get Set
-        public int? TemperatureControlID
+        public TemperatureControl()
+        {
+
+        }
+
+		//Get Set
+		[JsonProperty("temperatureControlID")]
+		public int? TemperatureControlID
         {
             get { return temperatureControlID; }
             set { temperatureControlID = value; }
         }
-        public HeatingTypes Heating
+		[JsonProperty("heating")]
+		public HeatingTypes Heating
         {
             get { return heating; }
             set { heating = value; }
         }
-        public CoolingTypes Cooling
+		[JsonProperty("cooling")]
+		public CoolingTypes Cooling
         {
             get { return cooling; }
             set { cooling = value; }

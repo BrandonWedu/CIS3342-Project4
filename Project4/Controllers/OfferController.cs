@@ -9,23 +9,32 @@ namespace Project4.Controllers
     //Handles Offer Create and Manage
     public class OfferController : Controller
     {
-		[HttpGet]        
+		[HttpPost]        
 		
 		public IActionResult MakeOffer(int homeID)
         {
             if (homeID > 0)
             {
-                //API call to get the home by ID
-                HttpClient client = new HttpClient();
-                string apiURL = "";
-                HttpContent content = new StringContent(homeID.ToString());
-                Task response = client.PostAsync(apiURL, content);
-                //string responseBody = response.Content.ReadAsStringAsync().Result;
-                //Home currentHome = JsonConvert.DeseralizeObject<Home>(responseBody)
-                //string seralizedHome = JsonConvert.SerializeObject(currentHome);
-                //HttpContext.Session.SetString("CurrentHome", serializedHome);
+				string apiUrl = $"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadSingleHomeListing/{homeID}";
+				HttpClient client = new HttpClient();
+				HttpResponseMessage response = client.GetAsync(apiUrl).Result;
 
-                if (HttpContext.Session.GetString("OfferContingencies") == null)
+				if (!response.IsSuccessStatusCode)
+				{
+					Console.WriteLine($"API Request Failed. Status Code: {response.StatusCode}");
+					ViewBag.Home = null;
+					return View(); // Return the view with no data
+				}
+
+
+				string jsonString = response.Content.ReadAsStringAsync().Result;
+
+
+				Home currentHome = JsonConvert.DeserializeObject<Home>(jsonString);
+				string seralizedHome = JsonConvert.SerializeObject(currentHome);
+				HttpContext.Session.SetString("CurrentHome", seralizedHome);
+
+				if (HttpContext.Session.GetString("OfferContingencies") == null)
                 {
                     List<string> currentContingencies = new List<string>();
                     string seralizedContingencies = JsonConvert.SerializeObject(currentContingencies);
@@ -102,13 +111,15 @@ namespace Project4.Controllers
             string saleType = Request.Form["SaleType"];
             string sellHome = Request.Form["SellHomePrior"];
             string moveInDate = Request.Form["MoveInDate"];
-            string clientAddress = Request.Form["Address"];
-            string clientCity = Request.Form["City"];
-            string clientState = Request.Form["State"];
-            string clientZip = Request.Form["Zip"];
+            string clientAddress = Request.Form["clientAddress"];
+            string clientCity = Request.Form["clientCity"];
+            string clientState = Request.Form["clientState"];
+            string clientZip = Request.Form["clientZip"];
+
             string serializedHome = HttpContext.Session.GetString("CurrentHome");
             Home home = JsonConvert.DeserializeObject<Home>(serializedHome);
-            Address newAddress = new Address(clientAddress, clientCity, Enum.Parse<States>(clientState), clientZip);
+            States stateEnum = Enum.Parse<States>(clientState);
+            Address newAddress = new Address(clientAddress, clientCity, stateEnum, clientZip);
             Client newClient = new Client(firstName, lastName, newAddress, phone, email);
             int clientID = WriteClient.CreateNew(newClient);
             Client actualClient = ReadClients.GetClientByLastNameAndAddress(newClient);
@@ -132,7 +143,7 @@ namespace Project4.Controllers
             TempData["Message"] = "Congratulations! Your offer was successfully placed!";
             TempData["FirstName"] = actualOffer.Client.FirstName;
             TempData["LastName"] = actualOffer.Client.LastName;
-            TempData["OfferHomeAddress"] = actualOffer.Home.Address;
+            TempData["OfferHomeAddress"] = actualOffer.Home.Address.Street + ", " + actualOffer.Home.Address.City + "," + actualOffer.Home.Address.State + ", " + actualOffer.Home.Address.ZipCode;
             TempData["OfferAmount"] = actualOffer.Amount;
 
 
@@ -144,9 +155,7 @@ namespace Project4.Controllers
 
         public async Task<IActionResult> Confirmation()
         {
-            await Task.Delay(6000);
-
-            return RedirectToAction("Dashboard", "Dashboard");
+            return View("Confirmation");
 
         }
 

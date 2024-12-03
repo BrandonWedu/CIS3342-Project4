@@ -1,4 +1,6 @@
-﻿namespace Project4.Models
+﻿using Newtonsoft.Json;
+
+namespace Project4.Models
 {
     //Property Type Enum
     public enum PropertyType
@@ -80,86 +82,105 @@
             this.utilities = utilities.Clone();
         }
 
+        public Home()
+        {
 
-        public int? HomeID
+        }
+		[JsonProperty("homeID")]
+		public int? HomeID
         {
             get { return homeID; }
             set { homeID = value; }
         }
-        public int? AgentID
+		[JsonProperty("agentID")]
+		public int? AgentID
         {
             get { return agentID; }
             set { agentID = value; }
         }
-        public int Cost
+		[JsonProperty("cost")]
+		public int Cost
         {
             get { return cost; }
             set { cost = value; }
         }
-        public Address Address
+		[JsonProperty("address")]
+		public Address Address
         {
-            get { return address.Clone(); }
-            set { address = value.Clone(); }
-        }
-        public PropertyType PropertyType
+			get { return address != null ? address.Clone() : null; }
+			set { address = value != null ? value.Clone() : null; }
+		}
+		[JsonProperty("propertyType")]
+		public PropertyType PropertyType
         {
             get { return propertyType; }
             set { propertyType = value; }
         }
-        public int HomeSize
+		[JsonProperty("homeSize")]
+		public int HomeSize
         {
             get { return CalculateHomeSize(); }
         }
-        public int YearConstructed
+		[JsonProperty("yearConstructed")]
+		public int YearConstructed
         {
             get { return yearConstructed; }
             set { yearConstructed = value; }
         }
-        public GarageType GarageType
+		[JsonProperty("garageType")]
+		public GarageType GarageType
         {
             get { return garageType; }
             set { garageType = value; }
         }
-        public string Description
+		[JsonProperty("description")]
+		public string Description
         {
             get { return description; }
             set { description = value; }
         }
-        public DateTime DateListed
+		[JsonProperty("dateListed")]
+		public DateTime DateListed
         {
             get { return new DateTime(dateListed.Ticks); }
             set { dateListed = new DateTime(value.Ticks); }
         }
-        public SaleStatus SaleStatus
+		[JsonProperty("saleStatus")]
+		public SaleStatus SaleStatus
         {
             get { return saleStatus; }
             set { saleStatus = value; }
         }
-        public Images Images
+		[JsonProperty("images")]
+		public Images Images
         {
-            get { return images.Clone(); }
-            set { images = value.Clone(); }
-        }
-        public Amenities Amenities
+			get { return images ??= new Images(); } 
+			set { images = value; } 
+		}
+		[JsonProperty("amenities")]
+		public Amenities Amenities
         {
-            get { return amenities.Clone(); }
-            set { amenities = value.Clone(); }
-        }
-        public TemperatureControl TemperatureControl
+			get { return amenities ??= new Amenities(); }
+			set { amenities = value; }
+		}
+		[JsonProperty("temperatureControl")]
+		public TemperatureControl TemperatureControl
         {
-            get { return temperatureControl.Clone(); }
-            set { temperatureControl = value.Clone(); }
-        }
-        public Rooms Rooms
+			get { return temperatureControl ??= new TemperatureControl(); }
+			set { temperatureControl = value; }
+		}
+		[JsonProperty("rooms")]
+		public Rooms Rooms
         {
-            get { return rooms.Clone(); }
-            set { rooms = value.Clone(); }
-        }
-        public Utilities Utilities
+			get { return rooms ??= new Rooms(); }
+			set { rooms = value; }
+		}
+		[JsonProperty("utilities")]
+		public Utilities Utilities
         {
-            get { return utilities.Clone(); }
-            set { utilities = value.Clone(); }
-        }
+			get { return utilities ??= new Utilities(); }
+			set { utilities = value; }
+		}
 
         //Calculate home size
         private int CalculateHomeSize()

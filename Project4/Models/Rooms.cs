@@ -1,4 +1,6 @@
-﻿namespace Project4.Models
+﻿using Newtonsoft.Json;
+
+namespace Project4.Models
 {
     public class Rooms : ListOfObjects<Room> , ICloneable<Rooms>
     {
@@ -8,7 +10,9 @@
         {
             return new Rooms(List);
         }
-        public int GetBedrooms()
+		[JsonProperty("list")]
+		public List<Room> List { get; set; }
+		public int GetBedrooms()
         {
             int count = 0;
             foreach (Room room in List)

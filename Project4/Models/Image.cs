@@ -1,4 +1,6 @@
-﻿namespace Project4.Models
+﻿using Newtonsoft.Json;
+
+namespace Project4.Models
 {
     public class Image : ICloneable<Image>
     {
@@ -26,27 +28,36 @@
             this.mainImage = mainImage;
         }
 
-        public int? ImageID
+        public Image()
+        {
+
+        }
+		[JsonProperty("imageID")]
+		public int? ImageID
         {
             get { return imageID; }
             set { imageID = value; }
         }
-        public string Url
+		[JsonProperty("url")]
+		public string Url
         {
             get { return url; }
             set { url = value; }
         }
-        public RoomType Type
+		[JsonProperty("type")]
+		public RoomType Type
         {
             get { return type; }
             set { type = value; }
         }
-        public string Description
+		[JsonProperty("description")]
+		public string Description
         {
             get { return description; }
             set { description = value; }
         }
-        public bool MainImage
+		[JsonProperty("mainImage")]
+		public bool MainImage
         {
             get { return mainImage; }
             set { mainImage = value; }

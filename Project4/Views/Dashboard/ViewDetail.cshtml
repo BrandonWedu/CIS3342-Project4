@@ -3,6 +3,13 @@
 *@
 @{
 	DateTime currentDate = DateTime.Now.Date;
+	Home currentHome = null;
+	Agent homeAgent = null;
+	if (ViewBag.Home != null)
+	{
+		currentHome = ViewBag.Home;
+		homeAgent = ReadAgents.GetAgentByAgentID((int)currentHome.AgentID);
+	}
 }
 
 	<div class="container">
@@ -24,44 +31,60 @@
 		<div class="row mb-3">
 			<div class="d-flex flex-column">
 				<span class="fw-bold">Agent Company</span>
+				<p>@homeAgent.WorkCompany.CompanyName</p>
 				<span class="fw-bold">Agent Name</span>
+				<p>@homeAgent.PersonalInformation.FirstName @homeAgent.PersonalInformation.LastName</p>
 				<span class="fw-bold">Agent Email</span>
+				<p>@homeAgent.AgentContactInfo.Email</p>
 			</div>
 		</div>
 
 		<div class="row mb-3">
 			<div class="col-12">
-				@*
-				<h3>@Model.AddressStreet, @Model.AddressCity, @Model.AddressState, @Model.AddressZipCode</h3>
-				<p class="mb-1"><strong>Asking Price:</strong> @Model.AskingPrice</p>
-				<p class="mb-1"><strong>Year Built:</strong> @Model.YearBuilt</p>
-				<p class="mb-1"><strong>Total Square Feet:</strong> @Model.PropertySize</p>
-				<p class="mb-1"><strong>Bedrooms:</strong> @Model.NumberOfBedrooms</p>
-				<p class="mb-1"><strong>Bathrooms:</strong> @Model.NumberOfBathrooms</p>
-				<p class="mb-1"><strong>Garage:</strong> @Model.GarageType</p>
-				<p class="mb-1"><strong>Heating System:</strong> @Model.HeatingSystem</p>
-				<p class="mb-1"><strong>Cooling System:</strong> @Model.CoolingSystem</p>
-				<p class="mb-1"><strong>Water Utilities:</strong> @Model.UtilitiesWater</p>
-				<p class="mb-1"><strong>Sewer Utilities:</strong> @Model.UtilitiesSewer</p>
-				<p class="mb-1"><strong>Listed on:</strong> @Model.CreationDate.Date</p>
-				<p class="mb-1"><strong>Days on Market:</strong> @((currentDate-Model.CreationDate.Date).Days)</p>
-				*@
+				
+				<h3>@currentHome.Address.Street, @currentHome.Address.City, @currentHome.Address.State, @currentHome.Address.ZipCode</h3>
+				<p class="mb-1"><strong>Asking Price:</strong> @currentHome.Cost</p>
+				<p class="mb-1"><strong>Year Built:</strong> @currentHome.YearConstructed</p>
+				<p class="mb-1"><strong>Total Square Feet:</strong> @currentHome.HomeSize</p>
+				<p class="mb-1"><strong>Bedrooms:</strong> @currentHome.Rooms.GetBedrooms()</p>
+				<p class="mb-1"><strong>Bathrooms:</strong> @currentHome.Rooms.GetFullBaths()</p>
+				<p class="mb-1"><strong>Half-Bathrooms:</strong> @currentHome.Rooms.GetHalfBaths()</p>
+				<p class="mb-1"><strong>Garage:</strong> @currentHome.GarageType</p>
+				<p class="mb-1"><strong>Heating System:</strong> @currentHome.TemperatureControl.Heating</p>
+				<p class="mb-1"><strong>Cooling System:</strong> @currentHome.TemperatureControl.Cooling</p>
+				<p class="mb-1"><strong>Listed on:</strong> @currentHome.DateListed</p>
+				<p class="mb-1"><strong>Days on Market:</strong> @((currentDate - @currentHome.DateListed.Date).Days)</p>
+				
 			</div>
 		</div>
 
 		<div class="row mb-3">
 			<div class="col-12">
 				<h4>Property Description</h4>
-				<p>@Model.PropertyDescription</p>
+				<p>@currentHome.Description</p>
 			</div>
 		</div>
 
 		<div class="row mb-3">
 			<div class="col-12">
 				<h4>Property Amenities</h4>
-				
-			</div>
+			@foreach(Amenity currentAmenity in currentHome.Amenities.List)
+			{
+				<p>@currentAmenity.Type.ToString()</p><br/>
+			}
 		</div>
+		</div>
+
+	<div class="row mb-3">
+		<div class="col-12">
+			<h4>Property Utilities</h4>
+			@foreach (Utility currentUtil in currentHome.Utilities.List)
+			{
+				<p>@currentUtil.Information.ToString(); <br /></p>
+
+			}
+		</div>
+	</div>
 
 		<div class="row mb-3">
 			<div class="col-12">
@@ -76,13 +99,15 @@
 						</tr>
 					</thead>
 					<tbody>
-
+					@foreach(Room currentRoom in currentHome.Rooms.List)
+					{
 						<tr>
-							<td>roomType</td>
-							<td>roomLength</td>
-							<td>roomWidth</td>
-							<td>TotalSqaureFeet</td>
+							<td>@currentRoom.Type</td>
+							<td>@currentRoom.Height</td>
+							<td>@currentRoom.Width</td>
+							<td>@(currentRoom.Height * currentRoom.Width)</td>
 						</tr>
+					}
 
 					</tbody>
 				</table>
@@ -91,14 +116,14 @@
 
 		<div class="row mb-3">
 			<div class="col-12 d-flex gap-2">
-			<form method="POST" asp-controller="Dashboard" asp-action="RequestShowing" asp-route-propertyID="">
+			<form method="POST" asp-controller="Showing" asp-action="RequestShowing" asp-route-homeID="">
 					<button type="submit" class="btn btn-primary btn-sm me-2" name="btnRequestShowing" id="btnRequestShowing">Request Showing</button>
 				</form>
-			<form method="POST" asp-controller="Dashboard" asp-action="MakeOffer" asp-route-propertyID="">
+			<form method="POST" asp-controller="Offer" asp-action="MakeOffer" asp-route-homeID="@currentHome.HomeID">
 					<button type="submit" class="btn btn-success btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Make Offer</button>
 				</form>
-				<form method="POST" asp-controller="Dashboard" asp-action="Dashboard" asp-route-propertyID="">
-					<button type="submit" class="btn btn-success btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Make Offer</button>
+				<form method="POST" asp-controller="Dashboard" asp-action="Dashboard">
+					<button type="submit" class="btn btn-secondary btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Return To All Listings</button>
 				</form>
 			</div>
 		</div>

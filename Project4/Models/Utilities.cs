@@ -1,4 +1,6 @@
-﻿namespace Project4.Models
+﻿using Newtonsoft.Json;
+
+namespace Project4.Models
 {
     public class Utilities : ListOfObjects<Utility>
     {
@@ -8,5 +10,7 @@
         {
             return new Utilities(List);
         }
-    }
+		[JsonProperty("list")]
+		public List<Utility> List { get; set; }
+	}
 }

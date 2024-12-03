@@ -5,6 +5,12 @@
 @{
 	//List<Property> allProperties = (List<Property>)ViewBag.AllProperties;
 	DateTime currentDate = DateTime.Now.Date;
+	Homes allHomes = null;
+	if (ViewBag.Homes != null)
+	{
+		allHomes = ViewBag.Homes;
+		Console.WriteLine(allHomes.List);
+	}
 
 }
 
@@ -110,8 +116,8 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-4 mb-4">
-					@*
-					@foreach (Property currentProperty in allProperties)
+					
+					@foreach (Home currentHome in allHomes.List)
 					{
 						<div class="card">
 							<img src="" class="card-img-top" alt="Property Image" />
@@ -119,23 +125,24 @@
 
 								<h5 class="card-title">Address Goes Here</h5>
 								<p class="card-text">
-									<strong>Type: @currentProperty.PropertyType</strong> <br />
-									<strong>SqFt: @currentProperty.PropertySize</strong> <br />
-									<strong>Bedrooms: @currentProperty.NumberOfBedrooms</strong> <br />
-									<strong>Bathrooms: @currentProperty.NumberOfBathrooms</strong> <br />
-									<strong>Asking Price: @currentProperty.AskingPrice</strong><br />
-									<strong>Days Listed: @((currentDate - currentProperty.CreationDate).Days)</strong> <br />
+									<strong>Type: @currentHome.PropertyType</strong> <br />
+									<strong>SqFt: @currentHome.HomeSize</strong> <br />
+									<strong>Bedrooms: @currentHome.Rooms.GetBedrooms()</strong> <br />
+									<strong>Full-Bathrooms: @currentHome.Rooms.GetFullBaths()</strong> <br />
+									<strong>Full-Bathrooms: @currentHome.Rooms.GetHalfBaths()</strong> <br />
+									<strong>Asking Price: @currentHome.Cost</strong><br />
+									<strong>Days Listed: @((currentDate - currentHome.DateListed).Days)</strong> <br />
 								</p>
 								<div class="d-flex gap-2">
-									<form method="POST" asp-controller="Dashboard" asp-action="ViewDetail" asp-route-propertyID="@currentProperty.PropertyID">
+									<form method="POST" asp-controller="Dashboard" asp-action="ViewDetail" asp-route-homeID="@currentHome.HomeID">
 
 										<button type="submit" class="btn btn-primary btn-sm me-2" name="btnViewDetials" id="btnViewDetails">View Details</button>
 									</form>
-									<form method="POST" asp-controller="Dashboard" asp-action="RequestShowing" asp-route-propertyID="@currentProperty.PropertyID">
+									<form method="POST" asp-controller="Showing" asp-action="RequestShowing" asp-route-homeID="@currentHome.HomeID">
 
 										<button type="submit" class="btn btn-primary btn-sm me-2" name="btnRequestShowing" id="btnRequestShowing">Request Showing</button>
 									</form>
-									<form method="POST" asp-controller="Dashboard" asp-action="MakeOffer" asp-route-propertyID="@currentProperty.PropertyID">
+									<form method="POST" asp-controller="Offer" asp-action="MakeOffer" asp-route-homeID="@currentHome.HomeID">
 
 										<button type="submit" class="btn btn-primary btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Make Offer</button>
 									</form>
@@ -145,7 +152,7 @@
 
 						</div>
 					}
-					*@
+					
 
 				</div>
 			</div>

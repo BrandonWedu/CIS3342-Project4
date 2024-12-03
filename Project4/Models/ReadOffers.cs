@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Newtonsoft.Json;
 using System.Data;
 
 namespace Project4.Models
@@ -13,12 +14,19 @@ namespace Project4.Models
             Offers allOffers = new Offers();
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "SelectAllOffers";
-            DataTable agentContactData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
+            sqlCommand.CommandText = "P4_SelectAllOffers";
+            DataTable offerData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
 
-            foreach (DataRow row in agentContactData.Rows)
+
+            foreach (DataRow row in offerData.Rows)
             {
-                //allOffers.Add(new Offer((int)row["OfferID"], ReadHome.GetHomeByID((int)row["HomeID"]), ReadClient.GetClientByID((int)row["ClientID"]), (int)row["Amount"], (TypeOfSale)Enum.Parse(typeof(TypeOfSale), (string)row["TypeOfSale"]), (bool)row["SellHomePrior"], (DateTime)row["MoveInDate"], (OfferStatus)Enum.Parse(typeof(OfferStatus), (string)row["OfferStatus"])));
+                int homeID = (int)row["HomeID"];
+                string apiUrl = $"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadSingleHomeListing/{homeID}";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage response = client.GetAsync(apiUrl).Result;
+                string jsonString = response.Content.ReadAsStringAsync().Result;
+                Home offerHome = JsonConvert.DeserializeObject<Home>(jsonString);
+                allOffers.Add(new Offer((int)row["OfferID"], offerHome, ReadClients.GetClientByClientID((int)row["ClientID"]), (int)row["Amount"], (TypeOfSale)Enum.Parse(typeof(TypeOfSale), (string)row["TypeOfSale"]), (bool)row["SellHomePrior"], (DateTime)row["MoveInDate"], (OfferStatus)Enum.Parse(typeof(OfferStatus), (string)row["OfferStatus"])));
             }
             return allOffers;
         }
@@ -30,14 +38,20 @@ namespace Project4.Models
 
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "SelectAllOffers";
-            DataTable agentContactData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
+            sqlCommand.CommandText = "P4_SelectAllOffers";
+            DataTable offerData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
             Offer selectedOffer = null;
-            foreach (DataRow row in agentContactData.Rows)
+            foreach (DataRow row in offerData.Rows)
             {
                 if ((int)row["OfferID"] == id)
                 {
-                    //selectedOffer = new Offer(new Offer((int)row["OfferID"], ReadHome.GetHomeByID((int)row["HomeID"]), ReadClients.GetClientByID((int)row["ClientID"]), (int)row["Amount"], (TypeOfSale)Enum.Parse(typeof(TypeOfSale), (string)row["TypeOfSale"]), (bool)row["SellHomePrior"], (DateTime)row["MoveInDate"], (OfferStatus)Enum.Parse(typeof(OfferStatus), (string)row["OfferStatus"])));
+                    int homeID = (int)row["HomeID"];
+                    string apiUrl = $"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadSingleHomeListing/{homeID}";
+                    HttpClient client = new HttpClient();
+                    HttpResponseMessage response = client.GetAsync(apiUrl).Result;
+                    string jsonString = response.Content.ReadAsStringAsync().Result;
+                    Home offerHome = JsonConvert.DeserializeObject<Home>(jsonString);
+                    selectedOffer = new Offer((int)row["OfferID"], offerHome, ReadClients.GetClientByClientID((int)row["ClientID"]), (int)row["Amount"], (TypeOfSale)Enum.Parse(typeof(TypeOfSale), (string)row["TypeOfSale"]), (bool)row["SellHomePrior"], (DateTime)row["MoveInDate"], (OfferStatus)Enum.Parse(typeof(OfferStatus), (string)row["OfferStatus"]));
                 }
             }
 
@@ -46,26 +60,31 @@ namespace Project4.Models
         }
 
 
-        internal static Offer GetOfferByHomeClientAmount(Home home, Client client, int amount)
+        internal static Offer GetOfferByHomeClientAmount(Home home, Client offerClient, int amount)
         {
             DBConnect databaseHandler = new DBConnect();
             Offers allOffers = new Offers();
 
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "SelectAllOffers";
-            DataTable agentContactData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
+            sqlCommand.CommandText = "P4_SelectAllOffers";
+            DataTable offerData = databaseHandler.GetDataSet(sqlCommand).Tables[0];
             Offer selectedOffer = null;
-            foreach (DataRow row in agentContactData.Rows)
+            foreach (DataRow row in offerData.Rows)
             {
-                //Home rowHome = ReadHome.GetHomeByID((int)row["HomeID"]);
-                //Client rowClient = ReadClients.GetClientByID((int)row["ClientID"])
-                /*
-                if ((int)row["Amount"] == amount && rowHome.HomeID == home.HomeID && rowClient == client.ClientID)
+                int homeID = (int)row["HomeID"];
+                string apiUrl = $"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadSingleHomeListing/{homeID}";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage response = client.GetAsync(apiUrl).Result;
+                string jsonString = response.Content.ReadAsStringAsync().Result;
+                Home rowHome = JsonConvert.DeserializeObject<Home>(jsonString);
+
+                Client rowClient = ReadClients.GetClientByClientID((int)row["ClientID"]);
+
+                if ((int)row["Amount"] == amount && rowHome.HomeID == home.HomeID && rowClient.ClientID == offerClient.ClientID)
                 {
-                    //selectedOffer = new Offer(new Offer((int)row["OfferID"], ReadHome.GetHomeByID((int)row["HomeID"]), ReadClients.GetClientByID((int)row["ClientID"]), (int)row["Amount"], (TypeOfSale)Enum.Parse(typeof(TypeOfSale), (string)row["TypeOfSale"]), (bool)row["SellHomePrior"], (DateTime)row["MoveInDate"], (OfferStatus)Enum.Parse(typeof(OfferStatus), (string)row["OfferStatus"])));
+                    selectedOffer = new Offer((int)row["OfferID"], rowHome, ReadClients.GetClientByClientID((int)row["ClientID"]), (int)row["Amount"], (TypeOfSale)Enum.Parse(typeof(TypeOfSale), (string)row["TypeOfSale"]), (bool)row["SellHomePrior"], (DateTime)row["MoveInDate"], (OfferStatus)Enum.Parse(typeof(OfferStatus), (string)row["OfferStatus"]));
                 }
-                */
             }
 
 

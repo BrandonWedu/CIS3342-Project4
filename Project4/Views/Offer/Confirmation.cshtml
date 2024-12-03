@@ -3,3 +3,17 @@
 *@
 @{
 }
+<div class="container text-center mt-5">
+    <h1>@TempData["Message"]</h1>
+    <p>Thank you, @TempData["FirstName"] @TempData["LastName"], for submitting your offer!</p>
+    <p>Offer Details:</p><br/>
+    <p>Home Address: @TempData["OfferHomeAddress"]</p><br/>
+    <p>Offer Amount: $@TempData["OfferAmount"]</p><br/>
+    <p>You will be redirected shortly to the dashboard...</p>
+</div>
+
+<script>
+    setTimeout(function () {
+        window.location.href = '@Url.Action("Dashboard", "Dashboard")';
+    }, 6000);
+</script>
