@@ -7,112 +7,182 @@
 
 }
 
-<div>
-    <form asp-controller="Account" asp-action="FinalizeAccountCreation" method="POST">
-        <h4>Account Info</h4>
-        <label asp-for="Username">Username:</label>
-        <input asp-for="Username" id="username" type="text" />
+<div class="container mt-5 mb-5">
+    <form asp-controller="Account" asp-action="FinalizeAccountCreation" method="POST" class="card p-4 shadow">
+        <h4 class="card-title">Create New MLS Account</h4>
+        <p class="text-danger">@ViewBag.CreateAccountError</p>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="Username" class="form-label">Username:</label>
+                <input asp-for="Username" id="username" type="text" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Password" class="form-label">Password:</label>
+                <input asp-for="Password" id="password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
 
-        <label asp-for="Password">Password:</label>
-        <input asp-for="Password" id="password" type="password" />
+        <h4 class="card-title">Agent Personal Info</h4>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="FirstName" class="form-label">First Name:</label>
+                <input asp-for="FirstName" id="fName" type="text" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="LastName" class="form-label">Last Name:</label>
+                <input asp-for="LastName" id="lName" type="text" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="Street" class="form-label">Street:</label>
+                <input asp-for="Street" id="street" type="text" class="form-control" />
+                <span asp-validation-for="Street" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="City" class="form-label">City:</label>
+                <input asp-for="City" id="city" type="text" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label asp-for="State" class="form-label">State:</label>
+                <select asp-for="State" id="state" class="form-select">
+                    <span asp-validation-for="State" class="text-danger"></span>
+                    @foreach (var state in Enum.GetNames(typeof(States)))
+                    {
+                        <option value="@state">@state</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Zip" class="form-label">Zip Code:</label>
+                <input asp-for="Zip" id="zip" type="text" class="form-control" />
+                <span asp-validation-for="Zip" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Phone" class="form-label">Personal Phone:</label>
+                <input asp-for="Phone" id="phone" type="text" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="Email" class="form-label">Email:</label>
+                <input asp-for="Email" id="email" type="email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
 
-        <h4>Agent Personal Info</h4>
-        <label asp-for="FirstName">First Name:</label>
-        <input asp-for="FirstName" id="fName" type="text" />
+        <h4 class="card-title">Agent Work Contact Info</h4>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="WorkStreet" class="form-label">Street:</label>
+                <input asp-for="WorkStreet" id="workstreet" type="text" class="form-control" />
+                <span asp-validation-for="WorkStreet" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="WorkCity" class="form-label">City:</label>
+                <input asp-for="WorkCity" id="workcity" type="text" class="form-control" />
+                <span asp-validation-for="WorkCity" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label asp-for="WorkState" class="form-label">State:</label>
+                <select asp-for="WorkState" id="workstate" class="form-select">
+                    @foreach (var state in Enum.GetNames(typeof(States)))
+                    {
+                        <option value="@state">@state</option>
+                    }
+                </select>
+                <span asp-validation-for="WorkState" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="WorkZip" class="form-label">Zip Code:</label>
+                <input asp-for="WorkZip" id="workzip" type="text" class="form-control" />
+                <span asp-validation-for="WorkZip" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="WorkPhone" class="form-label">Work Phone:</label>
+                <input asp-for="WorkPhone" id="workphone" type="text" class="form-control" />
+                <span asp-validation-for="WorkPhone" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="WorkEmail" class="form-label">Work Email:</label>
+                <input asp-for="WorkEmail" id="workemail" type="email" class="form-control" />
+                <span asp-validation-for="WorkEmail" class="text-danger"></span>
+            </div>
+        </div>
 
-        <label asp-for="LastName">Last Name:</label>
-        <input asp-for="LastName" id="lName" type="text" />
-
-        <label asp-for="Street">Street:</label>
-        <input asp-for="Street" id="street" type="text" />
-
-        <label asp-for="City">City:</label>
-        <input asp-for="City" id="city" type="text" />
-
-        <label asp-for="State">State:</label>
-        <select asp-for="State" id="workstate">
-            @foreach (var state in Enum.GetNames(typeof(States)))
-            {
-                <option value="@state">@state</option>
-            }
-        </select>
-
-        <label asp-for="Zip">Zip Code:</label>
-        <input asp-for="Zip" id="zip" type="text" />
-
-        <label asp-for="Phone">Personal Phone:</label>
-        <input asp-for="Phone" id="phone" type="text" />
-
-        <label asp-for="Email">Email:</label>
-        <input asp-for="Email" id="email" type="text" />
-
-        <h4>Agent Work Contact Info</h4>
-        <label asp-for="WorkStreet">Street:</label>
-        <input asp-for="WorkStreet" id="workstreet" type="text" />
-
-        <label asp-for="WorkCity">City:</label>
-        <input asp-for="WorkCity" id="workcity" type="text" />
-
-        <label asp-for="WorkState">State:</label>
-        <select asp-for="WorkState" id="workstate">
-            @foreach (var state in Enum.GetNames(typeof(States)))
-            {
-                <option value="@state">@state</option>
-            }
-        </select>
-
-        <label asp-for="WorkZip">Zip Code:</label>
-        <input asp-for="WorkZip" id="workzip" type="text" />
-
-        <label asp-for="WorkPhone">Work Phone:</label>
-        <input asp-for="WorkPhone" id="workphone" type="text" />
-
-        <label asp-for="WorkEmail">Work Email:</label>
-        <input asp-for="WorkEmail" id="workemail" type="text" />
-
-        <h4>Company Info</h4>
+        <h4 class="card-title">Company Info</h4>
         <p>Select a company, if your company is not listed you can add your company by pressing "Add New Company"</p>
-        <label asp-for="Company">Company</label>
-        <select asp-for="Company" id="company">
-            @foreach (Company company in ReadCompanies.ReadAllCompanies().List)
-            {
-                <option value="@company.CompanyID">@company.CompanyName</option>
-            }
-        </select>
+        <div class="row mb-3">
+            <div class="col-md-8">
+                <label asp-for="Company" class="form-label">Company</label>
+                <select asp-for="Company" id="company" class="form-select">
+                    @foreach (Company company in ReadCompanies.ReadAllCompanies().List)
+                    {
+                        <option value="@company.CompanyID">@company.CompanyName</option>
+                    }
+                </select>
+                <span asp-validation-for="Company" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <a asp-controller="Account" asp-action="CreateCompany" class="btn btn-primary">Add New Company</a>
+            </div>
+        </div>
 
-        <a asp-controller="Account" asp-action="CreateCompany" class="btn btn-primary">Add New Company</a>
+        <h4 class="card-title">Security Questions</h4>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="QuestionOne" class="form-label">Security Question One</label>
+                <select asp-for="QuestionOne" id="questionOne" class="form-select">
+                    @foreach (string question in SecurityQuestionList.GetFirstQuestionList())
+                    {
+                        <option value="@question">@question</option>
+                    }
+                </select>
+                <input asp-for="AnswerOne" id="answerone" type="text" class="form-control mt-2" placeholder="Answer" />
+                <span asp-validation-for="AnswerOne" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="QuestionTwo" class="form-label">Security Question Two</label>
+                <select asp-for="QuestionTwo" id="questionTwo" class="form-select">
+                    @foreach (string question in SecurityQuestionList.GetSecondQuestionList())
+                    {
+                        <option value="@question">@question</option>
+                    }
+                </select>
+                <input asp-for="AnswerTwo" id="answertwo" type="text" class="form-control mt-2" placeholder="Answer" />
+                <span asp-validation-for="AnswerTwo" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="QuestionThree" class="form-label">Security Question Three</label>
+                <select asp-for="QuestionThree" id="questionThree" class="form-select">
+                    @foreach (string question in SecurityQuestionList.GetThirdQuestionList())
+                    {
+                        <option value="@question">@question</option>
+                    }
+                </select>
+                <input asp-for="AnswerThree" id="answerthree" type="text" class="form-control mt-2" placeholder="Answer" />
+                <span asp-validation-for="AnswerThree" class="text-danger"></span>
+            </div>
+        </div>
 
-
-        <h4>Security Questions</h4>
-        <label asp-for="QuestionOne">Security Question One</label>
-        <select asp-for="QuestionOne" id="questionOne">
-            @foreach (string question in SecurityQuestionList.GetFirstQuestionList())
-            {
-                <option value="@question">@question</option>
-            }
-        </select>
-        <input asp-for="AnswerOne" id="answerone" type="text" />
-
-        <label asp-for="QuestionTwo">Security Question Two</label>
-        <select asp-for="QuestionTwo" id="questionTwo">
-            @foreach (string question in SecurityQuestionList.GetSecondQuestionList())
-            {
-                <option value="@question">@question</option>
-            }
-        </select>
-        <input asp-for="AnswerTwo" id="answertwo" type="text" />
-
-        <label asp-for="QuestionThree">Security Question Three</label>
-        <select asp-for="QuestionThree" id="questionThree">
-            @foreach (string question in SecurityQuestionList.GetThirdQuestionList())
-            {
-                <option value="@question">@question</option>
-            }
-        </select>
-        <input asp-for="AnswerThree" id="answerthree" type="text" />
-
-        <button type="submit" name="createaccount">Create Account</button>
-        <a asp-controller="Account" asp-action="Login" class="btn btn-secondary">Cancel</a>
+        <div class="d-flex justify-content-between">
+            <button type="submit" name="createaccount" class="btn btn-success">Create Account</button>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
 </div>
 

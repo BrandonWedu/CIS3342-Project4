@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 using Project4.Models;
 using Project4.Models.ViewModels;
 using System.Net.Http;
@@ -34,13 +36,27 @@ namespace Project4.Controllers
                 }
             }
 
-            if (model.Username == "" || uniqueName == false)
+            if (ModelState.IsValid == false)
             {
+                foreach (var modelStateKey in ModelState.Keys)
+                {
+                    var modelStateVal = ModelState[modelStateKey];
+                    foreach (var error in modelStateVal.Errors)
+                    {
+                        Console.WriteLine($"Key: {modelStateKey}, Error: {error.ErrorMessage}");
+                    }
+                }
+                ViewBag.CreateAccountError = "Please correct all the errors below and resubmit the form!";
+                return View("CreateAccount", model);
+            }
+
+            if ( uniqueName == false)
+            {
+                ViewBag.CreateAccountError = "Please enter a different username! The username you are trying to enter is already taken!";
                 return View("CreateAccount");
             }
             else
             {
-                // Need to add username check
                 //Get selected company
                 int companyID = model.Company;
                 Company selectedCompany = ReadCompanies.GetCompanyByCompanyID(companyID).List[0];
@@ -103,7 +119,7 @@ namespace Project4.Controllers
                     );
 
                 //Call the Email API and send the email
-                StringContent content = new StringContent(JsonSerializer.Serialize(info), Encoding.UTF8, "application/json");
+                StringContent content = new StringContent(System.Text.Json.JsonSerializer.Serialize(info), Encoding.UTF8, "application/json");
                 using (HttpClient httpClient = new HttpClient())
                 {
                     try
@@ -160,12 +176,29 @@ namespace Project4.Controllers
         }
         public IActionResult FinalizeCompanyCreation(CreateCompanyViewModel model)
         {
-            //Create Company
-            Address newAddress = new Address(model.CompanyStreet, model.CompanyCity, Enum.Parse<States>(model.CompanyState), model.CompanyZip);
-            Company newCompany = new Company(model.CompanyName, newAddress, model.CompanyPhone, model.CompanyEmail);
-            int companyID = WriteCompany.CreateNew(newCompany);
-            int actualCompanyID = ReadCompanies.GetComapnyByNameAndAddress(model.CompanyName, newAddress).List[0].CompanyID;
-            return View("CreateAccount");
+			if (ModelState.IsValid == false)
+			{
+				foreach (var modelStateKey in ModelState.Keys)
+				{
+					var modelStateVal = ModelState[modelStateKey];
+					foreach (var error in modelStateVal.Errors)
+					{
+						Console.WriteLine($"Key: {modelStateKey}, Error: {error.ErrorMessage}");
+					}
+				}
+				ViewBag.CreateCompanyError = "Please correct all the errors below and resubmit the form!";
+				return View("CreateCompany", model);
+			}
+            else
+            {
+				//Create Company
+				Address newAddress = new Address(model.CompanyStreet, model.CompanyCity, Enum.Parse<States>(model.CompanyState), model.CompanyZip);
+				Company newCompany = new Company(model.CompanyName, newAddress, model.CompanyPhone, model.CompanyEmail);
+				int companyID = WriteCompany.CreateNew(newCompany);
+				int actualCompanyID = ReadCompanies.GetComapnyByNameAndAddress(model.CompanyName, newAddress).List[0].CompanyID;
+				return View("CreateAccount");
+			}
+
         }
         [HttpPost]
         public IActionResult ForgotPassword(string username)
@@ -173,16 +206,22 @@ namespace Project4.Controllers
             Agent currentAgent = ReadAgents.GetAgentByUsername(username);
             if (currentAgent != null)
             {
-                TempData["Username"] = username;
+                string agentJson = JsonConvert.SerializeObject(currentAgent);
+                HttpContext.Session.SetString("RecoveryAgent", agentJson);
+
                 Random randomNumber = new Random();
                 int randomInt = randomNumber.Next(0, ReadAgentSecurity.GetAgentSecurityQuestionsByAgentID(currentAgent.AgentID).List.Count - 1);
-                ViewBag.Question = ReadAgentSecurity.GetAgentSecurityQuestionsByAgentID(currentAgent.AgentID).List[randomInt].Question.ToString();
-                TempData["QuestionInt"] = randomInt;
+
+                AgentSecurity randomQuestion = ReadAgentSecurity.GetAgentSecurityQuestionsByAgentID(currentAgent.AgentID).List[randomInt];
+                string questionJson = JsonConvert.SerializeObject(randomQuestion);
+                HttpContext.Session.SetString("RecoveryQuestion", questionJson);
+
+				ViewBag.Question = randomQuestion.Question.ToString();
                 return View("ForgotPasswordSecurity");
             }
             else
             {
-                //Make error message
+                ViewBag.ForgotPasswordError = "No account found with that username! Please try again!";
                 return View();
             }
         }
@@ -195,41 +234,23 @@ namespace Project4.Controllers
         [HttpGet]
         public IActionResult ForgotPasswordSecurity()
         {
-            string username = TempData["Username"].ToString();
-            Agent currentAgent = ReadAgents.GetAgentByUsername(username);
-            if (currentAgent == null)
-            {
-                return View("ForgotPassword");
-            }
-            else
-            {
-                //AgentSecuritys agentSecurityQuestions = ReadAgentSecurity.GetAgentSecurityQuestionsByAgentID(currentAgent.AgentID);
-                //Random randomNumber = new Random();
-                //int randomInt = randomNumber.Next(0, agentSecurityQuestions.List.Count - 1);
-                //Console.WriteLine(randomInt);
-                return View("ForgotPasswordSecurity");
-            }
-
+            return View("ForgotPasswordSecurity");
         }
 
         [HttpPost]
         public IActionResult ForgotPasswordSecurity(string answer)
         {
-            string username = TempData["Username"].ToString();
-            int questionInt = (int)TempData["QuestionInt"];
-            Agent currentAgent = ReadAgents.GetAgentByUsername(username);
-            AgentSecuritys agentSecurityQuestions = ReadAgentSecurity.GetAgentSecurityQuestionsByAgentID(currentAgent.AgentID);
-            AgentSecurity currentQuestion = ReadAgentSecurity.GetAgentSecurityQuestionsByAgentID(currentAgent.AgentID).List[questionInt];
-            if (currentQuestion.Answer.ToString() == answer.ToString())
+			string quesitonJson = HttpContext.Session.GetString("RecoveryQuestion");
+			AgentSecurity question = JsonConvert.DeserializeObject<AgentSecurity>(quesitonJson);
+            if (question.Answer.ToString() == answer.ToString())
             {
-                TempData["Username"] = username;
                 return View("ResetPassword");
             }
             else
             {
-
-                //Make error message
-                return View();
+                ViewBag.Question = question.Question.ToString();
+                ViewBag.ForgotPasswordError = "Incorrect Answer To Security Question! Please Try Again!";
+				return View();
             }
 
         }
@@ -237,29 +258,38 @@ namespace Project4.Controllers
         [HttpGet]
         public IActionResult ResetPassword()
         {
-            string username = TempData["Username"].ToString();
-
             return View();
         }
 
         [HttpPost]
         public IActionResult ResetPassword(string newPassword, string newPasswordVerify)
         {
+
             if (newPassword == newPasswordVerify)
             {
-                Console.WriteLine("Passwords Matched");
-                string username = TempData["Username"].ToString();
-                Agent currentAgent = ReadAgents.GetAgentByUsername(username);
-                PasswordHasher hasher = new PasswordHasher();
-                hasher.GenerateSalt();
-                string salt = hasher.GetSalt();
-                string hashedPassword = hasher.HashPasswordWithSalt(newPassword, salt);
-                WriteAgent.UpdateAgentPassword(currentAgent, hashedPassword, salt);
-                return View("Login");
+                if (newPassword.Length > 6)
+                {
+					string agentJson = HttpContext.Session.GetString("RecoveryAgent");
+					Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentJson);
+					PasswordHasher hasher = new PasswordHasher();
+					hasher.GenerateSalt();
+					string salt = hasher.GetSalt();
+					string hashedPassword = hasher.HashPasswordWithSalt(newPassword, salt);
+					WriteAgent.UpdateAgentPassword(currentAgent, hashedPassword, salt);
+
+                    HttpContext.Session.Remove("RecoveryAgent");
+                    HttpContext.Session.Remove("RecoveryQuestion");
+					return View("Login");
+				}
+                else
+                {
+                    ViewBag.ResetPasswordError = "Your New Password Must Be Longer Than 6 Characters!";
+                    return View();
+                }
             }
             else
             {
-                Console.WriteLine("Passwords did not Match");
+                ViewBag.ResetPasswordError = "Passwords Did Not Match! Please Re-enter Your New Passwords!";
                 return View();
             }
 
@@ -300,33 +330,23 @@ namespace Project4.Controllers
                     HttpContext.Session.SetString("Agent", agentJSONSession);
 
                     Agent loggedInAccount = ReadAgents.GetAgentByAgentID(agent.AgentID);
-                    return RedirectToAction("AgentDashboard", "AgentDashboard"); // confirmation just sits for a few seconds then redirects to agent dashboard
+                    return RedirectToAction("AgentDashboard", "AgentDashboard");
                 }
                 else
                 {
                     Console.WriteLine("Password verification failed!");
+                    ViewBag.LoginError = "Incorrect Password! Please try again!";
                 }
             }
             else
             {
                 Console.WriteLine("No agent found with the given username or account is not verified!");
+                ViewBag.LoginError = "Please enter a proper username or make sure your account is verified!";
             }
 
             return View("Login"); // login failed so reload login page
 
         }
 
-        public IActionResult TryForgotPassword(AgentSecurity question, string answer, string newPassword)
-        {
-            if (question.Answer == answer) // Answer to security question was correct so update password and load the login page
-            {
-                //WriteAgent.UpdatePassword(agent, newPassword); 
-                return View("Login");
-            }
-            else // secuirty question was not correct so reload forgotPassword page or login apge
-            {
-                return View("ForgotPassword");
-            }
-        }
     }
 }

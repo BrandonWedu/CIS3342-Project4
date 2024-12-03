@@ -5,35 +5,63 @@
 @{
 }
 
-<div>
-    <form asp-controller="Account" asp-action="FinalizeCompanyCreation" method="POST">
-        <label asp-for="CompanyName">Name:</label>
-        <input asp-for="CompanyName" id="companyname" type="text" />
+<div class="container mt-5 mb-5">
 
-        <label asp-for="CompanyStreet">Street:</label>
-        <input asp-for="CompanyStreet" id="companystreet" type="text" />
+	<form asp-controller="Account" asp-action="FinalizeCompanyCreation" method="POST" class="card p-4 shadow">
+		<h4 class="card-title">Add New Company to MLS System</h4>
+		<p class="text-danger">@ViewBag.CreateCompanyError</p>
+		<div class="mb-3">
+			<label asp-for="CompanyName" class="form-label">Company Name</label>
+			<input asp-for="CompanyName" id="companyname" type="text" class="form-control" />
+			<span asp-validation-for="CompanyName" class="text-danger"></span>
+		</div>
 
-        <label asp-for="CompanyCity">City:</label>
-        <input asp-for="CompanyCity" id="comapanycity" type="text" />
+		<div class="mb-3">
+			<label asp-for="CompanyStreet" class="form-label">Street</label>
+			<input asp-for="CompanyStreet" id="companystreet" type="text" class="form-control" />
+			<span asp-validation-for="CompanyStreet" class="text-danger"></span>
+		</div>
 
-        <label asp-for="CompanyState">State:</label>
-        <select asp-for="CompanyState" id="companystate">
-            @foreach (var state in Enum.GetNames(typeof(States)))
-            {
-                <option value="@state">@state</option>
-            }
-        </select>
+		<div class="mb-3">
+			<label asp-for="CompanyCity" class="form-label">City</label>
+			<input asp-for="CompanyCity" id="companycity" type="text" class="form-control" />
+			<span asp-validation-for="CompanyCity" class="text-danger"></span>
+		</div>
 
-        <label asp-for="CompanyZip">Zip Code:</label>
-        <input asp-for="CompanyZip" id="companyzip" type="text" />
+		<div class="mb-3">
+			<label asp-for="CompanyState" class="form-label">State</label>
+			<select asp-for="CompanyState" id="companystate" class="form-select">
+				@foreach (var state in Enum.GetNames(typeof(States)))
+				{
+					<option value="@state">@state</option>
+				}
+			</select>
+			<span asp-validation-for="CompanyState" class="text-danger"></span>
+		</div>
 
-        <label asp-for="CompanyPhone">Company Phone:</label>
-        <input asp-for="CompanyPhone" id="companyphone" type="text" />
+		<div class="mb-3">
+			<label asp-for="CompanyZip" class="form-label">Zip Code</label>
+			<input asp-for="CompanyZip" id="companyzip" type="text" class="form-control" />
+			<span asp-validation-for="CompanyZip" class="text-danger"></span>
+		</div>
 
-        <label asp-for="CompanyEmail">Company Email:</label>
-        <input asp-for="CompanyEmail" id="companyemail" type="text" />
-        <button type="submit">Create New Company</button>
-        <a asp-controller="Account" asp-action="CreateAccount" class="btn btn-secondary">Cancel</a>
-    </form>
+		<div class="mb-3">
+			<label asp-for="CompanyPhone" class="form-label">Company Phone</label>
+			<input asp-for="CompanyPhone" id="companyphone" type="text" class="form-control" />
+			<span asp-validation-for="CompanyPhone" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="CompanyEmail" class="form-label">Company Email</label>
+			<input asp-for="CompanyEmail" id="companyemail" type="email" class="form-control" />
+			<span asp-validation-for="CompanyEmail" class="text-danger"></span>
+		</div>
+
+		<div class="d-flex justify-content-between mt-4">
+			<button type="submit" class="btn btn-primary">Create New Company</button>
+			<a asp-controller="Account" asp-action="CreateAccount" class="btn btn-secondary">Cancel</a>
+		</div>
+	</form>
 </div>
+
 
