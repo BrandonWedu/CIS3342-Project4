@@ -13,7 +13,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <form asp-controller="RealEstateHome" asp-action="HomeForm" method="POST">
+    <form asp-controller="RealEstateHome" enctype="multipart/form-data" asp-action="HomeForm" method="POST">
             <h1>Create a Home Listing</h1>
 
             <div>
@@ -279,6 +279,11 @@
                 }
                 <button type="submit" name="button" value="AddImage">Add Image</button>
             </div>
+            <button type="submit" name="button" value="AddHome">Submit Home</button>
+            @if(TempData["Errors"] != null)
+            {
+            
+            }
         </form>
     </body>
 </html>

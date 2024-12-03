@@ -99,8 +99,7 @@ namespace Project4.Controllers
                         "Account Verification",
                         $"Please click this link or enter the code on the website to verify your account\n" +
                         $"Code: {code}\n" +
-                        $"<a>https://localhost:7252/VerifyAccountWithLink/{agentID}/{code}</a>"
-                        //$"<a>https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/Project4/VerifyAccountWithLink/{agentID}/{code}</a>"
+                        $"<a>https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/Project4/VerifyAccountWithLink/{agentID}/{code}</a>"
                     );
 
                 //Call the Email API and send the email
