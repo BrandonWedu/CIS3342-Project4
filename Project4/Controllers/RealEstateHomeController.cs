@@ -187,9 +187,19 @@ namespace Project4.Controllers
                 );
             PropertyType propertyType = (PropertyType)Enum.Parse(typeof(PropertyType), Request.Form["ddlPropertyType"].ToString());
             GarageType garageType = (GarageType)Enum.Parse(typeof(GarageType), Request.Form["ddlGarageType"].ToString());
-            
-            //test image 
-            //https://img.freepik.com/premium-vector/isolated-home-vector-illustration_1076263-25.jpg
+            string description = Request.Form["txtDescription"].ToString();
+            SaleStatus saleStatus = (SaleStatus)Enum.Parse(typeof(SaleStatus), Request.Form["ddlSaleStatus"].ToString());
+            //read images
+
+            //read amenities
+
+            //read temperature control
+
+            //read rooms
+
+            //read Utilities
+
+            string testImage = "https://img.freepik.com/premium-vector/isolated-home-vector-illustration_1076263-25.jpg";
 
             Home home = new Home(
                 agent.AgentID,
@@ -198,9 +208,9 @@ namespace Project4.Controllers
                 propertyType,
                 DateTime.Now.Year,
                 garageType,
-                "",
+                description,
                 DateTime.Now, 
-                SaleStatus.OffMarket, 
+                saleStatus,
                 new Images(),
                 new Amenities(), 
                 new TemperatureControl(HeatingTypes.CentralHeating, CoolingTypes.CentralAir),
