@@ -260,7 +260,7 @@
                         <span>Image Information: </span>
                         <input name="txtImageInformation_@i" type="text" placeholder="Enter Image Information" value="@TempData[$"txtImageInformation_{i}"]">
                         <span>Image Type: </span>
-                        <select name="ddlImageType_@i">
+                        <select name="ddlImageRoomType_@i">
                         @foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
                         {
                             if(TempData[$"ddlImageRoomType_{i}"] != null && TempData[$"ddlImageRoomType_{i}"].ToString() == roomType.ToString())

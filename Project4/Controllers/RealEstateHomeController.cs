@@ -29,11 +29,13 @@ namespace Project4.Controllers
             }
             return View();
         }
-
+        //Button Controller for Home Form
         [HttpPost]
         public IActionResult HomeForm(string button)
         {
+            //Gets the ID number of a button is it has an ID number. These are present in submit buttons dunamically generated
             int buttonNumber = button.Contains('_') ? int.Parse(button.Split('_').Last()) : -1;
+            //handles which submit button was clicked
             switch (button.Split('_').First())
             {
                 case "AddRoom":
@@ -71,6 +73,8 @@ namespace Project4.Controllers
             }
             return View("CreateHome");
         }
+        //The following functions will add a div dynamically in the razor view 
+        //or set a bool value that dictates if a div will be shown or hidden "deleted"
         public void AddRoom()
         {
             if (TempData["RoomCount"] == null)
@@ -127,20 +131,22 @@ namespace Project4.Controllers
             TempData[$"ImageHidden_{i}"] = true;
             RetainData();
         }
+        //Uploads image to the server
         public void UploadImage(int i)
         {
-            //Save Image To Server
             string here = Request.Form[$"fuImage_{i}"];
             IFormFile file = Request.Form.Files[$"fuImage_{i}"];
             if (file == null || file.FileName.Split('.').Last() != "png")
             {
-                //error
+                //TODO: error
                 return;
             }
 
             //TODO: Modify Image Learning Opportunity
             //-------------------------------------------------------
             ModifyImage modifyImage = new ModifyImage();
+
+            //-------------------------------------------------------
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 file.CopyTo(memoryStream);
@@ -149,10 +155,12 @@ namespace Project4.Controllers
 
             //Generate File Name
             string imageName = DateTime.Now.Ticks.ToString() + ".png";
+
             //get the server path 
             string serverPath = webhostenvironment.ContentRootPath;
             string path = Path.Combine(serverPath, "..", "Project3", "FileStorage");
 
+            //Upload or display error when uploading image to server
             try
             {
                 using (FileStream fileStream = new FileStream(path, FileMode.CreateNew))
@@ -163,19 +171,21 @@ namespace Project4.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Errors"] = "An error occurred while uploading the image." + path + " ERROR: " + ex;
+                TempData["Errors"] = $"An error occurred while uploading the image. Path: {path} Image Name: {imageName} Error: {ex}";
                 return;
             }
+            //To remove the upload button from that specific image on the razor view
             TempData[$"ImageUploaded_{i}"] = true;
             RetainData();
         }
+        //Code To Add Home to server through API
         public async Task AddHomeAsync(Home home) 
         { 
-            //TODO: Code To Add Home to server through API
             StringContent content = new StringContent(System.Text.Json.JsonSerializer.Serialize(home), Encoding.UTF8, "application/json");
             string copy = System.Text.Json.JsonSerializer.Serialize(home);
             using (HttpClient httpClient = new HttpClient())
             {
+                //TODO: show error if there is an error
                 try
                 {
                     HttpResponseMessage response = await httpClient.PostAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/CreateHome/CreateHomeListing", content);
@@ -206,24 +216,27 @@ namespace Project4.Controllers
 
             //read images
             Images images = new Images();
-            //for(int i = 0; i < int.Parse(Request.Form["ImageCount"].ToString()); i++)
-            //{
-            //    images.Add(new Image(
-            //            (string)Request.Form[$"ImageURL{i}"],
-            //            (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType{i}"].ToString()),
-            //            (string)Request.Form[$"txtImageInformation{i}"],
-            //           i == 1
-            //        ));
-            //}
+            for(int i = 0; i < int.Parse(Request.Form["ImageCount"].ToString()); i++)
+            {
+                var test = (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"]);
+                var test2 = Request.Form[$"txtImageInformation_{i}"];
+                images.Add(new Image(
+            //        (string)Request.Form[$"ImageURL{i}"],
+                        "https://img.freepik.com/premium-vector/isolated-home-vector-illustration_1076263-25.jpg",
+                        (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"].ToString()),
+                        Request.Form[$"txtImageInformation_{i}"],
+                        i == 1
+                    ));
+            }
             //read amenities
             Amenities amenities = new Amenities();
-            //for(int i = 0; i < int.Parse(Request.Form["AmenityCount"].ToString()); i++)
-            //{
-                //amenities.Add(new Amenity(
-                        //(AmenityType)Enum.Parse(typeof(AmenityType), Request.Form[$"ddlAmenityType{i}"].ToString()),
-                        //(string)Request.Form[$"txtAmenityDescription{i}"]
-                    //));
-            //}
+            for(int i = 0; i < int.Parse(Request.Form["AmenityCount"].ToString()); i++)
+            {
+                amenities.Add(new Amenity(
+                        (AmenityType)Enum.Parse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"].ToString()),
+                        Request.Form[$"txtAmenityInformation_{i}"]
+                    ));
+            }
 
             //read temperature control
             TemperatureControl temperatureControl = new TemperatureControl(
@@ -234,29 +247,22 @@ namespace Project4.Controllers
             Rooms rooms = new Rooms();
             for(int i = 0; i < int.Parse(Request.Form["RoomCount"].ToString()); i++)
             {
-            int data = int.Parse(Request.Form[$"txtLength_{i}"]);
-            int data2 = int.Parse(Request.Form[$"txtWidth_{i}"]);
-                RoomType data3 = (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"]);
                 rooms.Add(new Room(
-                    data3, data, data2    
-                    //(RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlRoomType{i}"].ToString()),
-                        //int.Parse(Request.Form[$"txtLength_{i}"]),
-                        //int.Parse(Request.Form[$"txtWidth_{i}"])
+                        (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"].ToString()),
+                        int.Parse(Request.Form[$"txtLength_{i}"]),
+                        int.Parse(Request.Form[$"txtWidth_{i}"])
                     ));
             }
 
             //read Utilities
             Utilities utilities = new Utilities();
-            //for(int i = 0; i < int.Parse(Request.Form["UtilityCount"].ToString()); i++)
-            //{
-                //utilities.Add(new Project4.Models.Utility(
-                        //(UtilityTypes)Enum.Parse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"].ToString()),
-                        //(string)Request.Form[$"txtUtilityDescription_{i}"]
-                    //));
-            //}
-
-
-            //string testImage = "https://img.freepik.com/premium-vector/isolated-home-vector-illustration_1076263-25.jpg";
+            for(int i = 0; i < int.Parse(Request.Form["UtilityCount"].ToString()); i++)
+            {
+                utilities.Add(new Project4.Models.Utility(
+                        (UtilityTypes)Enum.Parse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"].ToString()),
+                        Request.Form[$"txtUtilityInformation_{i}"]
+                    ));
+            }
 
             Home home = new Home(
                 agent.AgentID,
@@ -287,7 +293,7 @@ namespace Project4.Controllers
             TempData.Keep();
         }
 
-
+        //=========================================================================================================
 
         public IActionResult AllEditHomes()
         {
