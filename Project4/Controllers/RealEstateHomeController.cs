@@ -29,11 +29,11 @@ namespace Project4.Controllers
             }
             return View();
         }
-       
+
         [HttpPost]
         public IActionResult HomeForm(string button)
         {
-            int buttonNumber = button.Contains('_')? int.Parse(button.Split('_').Last()) : -1;
+            int buttonNumber = button.Contains('_') ? int.Parse(button.Split('_').Last()) : -1;
             switch (button.Split('_').First())
             {
                 case "AddRoom":
@@ -70,7 +70,7 @@ namespace Project4.Controllers
             }
             return View("CreateHome");
         }
-        public void AddRoom() 
+        public void AddRoom()
         {
             if (TempData["RoomCount"] == null)
             {
@@ -84,7 +84,7 @@ namespace Project4.Controllers
             TempData[$"RoomHidden_{i}"] = true;
             RetainData();
         }
-        public void AddUtility() 
+        public void AddUtility()
         {
             if (TempData["UtilityCount"] == null)
             {
@@ -98,7 +98,7 @@ namespace Project4.Controllers
             TempData[$"UtilityHidden_{i}"] = true;
             RetainData();
         }
-        public void AddAmenity() 
+        public void AddAmenity()
         {
             if (TempData["AmenityCount"] == null)
             {
@@ -112,7 +112,7 @@ namespace Project4.Controllers
             TempData[$"AmenityHidden_{i}"] = true;
             RetainData();
         }
-        public void AddImage() 
+        public void AddImage()
         {
             if (TempData["ImageCount"] == null)
             {
@@ -174,8 +174,8 @@ namespace Project4.Controllers
             TempData[$"ImageUploaded_{i}"] = true;
             RetainData();
         }
-        public async Task AddHomeAsync() 
-        { 
+        public async Task AddHomeAsync()
+        {
             //TODO: Code To Add Home to server through API
             string agentJson = HttpContext.Session.GetString("Agent");
             Agent agent = System.Text.Json.JsonSerializer.Deserialize<Agent>(agentJson);
@@ -210,29 +210,30 @@ namespace Project4.Controllers
                 DateTime.Now.Year,
                 garageType,
                 description,
-                DateTime.Now, 
+                DateTime.Now,
                 saleStatus,
                 new Images(),
-                new Amenities(), 
+                new Amenities(),
                 new TemperatureControl(HeatingTypes.CentralHeating, CoolingTypes.CentralAir),
-                new Rooms(), 
+                new Rooms(),
                 new Utilities()
                 );
             //Call the Email API and send the email
-                StringContent content = new StringContent(System.Text.Json.JsonSerializer.Serialize(home), Encoding.UTF8, "application/json");
-                string copy = System.Text.Json.JsonSerializer.Serialize(home);
-                using (HttpClient httpClient = new HttpClient())
+            StringContent content = new StringContent(System.Text.Json.JsonSerializer.Serialize(home), Encoding.UTF8, "application/json");
+            string copy = System.Text.Json.JsonSerializer.Serialize(home);
+            using (HttpClient httpClient = new HttpClient())
+            {
+                try
                 {
-                    try
-                    {
-                        HttpResponseMessage response = await httpClient.PostAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/CreateHome/CreateHomeListing", content);
-                        string responseBody = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Response Body: {responseBody}");
-                    } catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
+                    HttpResponseMessage response = await httpClient.PostAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/CreateHome/CreateHomeListing", content);
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Response Body: {responseBody}");
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
 
         }
 
@@ -241,7 +242,7 @@ namespace Project4.Controllers
         {
             foreach (string key in Request.Form.Keys)
             {
-                    TempData[key] = Request.Form[key];
+                TempData[key] = Request.Form[key];
             }
             TempData.Keep();
         }
@@ -382,9 +383,9 @@ namespace Project4.Controllers
             string researlizedHomeJson = JsonConvert.SerializeObject(currentHome);
             HttpContext.Session.SetString("EditRooms", reseralizedRoomJson);
             HttpContext.Session.SetString("EditHome", researlizedHomeJson);
-            
 
-            
+
+
             return RedirectToAction("EditHome", currentHome.HomeID);
         }
         [HttpPost]
@@ -432,40 +433,20 @@ namespace Project4.Controllers
             //Validate each smaller componet and after validation readd them to the home object
 
             //Do api call
-            StringContent content = new StringContent(JsonConvert.SerializeObject(currentHome), Encoding.UTF8, "application/json");
-            using (HttpClient httpClient = new HttpClient())
-            {
-                try
-                {
-                    HttpResponseMessage response = httpClient.PutAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/UpdateHome/UpdateHomeListing", content).Result;
+            HttpClient client = new HttpClient();
+            StringContent apiContent = new StringContent(JsonConvert.SerializeObject(currentHome), Encoding.UTF8, "application/json");
+            HttpResponseMessage apiResponse = client.PutAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/UpdateHome/UpdateHomeListing", apiContent).Result;
+            Console.WriteLine(apiContent);
+            Console.WriteLine(apiResponse);
 
-                    // Check the response status code
-                    if (response.IsSuccessStatusCode)
-                    {
-                        Console.WriteLine("Update Successful");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Error: {response.StatusCode}");
-                    }
+            HttpContext.Session.Remove("EditRooms");
+            HttpContext.Session.Remove("EditImages");
+            HttpContext.Session.Remove("EditAmenities");
+            HttpContext.Session.Remove("EditUtilities");
+            HttpContext.Session.Remove("EditTemperature");
+            HttpContext.Session.Remove("EditHome");
+            return RedirectToAction("EditHome", currentHome.HomeID);
 
-                    // Optional: Read the response body for more details
-                    string responseBody = response.Content.ReadAsStringAsync().Result;
-                    Console.WriteLine($"Response Body: {responseBody}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Exception: {ex.Message}");
-                }
-
-                HttpContext.Session.Remove("EditRooms");
-                HttpContext.Session.Remove("EditImages");
-                HttpContext.Session.Remove("EditAmenities");
-                HttpContext.Session.Remove("EditUtilities");
-                HttpContext.Session.Remove("EditTemperature");
-                HttpContext.Session.Remove("EditHome");
-                return RedirectToAction("EditHome", currentHome.HomeID);
-            }
         }
     }
 }
