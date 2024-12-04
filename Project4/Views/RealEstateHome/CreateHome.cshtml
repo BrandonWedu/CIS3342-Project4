@@ -176,6 +176,8 @@
                 {
                     TempData[$"UtilityHidden_{i}"] = false;
                 }
+                <input type="hidden" name="UtilityCount" value="@TempData["UtilityCount"]" />
+                <input type="hidden" name="UtilityHidden_@i" value="@TempData[$"UtilityHidden_{i}"]" />
                     <div @((bool)TempData[$"UtilityHidden_{i}"] ? "hidden" : "")>
                         <span>Utility Information: </span>
                         <input name="txtUtilityInformation_@i" type="text" placeholder="Enter Utility Information" value="@TempData[$"txtUtilityInformation_{i}"]">
@@ -211,6 +213,8 @@
                 {
                     TempData[$"AmenityHidden_{i}"] = false;
                 }
+                <input type="hidden" name="AmenityCount" value="@TempData["AmenityCount"]" />
+                <input type="hidden" name="AmenityHidden_@i" value="@TempData[$"AmenityHidden_{i}"]" />
                     <div @((bool)TempData[$"AmenityHidden_{i}"] ? "hidden" : "")>
                         <span>Amenity Information: </span>
                         <input name="txtAmenityInformation_@i" type="text" placeholder="Enter Amenity Information" value="@TempData[$"txtAmenityInformation_{i}"]">
@@ -250,6 +254,8 @@
                 {
                     TempData[$"ImageUploaded_{i}"] = false;
                 }
+                <input type="hidden" name="ImageCount" value="@TempData["ImageCount"]" />
+                <input type="hidden" name="ImageHidden_@i" value="@TempData[$"ImageHidden_{i}"]" />
                     <div @((bool)TempData[$"ImageHidden_{i}"] ? "hidden" : "")>
                         <span>Image Information: </span>
                         <input name="txtImageInformation_@i" type="text" placeholder="Enter Image Information" value="@TempData[$"txtImageInformation_{i}"]">

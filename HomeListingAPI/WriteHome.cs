@@ -62,7 +62,7 @@ namespace HomeListingAPI
 
         }
 
-        internal static void UpdateHome(Home home)
+        internal static void UpdateHome(Home home, Home oldHome)
         {
 			DBConnect dbConnect = new DBConnect();
 			SqlCommand sqlCommand = new SqlCommand();
@@ -80,11 +80,11 @@ namespace HomeListingAPI
 			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@SaleStatus", home.SaleStatus.ToString(), SqlDbType.VarChar, 50));
 			dbConnect.DoUpdate(sqlCommand);
 
-            WriteAmenity.UpdateAmenities((int)home.HomeID, home.Amenities);
-            WriteHomeImage.UpdateHomeImages((int)home.HomeID, home.Images);
-            WriteRoom.UpdateRooms((int)home.HomeID, home.Rooms);
+            WriteAmenity.UpdateAmenities((int)home.HomeID, home.Amenities, oldHome.Amenities);
+            WriteHomeImage.UpdateHomeImages((int)home.HomeID, home.Images, oldHome.Images);
+            WriteRoom.UpdateRooms((int)home.HomeID, home.Rooms, oldHome.Rooms);
             WriteTemperatureControl.UpdateTemperatureControl((int)home.HomeID, home.TemperatureControl);
-            WriteUtility.UpdateUtilities((int)home.HomeID, home.Utilities);
+            WriteUtility.UpdateUtilities((int)home.HomeID, home.Utilities, oldHome.Utilities);
 
 		}
     }

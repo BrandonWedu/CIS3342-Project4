@@ -4,22 +4,12 @@
 *@
 @{
     Agent currentAgent = null;
-    Homes agentHomes = new Homes();
-    string apiUrl = "https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadHomeListings";
-    HttpClient client = new HttpClient();
-    HttpResponseMessage response = client.GetAsync(apiUrl).Result;
-    string jsonString = response.Content.ReadAsStringAsync().Result;
-    Homes allHomes = JsonConvert.DeserializeObject<Homes>(jsonString);
+    Homes agentHomes = null;
+
     if (ViewBag.Agent != null)
     {
         currentAgent = ViewBag.Agent;
-        foreach (Home currentHome in allHomes.List)
-        {
-            if (currentHome.AgentID == currentAgent.AgentID)
-            {
-                agentHomes.Add(currentHome);
-            }
-        }
+        agentHomes = ViewBag.AgentHomes;
     }
 }
 <div class="container">
