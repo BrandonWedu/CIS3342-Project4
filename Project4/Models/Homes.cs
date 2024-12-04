@@ -13,6 +13,6 @@ namespace Project4.Models
 			return new Homes(List);
 		}
 		[JsonProperty("list")]
-		public List<Home> List { get; set; }
+		public List<Home> List { get; set; } = new List<Home>();
 	}
 }

@@ -1,0 +1,188 @@
+﻿@using Newtonsoft.Json
+@*
+    You must be a logged in agent to access this page.
+*@
+
+@{
+    ViewData["Title"] = "Project 4 - Edit Home Listing";
+    Rooms currentRooms = null;
+    Images currentImages = null;
+    TemperatureControl currentTemperatureControl = null;
+    Amenities currentAmenities = null;
+    Utilities currentUtilities = null;
+    if (ViewBag.EditRooms != null)
+    {
+        currentRooms = ViewBag.EditRooms;
+        currentImages = ViewBag.EditImages;
+        currentTemperatureControl = ViewBag.EditTemperature;
+        currentAmenities = ViewBag.EditAmenities;
+        currentUtilities = ViewBag.EditUtilities;
+    }
+
+    int roomCount = 0;
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Home Listing</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <form asp-controller="RealEstateHome" asp-action="TryFinalizeEditHome" method="POST">
+        <h1>Create a Home Listing</h1>
+
+        <div>
+            <h2>Home Address</h2>
+            <span>Street</span>
+            <input name="txtHomeStreet" type="text" placeholder="Enter Street" value="@TempData["txtHomeStreet"]">
+            <span>City</span>
+            <input name="txtHomeCity" type="text" placeholder="Enter City" value="@TempData["txtHomeCity"]">
+            <span>State</span>
+            <select name="ddlHomeState" type="text">
+                @foreach (States state in Enum.GetValues(typeof(States)))
+                {
+                    if (TempData["ddlHomeState"] != null && TempData["ddlHomeState"].ToString() == state.ToString())
+                    {
+                        <option value="@state" selected="selected">@state</option>
+                    }
+                    else
+                    {
+                        <option value="@state">@state</option>
+                    }
+                }
+            </select>
+            <span>Zip Code</span>
+            <input name="txtHomeZipCode" type="text" placeholder="Enter Zip Code" value="@TempData["txtHomeZipCode"]">
+
+        </div>
+
+        <div>
+            <h2>Home Information</h2>
+            <span>Asking Price</span>
+            <input name="txtHomeCost" type="text" placeholder="Enter Asking Price" value="@TempData["txtHomeCost"]">
+            <span id="lblPropertyType">Property Type</span>
+            <select name="ddlPropertyType">
+                @foreach (PropertyType propertyType in Enum.GetValues(typeof(PropertyType)))
+                {
+                    if (TempData["ddlPropertyType"] != null && TempData["ddlPropertyType"].ToString() == propertyType.ToString())
+                    {
+                        <option value="@propertyType" selected="selected">@propertyType</option>
+                    }
+                    else
+                    {
+                        <option value="@propertyType">@propertyType</option>
+                    }
+                }
+            </select>
+            <span>Year Constructed</span>
+            <input name="txtYearConstructed" type="text" placeholder="Enter Year Constructed" value="@TempData["txtYearConstructed"]">
+            <span>Garage Type</span>
+            <select name="ddlGarageType">
+                @foreach (GarageType garageType in Enum.GetValues(typeof(GarageType)))
+                {
+                    if (TempData["ddlGarageType"] != null && TempData["ddlGarageType"].ToString() == garageType.ToString())
+                    {
+                        <option value="@garageType" selected="selected">@garageType</option>
+                    }
+                    else
+                    {
+                        <option value="@garageType">@garageType</option>
+                    }
+                }
+            </select>
+            <span>Home Description</span>
+            <textarea name="txtHomeDescription" rows="4" cols="20" placeholder="Home Description">@TempData["txtHomeDescription"]</textarea>
+            <span>SaleStatus</span>
+            <select name="ddlSaleStatus">
+                @foreach (SaleStatus saleStatus in Enum.GetValues(typeof(SaleStatus)))
+                {
+                    if (TempData["ddlSaleStatus"] != null && TempData["ddlSaleStatus"].ToString() == saleStatus.ToString())
+                    {
+                        <option value="@saleStatus" selected="selected">@saleStatus</option>
+                    }
+                    else
+                    {
+                        <option value="@saleStatus">@saleStatus</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div>
+            <h2>Add Temperature Control Information</h2>
+            <span>Cooling</span>
+            <select name="ddlCooling">
+                @foreach (CoolingTypes coolingType in Enum.GetValues(typeof(CoolingTypes)))
+                {
+                    if (TempData["ddlCooling"] != null && TempData["ddlCooling"].ToString() == coolingType.ToString())
+                    {
+                        <option value="@coolingType" selected="selected">@coolingType</option>
+                    }
+                    else
+                    {
+                        <option value="@coolingType">@coolingType</option>
+                    }
+                }
+            </select>
+            <span>Heating</span>
+            <select name="ddlHeating">
+                @foreach (HeatingTypes heatingType in Enum.GetValues(typeof(HeatingTypes)))
+                {
+                    if (TempData["ddlHeating"] != null && TempData["ddlHeating"].ToString() == heatingType.ToString())
+                    {
+                        <option value="@heatingType" selected="selected">@heatingType</option>
+                    }
+                    else
+                    {
+                        <option value="@heatingType">@heatingType</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div>
+            <h2>Add Room Information</h2>
+            @if (currentRooms != null)
+            {
+                
+                @foreach (Room currentRoom in currentRooms.List)
+                {
+                    <div>
+                        <span>Length: </span>
+                        <input name="txtLength_@roomCount" type="text" placeholder="Enter Length" value="@currentRoom.Height">
+                        <span>Width: </span>
+                        <input name="txtWidth_@roomCount" type="text" placeholder="Enter Width" value="@currentRoom.Width">
+                        <span>RoomType: </span>
+                        <select name="ddlRoomType_@roomCount">
+                            @foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
+                            {
+                                if (currentRoom.Type != null && currentRoom.Type.ToString() == roomType.ToString())
+                                {
+                                    <option value="@roomType" selected="selected">@roomType</option>
+                                }
+                                else
+                                {
+                                    <option value="@roomType">@roomType</option>
+                                }
+                            }
+                        </select>
+                        <input name="roomIndex_@roomCount" value="@roomCount" hidden/>
+                        <button type="submit" formaction="/RealEstateHome/RemoveEditRoom/@roomCount" formmethod="POST" class="btn btn-danger">Remove Room</button>
+                    </div>
+                    <button type="submit" formaction="/RealEstateHome/AddEditRoom" formmethod="POST" class="btn btn-danger">Add Room</button>
+                }
+
+                @if(currentRooms.List.Count == 0)
+                {
+                    <button type="submit" formaction="/RealEstateHome/AddEditRoom" formmethod="POST" class="btn btn-danger">Add Room</button>
+                }
+            }
+        </div>
+
+        <button type="submit" name="save">Save Edit</button>
+        <a asp-controller="RealEstateHome" asp-action="AllEditHomes" class="btn btn-secondary w-100">Cancel Edit</a>
+    </form>
+</body>
+</html>

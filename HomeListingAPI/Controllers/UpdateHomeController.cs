@@ -7,7 +7,7 @@ namespace HomeListingAPI.Controllers
 	public class UpdateHomeController : Controller
 	{
 		[HttpPut("UpdateHomeListing")]
-		public IActionResult UpdateHomeListing([FromBody] Home updatedHome)
+		public IActionResult Put([FromBody] Home updatedHome)
 		{
 			if (updatedHome == null)
 			{
@@ -35,7 +35,9 @@ namespace HomeListingAPI.Controllers
 			currentHome.YearConstructed = updatedHome.YearConstructed;
 			currentHome.Utilities = updatedHome.Utilities;
 
-			WriteHome.UpdateHome(currentHome);
+			Home oldHome = ReadHome.GetHomeByHomeID((int)updatedHome.HomeID);
+
+			WriteHome.UpdateHome(currentHome, oldHome);
 			return Ok("Home Listing Updated");
 		}
 	}
