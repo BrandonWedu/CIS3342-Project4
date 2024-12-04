@@ -29,7 +29,7 @@ namespace Project4.Models
     public class Home : ICloneable<Home>
     {
         private int? homeID;
-        private int? agentID;
+        private int agentID;
         private int cost;
         private Address address;
         private PropertyType propertyType;
@@ -45,7 +45,7 @@ namespace Project4.Models
         private Rooms rooms;
         private Utilities utilities;
 
-        public Home(int? agentID, int cost, Address address, PropertyType type, int yearConstructed, GarageType garageType, string description, DateTime dateListed, SaleStatus saleStatus, Images images, Amenities amenities, TemperatureControl temperatureControl, Rooms rooms, Utilities utilities)
+        public Home(int agentID, int cost, Address address, PropertyType type, int yearConstructed, GarageType garageType, string description, DateTime dateListed, SaleStatus saleStatus, Images images, Amenities amenities, TemperatureControl temperatureControl, Rooms rooms, Utilities utilities)
         {
             this.homeID = null;
             this.agentID = agentID;
@@ -63,7 +63,7 @@ namespace Project4.Models
             this.rooms = rooms.Clone();
             this.utilities = utilities.Clone();
         }
-        public Home(int? houseID, int? agentID, int cost, Address address, PropertyType type, int yearConstructed, GarageType garageType, string description, DateTime dateListed, SaleStatus saleStatus, Images images, Amenities amenities, TemperatureControl temperatureControl, Rooms rooms, Utilities utilities)
+        public Home(int? houseID, int agentID, int cost, Address address, PropertyType type, int yearConstructed, GarageType garageType, string description, DateTime dateListed, SaleStatus saleStatus, Images images, Amenities amenities, TemperatureControl temperatureControl, Rooms rooms, Utilities utilities)
         {
             this.homeID = houseID;
             this.agentID = agentID;
@@ -93,7 +93,7 @@ namespace Project4.Models
             set { homeID = value; }
         }
 		[JsonProperty("agentID")]
-		public int? AgentID
+		public int AgentID
         {
             get { return agentID; }
             set { agentID = value; }

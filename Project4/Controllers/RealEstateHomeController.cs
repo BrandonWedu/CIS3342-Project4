@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Project4.Models;
 using System.Text;
 using System.Text.Json;
@@ -177,7 +178,7 @@ namespace Project4.Controllers
         { 
             //TODO: Code To Add Home to server through API
             string agentJson = HttpContext.Session.GetString("Agent");
-            Agent agent = JsonSerializer.Deserialize<Agent>(agentJson);
+            Agent agent = System.Text.Json.JsonSerializer.Deserialize<Agent>(agentJson);
             int cost = int.Parse(Request.Form["txtHomeCost"]);
             Address address = new Address(
                     Request.Form["txtHomeStreet"].ToString(),
@@ -218,8 +219,8 @@ namespace Project4.Controllers
                 new Utilities()
                 );
             //Call the Email API and send the email
-                StringContent content = new StringContent(JsonSerializer.Serialize(home), Encoding.UTF8, "application/json");
-                string copy = JsonSerializer.Serialize(home);
+                StringContent content = new StringContent(System.Text.Json.JsonSerializer.Serialize(home), Encoding.UTF8, "application/json");
+                string copy = System.Text.Json.JsonSerializer.Serialize(home);
                 using (HttpClient httpClient = new HttpClient())
                 {
                     try
@@ -243,6 +244,16 @@ namespace Project4.Controllers
                     TempData[key] = Request.Form[key];
             }
             TempData.Keep();
+        }
+
+
+
+        public IActionResult AllEditHomes()
+        {
+            string agentJson = HttpContext.Session.GetString("Agent");
+            Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentJson);
+            ViewBag.Agent = currentAgent;
+            return View();
         }
     }
 }
