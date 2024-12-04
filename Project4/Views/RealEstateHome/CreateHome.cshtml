@@ -137,6 +137,8 @@
                 {
                     TempData[$"RoomHidden_{i}"] = false;
                 }
+                <input type="hidden" name="RoomCount" value="@TempData["RoomCount"]" />
+                <input type="hidden" name="RoomHidden_@i" value="@TempData[$"RoomHidden_{i}"]" />
                     <div @((bool)TempData[$"RoomHidden_{i}"] ? "hidden" : "")>
                         <span>Length: </span>
                         <input name="txtLength_@i" type="text" placeholder="Enter Length" value="@TempData[$"txtLength_{i}"]">
@@ -274,7 +276,10 @@
                             <input type="file" name="fuImage_@i">
                             <button type="submit" name="button" value="UploadImage_@i">Upload Image</button>
                         }
-                        <button type="submit" name="button" value="DeleteImage_@i">Delete Image</button>
+                        @if(i != 0)
+                        {
+                            <button type="submit" name="button" value="DeleteImage_@i">Delete Image</button>
+                        }
                     </div>
                 }
                 <button type="submit" name="button" value="AddImage">Add Image</button>

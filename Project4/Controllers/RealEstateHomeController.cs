@@ -64,7 +64,9 @@ namespace Project4.Controllers
                     UploadImage(buttonNumber);
                     break;
                 case "AddHome":
-                    AddHomeAsync();
+                    Home home = GetHomeData();
+                    AddHomeAsync(home);
+                    RetainData();
                     break;
 
             }
@@ -155,16 +157,16 @@ namespace Project4.Controllers
 
             try
             {
-                string fileStoragePath = Path.Combine(_environment.WebRootPath, "FileStorage");
+                string fileStoragePath = Path.Combine(_environment.ContentRootPath,"TermProject", "FileStorage");
                 if (!Directory.Exists(fileStoragePath))
                 {
                     Directory.CreateDirectory(fileStoragePath);
                 }
-
                 using (FileStream fileStream = new FileStream(path, FileMode.CreateNew))
                 {
                     fileStream.Write(modifyImage.Image, 0, modifyImage.Image.Length);
                 }
+                TempData[$"ImageURL{i}"] = path;
             }
             catch (Exception ex)
             {
@@ -174,9 +176,27 @@ namespace Project4.Controllers
             TempData[$"ImageUploaded_{i}"] = true;
             RetainData();
         }
-        public async Task AddHomeAsync() 
+        public async Task AddHomeAsync(Home home) 
         { 
             //TODO: Code To Add Home to server through API
+            StringContent content = new StringContent(System.Text.Json.JsonSerializer.Serialize(home), Encoding.UTF8, "application/json");
+            string copy = System.Text.Json.JsonSerializer.Serialize(home);
+            using (HttpClient httpClient = new HttpClient())
+            {
+                try
+                {
+                    HttpResponseMessage response = await httpClient.PostAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/CreateHome/CreateHomeListing", content);
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Response Body: {responseBody}");
+                } catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+        //Get Home Data
+        public Home GetHomeData()
+        {
             string agentJson = HttpContext.Session.GetString("Agent");
             Agent agent = System.Text.Json.JsonSerializer.Deserialize<Agent>(agentJson);
             int cost = int.Parse(Request.Form["txtHomeCost"]);
@@ -190,17 +210,58 @@ namespace Project4.Controllers
             GarageType garageType = (GarageType)Enum.Parse(typeof(GarageType), Request.Form["ddlGarageType"].ToString());
             string description = Request.Form["txtDescription"].ToString();
             SaleStatus saleStatus = (SaleStatus)Enum.Parse(typeof(SaleStatus), Request.Form["ddlSaleStatus"].ToString());
-            //read images
 
+            //read images
+            Images images = new Images();
+            //for(int i = 0; i < int.Parse(Request.Form["ImageCount"].ToString()); i++)
+            //{
+            //    images.Add(new Image(
+            //            (string)Request.Form[$"ImageURL{i}"],
+            //            (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType{i}"].ToString()),
+            //            (string)Request.Form[$"txtImageInformation{i}"],
+            //           i == 1
+            //        ));
+            //}
             //read amenities
+            Amenities amenities = new Amenities();
+            //for(int i = 0; i < int.Parse(Request.Form["AmenityCount"].ToString()); i++)
+            //{
+                //amenities.Add(new Amenity(
+                        //(AmenityType)Enum.Parse(typeof(AmenityType), Request.Form[$"ddlAmenityType{i}"].ToString()),
+                        //(string)Request.Form[$"txtAmenityDescription{i}"]
+                    //));
+            //}
 
             //read temperature control
-
+            TemperatureControl temperatureControl = new TemperatureControl(
+                    (HeatingTypes)Enum.Parse(typeof(HeatingTypes), Request.Form[$"ddlHeating"].ToString()),
+                    (CoolingTypes)Enum.Parse(typeof(CoolingTypes), Request.Form[$"ddlCooling"].ToString())
+                );
             //read rooms
+            Rooms rooms = new Rooms();
+            for(int i = 0; i < int.Parse(Request.Form["RoomCount"].ToString()); i++)
+            {
+            int data = int.Parse(Request.Form[$"txtLength_{i}"]);
+            var data2 = Request.Form[$"txtWidth_{i}"];
+                rooms.Add(new Room(
+                        (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlRoomType{i}"].ToString()),
+                        int.Parse(Request.Form[$"txtLength_{i}"]),
+                        int.Parse(Request.Form[$"txtWidth_{i}"])
+                    ));
+            }
 
             //read Utilities
+            Utilities utilities = new Utilities();
+            //for(int i = 0; i < int.Parse(Request.Form["UtilityCount"].ToString()); i++)
+            //{
+                //utilities.Add(new Project4.Models.Utility(
+                        //(UtilityTypes)Enum.Parse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"].ToString()),
+                        //(string)Request.Form[$"txtUtilityDescription_{i}"]
+                    //));
+            //}
 
-            string testImage = "https://img.freepik.com/premium-vector/isolated-home-vector-illustration_1076263-25.jpg";
+
+            //string testImage = "https://img.freepik.com/premium-vector/isolated-home-vector-illustration_1076263-25.jpg";
 
             Home home = new Home(
                 agent.AgentID,
@@ -212,28 +273,13 @@ namespace Project4.Controllers
                 description,
                 DateTime.Now, 
                 saleStatus,
-                new Images(),
-                new Amenities(), 
-                new TemperatureControl(HeatingTypes.CentralHeating, CoolingTypes.CentralAir),
-                new Rooms(), 
-                new Utilities()
+                images,
+                amenities,
+                temperatureControl,
+                rooms,
+                utilities
                 );
-            //Call the Email API and send the email
-                StringContent content = new StringContent(System.Text.Json.JsonSerializer.Serialize(home), Encoding.UTF8, "application/json");
-                string copy = System.Text.Json.JsonSerializer.Serialize(home);
-                using (HttpClient httpClient = new HttpClient())
-                {
-                    try
-                    {
-                        HttpResponseMessage response = await httpClient.PostAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/CreateHome/CreateHomeListing", content);
-                        string responseBody = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Response Body: {responseBody}");
-                    } catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                }
-
+            return home;
         }
 
         //save request.form to temp data
