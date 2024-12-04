@@ -10,7 +10,5 @@ namespace Project4.Models
         {
             return new Utilities(List);
         }
-		[JsonProperty("list")]
-		public List<Utility> List { get; set; }
 	}
 }

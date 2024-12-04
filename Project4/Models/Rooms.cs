@@ -10,9 +10,7 @@ namespace Project4.Models
         {
             return new Rooms(List);
         }
-		[JsonProperty("list")]
-		public List<Room> List { get; set; }
-		public int GetBedrooms()
+        public int GetBedrooms()
         {
             int count = 0;
             foreach (Room room in List)
