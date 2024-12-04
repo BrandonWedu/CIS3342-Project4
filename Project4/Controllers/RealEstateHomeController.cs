@@ -435,8 +435,8 @@ namespace Project4.Controllers
             //Do api call
             HttpClient client = new HttpClient();
             StringContent apiContent = new StringContent(JsonConvert.SerializeObject(currentHome), Encoding.UTF8, "application/json");
-            HttpResponseMessage apiResponse = client.PutAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/UpdateHome/UpdateHomeListing", apiContent).Result;
-            Console.WriteLine(apiContent);
+            HttpResponseMessage apiResponse = client.PostAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/UpdateHome/UpdateHomeListing", apiContent).Result;
+            Console.WriteLine(apiContent.ToString());
             Console.WriteLine(apiResponse);
 
             HttpContext.Session.Remove("EditRooms");
