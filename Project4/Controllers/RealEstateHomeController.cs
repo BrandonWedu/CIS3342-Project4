@@ -80,7 +80,7 @@ namespace Project4.Controllers
         {
             if (TempData["RoomCount"] == null)
             {
-                TempData["RoomCount"] = 1;
+                TempData["RoomCount"] = 0;
             }
             TempData["RoomCount"] = (int)TempData["RoomCount"] + 1;
             RetainData();
@@ -94,7 +94,7 @@ namespace Project4.Controllers
         {
             if (TempData["UtilityCount"] == null)
             {
-                TempData["UtilityCount"] = 1;
+                TempData["UtilityCount"] = 0;
             }
             TempData["UtilityCount"] = (int)TempData["UtilityCount"] + 1;
             RetainData();
@@ -108,7 +108,7 @@ namespace Project4.Controllers
         {
             if (TempData["AmenityCount"] == null)
             {
-                TempData["AmenityCount"] = 1;
+                TempData["AmenityCount"] = 0;
             }
             TempData["AmenityCount"] = (int)TempData["AmenityCount"] + 1;
             RetainData();
@@ -122,7 +122,7 @@ namespace Project4.Controllers
         {
             if (TempData["ImageCount"] == null)
             {
-                TempData["ImageCount"] = 1;
+                TempData["ImageCount"] = 0;
             }
             TempData["ImageCount"] = (int)TempData["ImageCount"] + 1;
             RetainData();
@@ -201,6 +201,7 @@ namespace Project4.Controllers
         //Get Home Data
         public Home GetHomeData()
         {
+            RetainData();
             string agentJson = HttpContext.Session.GetString("Agent");
             Agent agent = System.Text.Json.JsonSerializer.Deserialize<Agent>(agentJson);
             int cost = int.Parse(Request.Form["txtHomeCost"]);
@@ -217,7 +218,7 @@ namespace Project4.Controllers
 
             //read images
             Images images = new Images();
-            for(int i = 0; i < int.Parse(Request.Form["ImageCount"].ToString()); i++)
+            for(int i = 0; i < int.Parse(TempData["ImageCount"].ToString()); i++)
             {
                 var test = (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"]);
                 var test2 = Request.Form[$"txtImageInformation_{i}"];
@@ -231,7 +232,7 @@ namespace Project4.Controllers
             }
             //read amenities
             Amenities amenities = new Amenities();
-            for(int i = 0; i < int.Parse(Request.Form["AmenityCount"].ToString()); i++)
+            for(int i = 0; i < int.Parse(TempData["AmenityCount"].ToString()); i++)
             {
                 amenities.Add(new Amenity(
                         (AmenityType)Enum.Parse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"].ToString()),
@@ -246,7 +247,7 @@ namespace Project4.Controllers
                 );
             //read rooms
             Rooms rooms = new Rooms();
-            for(int i = 0; i < int.Parse(Request.Form["RoomCount"].ToString()); i++)
+            for(int i = 0; i < int.Parse(TempData["RoomCount"].ToString()); i++)
             {
                 rooms.Add(new Room(
                         (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"].ToString()),
@@ -257,7 +258,7 @@ namespace Project4.Controllers
 
             //read Utilities
             Utilities utilities = new Utilities();
-            for(int i = 0; i < int.Parse(Request.Form["UtilityCount"].ToString()); i++)
+            for(int i = 0; i < int.Parse(TempData["UtilityCount"].ToString()); i++)
             {
                 utilities.Add(new Project4.Models.Utility(
                         (UtilityTypes)Enum.Parse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"].ToString()),
