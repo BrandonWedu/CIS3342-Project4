@@ -1,33 +1,15 @@
-﻿@using Newtonsoft.Json
-@*
+﻿@*
     You must be a logged in agent to access this page.
 *@
 
 @{
-	ViewData["Title"] = "Project 4 - Edit Home Listing";
-	Rooms currentRooms = null;
-	Images currentImages = null;
-	TemperatureControl currentTemperatureControl = null;
-	Amenities currentAmenities = null;
-	Utilities currentUtilities = null;
-	if (ViewBag.EditRooms != null)
-	{
-		currentRooms = ViewBag.EditRooms;
-		currentImages = ViewBag.EditImages;
-		currentTemperatureControl = ViewBag.EditTemperature;
-		currentAmenities = ViewBag.EditAmenities;
-		currentUtilities = ViewBag.EditUtilities;
-	}
-
-	int roomCount = 0;
-
+	ViewData["Title"] = "Project 4 - Schedule Showing";
 }
-
 <div class="container my-4">
-	<form asp-controller="RealEstateHome" asp-action="TryFinalizeEditHome" enctype="multipart/form-data" method="POST" class="card shadow mt-5 p-3">
+	<form asp-controller="RealEstateHome" enctype="multipart/form-data" asp-action="EditHomeForm" method="POST" class="card shadow mt-5 p-3">
 		<h1>Create a Home Listing</h1>
 
-		<div class="mt-1">
+		<div class="row mt-3">
 			<h2>Home Address</h2>
 			<span class="form-label">Street</span>
 			<input class="form-control" name="txtHomeStreet" type="text" placeholder="Enter Street" value="@TempData["txtHomeStreet"]">
@@ -47,16 +29,16 @@
 					}
 				}
 			</select>
-			<span>Zip Code</span>
+			<span class="form-label">Zip Code</span>
 			<input class="form-control" name="txtHomeZipCode" type="text" placeholder="Enter Zip Code" value="@TempData["txtHomeZipCode"]">
 
 		</div>
 
-		<div class="mt-1">
+		<div class="row mt-3">
 			<h2>Home Information</h2>
 			<span class="form-label">Asking Price</span>
 			<input class="form-control" name="txtHomeCost" type="text" placeholder="Enter Asking Price" value="@TempData["txtHomeCost"]">
-			<span id="lblPropertyType">Property Type</span>
+			<span class="form-label" id="lblPropertyType">Property Type</span>
 			<select class="form-control" name="ddlPropertyType">
 				@foreach (PropertyType propertyType in Enum.GetValues(typeof(PropertyType)))
 				{
@@ -104,7 +86,7 @@
 			</select>
 		</div>
 
-		<div class="mt-1">
+		<div class="row mt-3">
 			<h2>Add Temperature Control Information</h2>
 			<span class="form-label">Cooling</span>
 			<select class="form-control" name="ddlCooling">
@@ -136,207 +118,215 @@
 			</select>
 		</div>
 
-		<div class="mt-1">
-			<h2>Home Room Information</h2>
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<td>Length</td>
-						<td>Width</td>
-						<td>RoomType</td>
-					</tr>
-				</thead>
-				<tbody>
-					@if (currentRooms.List.Count == 0)
-					{
-						<tr>
-							<td>No Room Data</td>
-						</tr>
-					}
-					else
-					{
-						@for (int i = 0; i < currentRooms.List.Count; i++)
-						{
-							<tr>
-								<td>@currentRooms.List[i].Height</td>
-								<td>@currentRooms.List[i].Width</td>
-								<td>@currentRooms.List[i].Type</td>
-								<td><button type="submit" formaction="/RealEstateHome/RemoveEditRoom/@i" formmethod="POST" class="btn btn-danger">Remove Room</button></td>
-							</tr>
-						}
-					}
+		<div class="row mt-3">
+			<h2>Add Room Information</h2>
+			@if (TempData["RoomCount"] == null)
+			{
+				TempData["RoomCount"] = 1;
+			}
+			@for (int i = 0; i < (int)TempData["RoomCount"]; i++)
+			{
+				if (TempData[$"RoomHidden_{i}"] == null)
+				{
+					TempData[$"RoomHidden_{i}"] = false;
+				}
+				<div @((bool)TempData[$"RoomHidden_{i}"] ? "hidden" : "")>
+					<div class="row align-items-center mt-2">
+						<div class="col-md-3">
+							<span class="form-label">Length: </span>
+							<input class="form-control col-md-2" name="txtLength_@i" type="text" placeholder="Enter Length" value="@TempData[$"txtLength_{i}"]">
+						</div>
+						<div class="col-md-3">
+							<span class="form-label">Width: </span>
+							<input class="form-control" name="txtWidth_@i" type="text" placeholder="Enter Width" value="@TempData[$"txtWidth_{i}"]">
+						</div>
+						<div class="col-md-3">
+							<span class="form-label">RoomType: </span>
+							<select class="form-control" name="ddlRoomType_@i">
+								@foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
+								{
+									if (TempData[$"ddlRoomType_{i}"] != null && TempData[$"ddlRoomType_{i}"].ToString() == roomType.ToString())
+									{
+										<option value="@roomType" selected="selected">@roomType</option>
+									}
+									else
+									{
+										<option value="@roomType">@roomType</option>
+									}
+								}
+							</select>
+						</div>
 
-				</tbody>
-			</table>
+						<div class="col-md-3 mt-4">
+							<button class="btn btn-danger w-100" type="submit" name="button" value="DeleteEditRoom_@i">Delete Room</button>
+						</div>
 
-			<h3>Add New Room</h3>
-			<div>
-				<span class="form-label">Length: </span>
-				<input class="form-control" name="roomLength" type="text" placeholder="Enter Length">
-				<span class="form-label">Width: </span>
-				<input class="form-control" name="roomWidth" type="text" placeholder="Enter Width">
-				<span class="form-label">RoomType: </span>
-				<select class="form-control" name="roomType">
-					@foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
-					{
 
-						<option value="@roomType">@roomType</option>
-
-					}
-				</select>
-				<button type="submit" formaction="/RealEstateHome/AddEditRoom" formmethod="POST" class="btn btn-primary mt-3 w-100">Add Room</button>
-			</div>
-		</div>
-
-		<div class="mt-1">
-			<h2>Home Image Information</h2>
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<td>Image Type</td>
-						<td>Image Description</td>
-						<td>Is Main Image</td>
-					</tr>
-				</thead>
-				<tbody>
-					@if (currentImages.List.Count == 0)
-					{
-						<tr>
-							<td>No Image Data</td>
-						</tr>
-					}
-					else
-					{
-						@for (int i = 0; i < currentImages.List.Count; i++)
-						{
-							<tr>
-								<td>@currentImages.List[i].Type</td>
-								<td>@currentImages.List[i].Description</td>
-								<td>@currentImages.List[i].MainImage</td>
-								<td><button type="submit" formaction="/RealEstateHome/RemoveEditImage/@i" formmethod="POST" class="btn btn-danger">Remove Image</button></td>
-							</tr>
-						}
-					}
-
-				</tbody>
-			</table>
-			<h3>Add New Image</h3>
-			<div>
-				<span class="form-label">Image Description: </span>
-				<input class="form-control" name="imageDescription" type="text" placeholder="Enter Image Description">
-				<span class="form-label">Image Type: </span>
-				<select class="form-control" name="imageType">
-					@foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
-					{
-						<option value="@roomType">@roomType</option>
-					}
-				</select>
-				<span class="form-label">Upload Image</span>
-				<input class="form-control" type="file" name="imageFile">
-				<label class="form-label">Default Image</label>
-				<div class="form-control" class="form-check">
-					<input type="radio" id="yes" name="defaultImage" value="true" class="form-check-input" />
-					<label for="yes" class="form-check-label">Yes</label>
+					</div>
 				</div>
-				<div class="form-control" class="form-check">
-					<input type="radio" id="no" name="defaultImage" value="false" class="form-check-input" />
-					<label for="no" class="form-check-label">No</label>
+			}
+			<button class="btn btn-primary mt-3" type="submit" name="button" value="AddEditRoom">Add Room</button>
+		</div>
+
+		<div class="row mt-3">
+			<h2>Add Utility Information</h2>
+			@if (TempData["UtilityCount"] == null)
+			{
+				TempData["UtilityCount"] = 1;
+			}
+			@for (int i = 0; i < (int)TempData["UtilityCount"]; i++)
+			{
+				if (TempData[$"UtilityHidden_{i}"] == null)
+				{
+					TempData[$"UtilityHidden_{i}"] = false;
+				}
+				<div @((bool)TempData[$"UtilityHidden_{i}"] ? "hidden" : "")>
+					<div class="row align-items-center mt-2">
+						<div class="col-md-5">
+							<span class="form-label">Utility Information: </span>
+							<input class="form-control" name="txtUtilityInformation_@i" type="text" placeholder="Enter Utility Information" value="@TempData[$"txtUtilityInformation_{i}"]">
+						</div>
+						<div class="col-md-5">
+							<span class="form-label">Utility Type: </span>
+							<select class="form-control" name="ddlUtilityType_@i">
+								@foreach (UtilityTypes utilityType in Enum.GetValues(typeof(UtilityTypes)))
+								{
+									if (TempData[$"ddlUtilityType_{i}"] != null && TempData[$"ddlUtilityType_{i}"].ToString() == utilityType.ToString())
+									{
+										<option value="@utilityType" selected="selected">@utilityType</option>
+									}
+									else
+									{
+										<option value="@utilityType">@utilityType</option>
+									}
+								}
+							</select>
+						</div>
+						<div class="col-md-2 mt-4">
+							<button class="btn btn-danger w-100" type="submit" name="button" value="DeleteUtility_@i">Delete Utility</button>
+						</div>
+					</div>
 				</div>
-				<button type="submit" formaction="/RealEstateHome/AddEditImage" formmethod="POST" class="btn btn-primary mt-3 w-100">Add Image</button>
+			}
+			<button class="btn btn-primary mt-3" type="submit" name="button" value="AddUtility">Add Utility</button>
+		</div>
+
+		<div class="row mt-3">
+			<h2>Add Amenity Information</h2>
+			@if (TempData["AmenityCount"] == null)
+			{
+				TempData["AmenityCount"] = 1;
+			}
+			@for (int i = 0; i < (int)TempData["AmenityCount"]; i++)
+			{
+				if (TempData[$"AmenityHidden_{i}"] == null)
+				{
+					TempData[$"AmenityHidden_{i}"] = false;
+				}
+				<div @((bool)TempData[$"AmenityHidden_{i}"] ? "hidden" : "")>
+					<div class="row align-items-center mt-2">
+						<div class="col-md-5">
+							<span class="form-label">Amenity Information: </span>
+							<input class="form-control" name="txtAmenityInformation_@i" type="text" placeholder="Enter Amenity Information" value="@TempData[$"txtAmenityInformation_{i}"]">
+						</div>
+						<div class="col-md-5">
+							<span class="form-label">Amenity Type: </span>
+							<select class="form-control" name="ddlAmenityType_@i">
+								@foreach (AmenityType amenityType in Enum.GetValues(typeof(AmenityType)))
+								{
+									if (TempData[$"ddlAmenityType_{i}"] != null && TempData[$"ddlAmenityType_{i}"].ToString() == amenityType.ToString())
+									{
+										<option value="@amenityType" selected="selected">@amenityType</option>
+									}
+									else
+									{
+										<option value="@amenityType">@amenityType</option>
+									}
+								}
+							</select>
+						</div>
+						<div class="col-md-2 mt-4">
+							<button class="btn btn-danger w-100" type="submit" name="button" value="DeleteAmenity_@i">Delete Amenity</button>
+						</div>
+					</div>
+				</div>
+			}
+			<button class="btn btn-primary mt-3" type="submit" name="button" value="AddAmenity">Add Amenity</button>
+		</div>
+
+		<div class="row mt-3">
+			<h2>Add Image Information</h2>
+			@if (TempData["ImageCount"] == null)
+			{
+				TempData["ImageCount"] = 1;
+			}
+			@for (int i = 0; i < (int)TempData["ImageCount"]; i++)
+			{
+				if (TempData[$"ImageHidden_{i}"] == null)
+				{
+					TempData[$"ImageHidden_{i}"] = false;
+				}
+				if (TempData[$"ImageUploaded_{i}"] == null)
+				{
+					TempData[$"ImageUploaded_{i}"] = false;
+				}
+				<div @((bool)TempData[$"ImageHidden_{i}"] ? "hidden" : "")>
+					<div class="row align-items-center mt-2">
+						<div class="col-md-3">
+							<span class="form-label">Image Information: </span>
+							<input class="form-control" name="txtImageInformation_@i" type="text" placeholder="Enter Image Information" value="@TempData[$"txtImageInformation_{i}"]">
+						</div>
+						<div class="col-md-2">
+							<span class="form-label">Image Type: </span>
+							<select class="form-control" name="ddlImageRoomType_@i">
+								@foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
+								{
+									if (TempData[$"ddlImageRoomType_{i}"] != null && TempData[$"ddlImageRoomType_{i}"].ToString() == roomType.ToString())
+									{
+										<option value="@roomType" selected="selected">@roomType</option>
+									}
+									else
+									{
+										<option value="@roomType">@roomType</option>
+									}
+								}
+							</select>
+						</div>
+						@if ((bool)TempData[$"ImageUploaded_{i}"])
+						{
+							<span class="form-label fw-bold">Image Uploaded To Server.</span>
+						}
+						else
+						{
+							<div class="col-md-3">
+								<input class="form-control mt-4" type="file" name="fuImage_@i">
+							</div>
+							<div class="col-md-2">
+								<button class="btn btn-info w-100 mt-4" type="submit" name="button" value="UploadImage_@i">Upload Image</button>
+							</div>
+						}
+						@if (i != 0)
+						{
+							<div class="col-md-2">
+								<button class="btn btn-danger w-100 mt-4" type="submit" name="button" value="DeleteImage_@i">Delete Image</button>
+							</div>
+						}
+					</div>
+				</div>
+			}
+			<button class="btn btn-primary mt-3" type="submit" name="button" value="AddImage">Add Image</button>
+		</div>
+		<div class="row">
+
+			<div class="col-12 mt-3">
+				<button class="btn btn-success w-100" type="submit" name="button" value="FinalizeEdit">Finalize Edit</button>
 			</div>
 		</div>
 
-		<div class="mt-1">
-			<h2>Home Utility Information</h2>
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<td>Utility Type</td>
-						<td>Utility Information</td>
-						<td>Remove Utility</td>
-					</tr>
-				</thead>
-				<tbody>
-					@if (currentUtilities.List.Count == 0)
-					{
-						<tr>
-							<td>No Utility Data</td>
-						</tr>
-					}
-					else
-					{
-						@for (int i = 0; i < currentUtilities.List.Count; i++)
-						{
-							<tr>
-								<td>@currentUtilities.List[i].Type</td>
-								<td>@currentUtilities.List[i].Information</td>
-								<td><button type="submit" formaction="/RealEstateHome/RemoveEditUtility/@i" formmethod="POST" class="btn btn-danger">Remove Image</button></td>
-							</tr>
-						}
-					}
-				</tbody>
-			</table>
-			<div>
-				<h3>Add New Utility</h3>
-				<span class="form-label">Utility Information: </span>
-				<input class="form-control" name="utilityInformation" type="text" placeholder="Enter Utility Information">
-				<span class="form-label">Utility Type: </span>
-				<select class="form-control" name="utilityType">
-					@foreach (UtilityTypes utilityType in Enum.GetValues(typeof(UtilityTypes)))
-					{
-						<option value="@utilityType">@utilityType</option>
-					}
-				</select>
-				<button type="submit" formaction="/RealEstateHome/AddEditUtility" formmethod="POST" class="btn btn-primary mt-3 w-100">Add Utility</button>
-			</div>
-		</div>
 
-		<div class="mt-1">
-			<h2>Home Amenity Information</h2>
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<td>Amenity Type</td>
-						<td>Amenity Information</td>
-						<td>Remove Utility</td>
-					</tr>
-				</thead>
-				<tbody>
-					@if (currentAmenities.List.Count == 0)
-					{
-						<tr>
-							<td>No Amenity Data</td>
-						</tr>
-					}
-					else
-					{
-						@for (int i = 0; i < currentAmenities.List.Count; i++)
-						{
-							<tr>
-								<td>@currentAmenities.List[i].Type</td>
-								<td>@currentAmenities.List[i].Description</td>
-								<td><button type="submit" formaction="/RealEstateHome/RemoveEditAmenity/@i" formmethod="POST" class="btn btn-danger">Remove Amenity</button></td>
-							</tr>
-						}
-					}
-				</tbody>
-			</table>
-			<div>
-				<h3>Add New Amenity</h3>
-				<span class="form-label">Amenity Information: </span>
-				<input class="form-control" name="amenityInformation" type="text" placeholder="Enter Amenity Information">
-				<span class="form-label">Amenity Type: </span>
-				<select class="form-control" name="amenityType">
-					@foreach (AmenityType amenityType in Enum.GetValues(typeof(AmenityType)))
-					{
-						<option value="@amenityType">@amenityType</option>
-					}
-				</select>
-				<button type="submit" formaction="/RealEstateHome/AddEditAmenity" formmethod="POST" class="btn btn-primary mt-3 w-100">Add Amenity</button>
-			</div>
-		</div>
-		<button type="submit" name="save" class="btn btn-success mt-3 w-100">Save Edit</button>
-		<a asp-controller="RealEstateHome" asp-action="AllEditHomes" class="btn btn-secondary mt-3 w-100">Cancel Edit</a>
+		@if (TempData["Errors"] != null)
+		{
+			<p>@TempData["Errors"]</p>
+		}
 	</form>
 </div>
-
