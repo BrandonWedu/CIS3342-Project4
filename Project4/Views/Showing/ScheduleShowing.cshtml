@@ -1,6 +1,6 @@
-﻿@model Project4.Models.Home
-@{
+﻿@{
     ViewData["Title"] = "Project 4 - Schedule Showing";
+    Home home = (Home)TempData["Home"];
 }
 
 <!DOCTYPE html>
@@ -10,29 +10,27 @@
         <meta charset="utf-8" />
     </head>
     <body>
-    @if(Model != null)
-    {
-        TempData["Home"] = @Model;
+        @if(TempData["Home"] != null) {
         <form asp-controller="Showing" asp-action="ShowingRequest" method="POST">
             <h1>Schedule Showing</h1>
             <h2>Home Information</h2>
-            <label> Agent ID: @Model.AgentID </label>
+            <label> Agent ID: @home.AgentID</label>
             <h2>Client Information</h2>
 
             <label>First Name:</label>
-            <input id="clientFirstName" class="form-control" />
+            <input name="txtFirstName" class="form-control" />
 
             <label>Last Name:</label>
-            <input name="txtClientLastName" class="form-control" />
+            <input name="txtLastName" class="form-control" />
 
             <label>Street:</label>
-            <input name="txtClientStreet" class="form-control" />
+            <input name="txtStreet" class="form-control" />
 
             <label>City:</label>
-            <input name="txtClientCity" class="form-control" />
+            <input name="txtCity" class="form-control" />
 
             <label>State:</label>
-            <select name="ddlClientState" class="form-control">
+            <select name="ddlState" class="form-control">
                 @foreach (States state in Enum.GetValues(typeof(States)))
                 {
                     <option value="@state">@state</option>
@@ -40,16 +38,16 @@
             </select>
 
             <label>Zip Code:</label>
-            <input name="txtClientZipCode" class="form-control" />
+            <input name="txtZipCode" class="form-control" />
 
             <label>Phone Number:</label>
-            <input name="txtClientPhoneNumber" class="form-control" />
+            <input name="txtPhoneNumber" class="form-control" />
 
             <label>Email:</label>
-            <input name="txtClientEmail" class="form-control" />
+            <input name="txtEmail" class="form-control" />
 
             <label>Showing Time:</label>
-            <input name="dateClientShowingTime" type="date" class="form-control" />
+            <input name="dateShowingTime" type="date" class="form-control" />
 
             <button id="btnSubmitShowing" type="submit">Schedule</button>
         </form>

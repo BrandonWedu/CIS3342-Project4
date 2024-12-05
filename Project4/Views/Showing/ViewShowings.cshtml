@@ -1,7 +1,6 @@
-﻿@*WHEN ATTEMPTING TO NAVIGATE TO THIS PAGE YOU MUST PROVIDE A LIST OF SHOWINGS*@
-@{
-    Layout = null;
+﻿@{
     ViewData["Title"] = "Project 4 - View Showing";
+    Showings showings = (Showings)TempData["Showings"];
 }
 
 <!DOCTYPE html>
@@ -20,19 +19,20 @@
         {
             <p>@TempData["ErrorMessage"]</p>
         }
-        @if(Model.Showings != null)
+        @if(showings != null)
         {
-            @foreach (Showing showing in @Model.Showings.List)
-                {
-                <form asp-controller="Showing" asp-action="ChangeStatus" asp-route-showingID="@showing.ShowingID" method="POST">
+            @foreach (Showing showing in @showings.List)
+            {
+                <form asp-controller="Showing" asp-action="ChangeStatus" method="POST">
                     <div>
+                        <input type="hidden" name="ShowingID" value="@showing.ShowingID"/>
                         <h2>Showing</h2>
-                        <span>Home: @showing.Home.Address.ToString()</span><br />
+                        <span>Home: @showing.HomeID</span><br />
                         <span>Client Name: @showing.Client.FirstName @showing.Client.LastName</span><br />
                         <span>Showing Time: @showing.ShowingTime.ToShortDateString()</span><br />
                         <span>Time Requested: @showing.TimeRequestCreated.ToLongDateString()</span><br />
                         <span>Status</span>
-                        <select name="showingStatus" id="showingStatus">
+                        <select name="ddlShowingStatus" id="showingStatus">
                             @foreach (ShowingStatus status in Enum.GetValues(typeof(ShowingStatus)))
                             {
                                 if(showing.Status == status)
@@ -44,7 +44,7 @@
                                 }
                             }
                         </select>
-                        <button type="submit" id="btnChangeStatus">Change Status</button>
+                        <button type="submit" name="btnChangeStatus">Change Status</button>
                     </div>
                 </form>
             }

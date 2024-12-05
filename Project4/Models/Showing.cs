@@ -11,26 +11,26 @@
     {
         //Fields
         private int? showingID;
-        private Home home;
+        private int homeID;
         private Client client; 
         private DateTime timeRequestCreated;
         private DateTime showingTime;
         private ShowingStatus status;
 
-        public Showing(Home home, Client client, DateTime timeRequestCreated, DateTime showingTime, ShowingStatus status)
+        public Showing(int homeID, Client client, DateTime timeRequestCreated, DateTime showingTime, ShowingStatus status)
         {
             showingID = null;
-            this.home = home.Clone();
+            this.homeID = homeID;
             this.client = client.Clone();
             this.timeRequestCreated = new DateTime(timeRequestCreated.Ticks);
             this.showingTime = new DateTime(showingTime.Ticks);
             this.status = status;
         }
 
-        public Showing(int? showingID, Home home, Client client, DateTime timeRequestCreated, DateTime showingTime, ShowingStatus status)
+        public Showing(int? showingID, int homeID, Client client, DateTime timeRequestCreated, DateTime showingTime, ShowingStatus status)
         {
             this.showingID = showingID;
-            this.home = home.Clone();
+            this.homeID = homeID;
             this.client = client.Clone();
             this.timeRequestCreated = new DateTime(timeRequestCreated.Ticks);
             this.showingTime = new DateTime(showingTime.Ticks);
@@ -42,10 +42,10 @@
             get { return showingID; }
             set { showingID = value; }
         }
-        public Home Home
+        public int HomeID
         {
-            get { return home.Clone(); }
-            set { home = value.Clone(); }
+            get { return homeID; }
+            set { homeID = value; }
         }
         public Client Client
         {
@@ -70,7 +70,7 @@
 
         public Showing Clone()
         {
-            return new Showing(ShowingID, Home, Client, TimeRequestCreated, ShowingTime, Status);
+            return new Showing(ShowingID, HomeID, Client, TimeRequestCreated, ShowingTime, Status);
         }
     }
 }

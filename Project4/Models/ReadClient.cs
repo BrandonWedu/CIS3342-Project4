@@ -23,8 +23,8 @@ namespace Project4.Models
                 (string)row["FirstName"],
                 (string)row["LastName"],
                 Serializer.DeserializeData<Address>((byte[])row["ClientAddress"]),
-                (string)row["ClientPhoneNumber"],
-                (string)row["ClientEmail"]
+                (string)row["PhoneNumber"],
+                (string)row["Email"]
                 );
         }
     }

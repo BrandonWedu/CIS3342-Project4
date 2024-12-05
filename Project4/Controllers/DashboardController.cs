@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Project4.Models;
+using Project4.Models.ViewModels;
 
 namespace Project4.Controllers
 {

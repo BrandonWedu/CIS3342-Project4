@@ -35,7 +35,7 @@ namespace Project4.Models
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<byte[]>("@clientAddress", Serializer.SerializeData<Address>(showing.Client.ClientAddress), SqlDbType.VarBinary));
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@clientPhoneNumber", showing.Client.PhoneNumber, SqlDbType.VarChar, 50));
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@clientEmail", showing.Client.Email, SqlDbType.VarChar, 50));
-            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@homeID", (int)showing.Home.HomeID, SqlDbType.Int, 8));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@homeID", (int)showing.HomeID, SqlDbType.Int, 8));
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<DateTime>("@timeRequestCreated", showing.TimeRequestCreated, SqlDbType.DateTime));
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<DateTime>("@showingTime", showing.ShowingTime, SqlDbType.DateTime));
             sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@showingStatus", showing.Status.ToString(), SqlDbType.VarChar, 50));
