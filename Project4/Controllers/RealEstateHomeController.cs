@@ -9,6 +9,7 @@ using Project4.Models;
 using System.Text;
 using System.Text.Json;
 using System.IO;
+using System.Net;
 
 namespace Project4.Controllers
 {
@@ -506,6 +507,24 @@ namespace Project4.Controllers
 			TempData[$"RoomHidden_{i}"] = true;
 			RetainData();
 		}
+
+        public void UpdateHome(Home updatedHome)
+        {
+            string apiUrl = "https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/UpdateHome/UpdateHomeListing";
+
+            WebRequest request = WebRequest.Create(apiUrl + updatedHome);
+            WebResponse response = request.GetResponse();
+            Console.WriteLine(response.ToString());
+
+            Stream dataStream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string data = reader.ReadToEnd();
+            Console.WriteLine(data);
+            reader.Close();
+            response.Close();
+
+        }
+        /*
 		public async Task UpdateHome(Home updatedHome)
 		{
 			string jsonString = JsonConvert.SerializeObject(updatedHome);
@@ -529,6 +548,7 @@ namespace Project4.Controllers
 
 			Console.WriteLine("We Made it to past the api!");
 		}
+        */
 
 
 	}

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Project4.Models;
 using Project4.Models.ViewModels;
+using System.Net;
 using System.Reflection;
 
 namespace Project4.Controllers
@@ -16,24 +17,16 @@ namespace Project4.Controllers
             if (homeID > 0)
             {
 				string apiUrl = $"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadSingleHomeListing/{homeID}";
-				HttpClient client = new HttpClient();
-				HttpResponseMessage response = client.GetAsync(apiUrl).Result;
-
-				if (!response.IsSuccessStatusCode)
-				{
-					Console.WriteLine($"API Request Failed. Status Code: {response.StatusCode}");
-					ViewBag.Home = null;
-					return View(); // Return the view with no data
-				}
-
-
-				string jsonString = response.Content.ReadAsStringAsync().Result;
-
-
-				Home currentHome = JsonConvert.DeserializeObject<Home>(jsonString);
+				WebRequest request = WebRequest.Create(apiUrl);
+				WebResponse resposne = request.GetResponse();
+				Stream dataStream = resposne.GetResponseStream();
+				StreamReader reader = new StreamReader(dataStream);
+				string data = reader.ReadToEnd();
+				reader.Close();
+				resposne.Close();
+				Home currentHome = JsonConvert.DeserializeObject<Home>(data);
 				string seralizedHome = JsonConvert.SerializeObject(currentHome);
 				HttpContext.Session.SetString("CurrentHome", seralizedHome);
-
 				if (HttpContext.Session.GetString("OfferContingencies") == null)
                 {
                     List<string> currentContingencies = new List<string>();
