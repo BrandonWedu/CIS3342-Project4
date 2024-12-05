@@ -31,7 +31,7 @@ namespace Project4.Controllers
         public IActionResult ScheduleShowing(Home home)
         {
 
-            return View();
+            return View("ScheduleShowing", home);
         }
 
         [HttpPost]
