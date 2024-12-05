@@ -9,6 +9,9 @@ namespace Project4.Controllers
     {
         public IActionResult MortgageCalculator()
         {
+            string seralizedHome = HttpContext.Session.GetString("CurrentHome");
+            Home currentHome = JsonConvert.DeserializeObject<Home>(seralizedHome);
+            ViewBag.Home = currentHome;
             return View();
         }
 
@@ -17,7 +20,11 @@ namespace Project4.Controllers
         {
             //Validation
             List<string> error = new List<string>();
-            
+
+            string seralizedHome = HttpContext.Session.GetString("CurrentHome");
+            Home currentHome = JsonConvert.DeserializeObject<Home>(seralizedHome);
+            ViewBag.Home = currentHome;
+
             //everything must be TryParsed as a double
             if (!double.TryParse(homeValue, out double parsedHomeValue) || double.TryParse(downPayment, out double parsedDownPayment) && parsedHomeValue < parsedDownPayment)
             {
@@ -71,8 +78,6 @@ namespace Project4.Controllers
 
             }
 
-            //string seralizedHome = HttpContext.Session.GetString("CurrentHome");
-            //TempData["CurrentHome"] = seralizedHome;
             //---------------------------------
             return View("MortgageCalculator");
         }
