@@ -24,10 +24,7 @@ namespace Project4.Controllers
         [HttpGet]
         public IActionResult CreateHome()
         {
-            if (HttpContext.Session.GetString("Agent") == null)
-            {
-                return RedirectToAction("Dashboard", "Dashboard");
-            }
+            if (HttpContext.Session.GetString("Agent") == null) { return RedirectToAction("Dashboard", "Dashboard"); }
             return View();
         }
         //Button Controller for Home Form
