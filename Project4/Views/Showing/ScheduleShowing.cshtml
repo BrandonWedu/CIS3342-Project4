@@ -1,8 +1,5 @@
-﻿@using Project4.Models.ViewModels
-@model ScheduleShowingsViewModel
-@*WHEN ATTEMPTING TO NAVIGATE TO THIS PAGE YOU MUST PROVIDE A HOME OBJECT IN THE VIEW MODEL*@
+﻿@model Project4.Models.Home
 @{
-    Layout = null;
     ViewData["Title"] = "Project 4 - Schedule Showing";
 }
 
@@ -13,57 +10,53 @@
         <meta charset="utf-8" />
     </head>
     <body>
-    @if(Model.Home != null)
+    @if(Model != null)
     {
+        TempData["Home"] = @Model;
         <form asp-controller="Showing" asp-action="ShowingRequest" method="POST">
             <h1>Schedule Showing</h1>
             <h2>Home Information</h2>
-            <p>
-                
-                Company: @*@Model.Home.Agent.WorkCompany.CompanyName *@<br/>
-                Agent: @*@Model.Home.Agent.PersonalInformation.FirstName @Model.Home.Agent.PersonalInformation.LastName | Agent Email: @Model.Home.Agent.AgentContactInfo.Email *@<br/>
-                Home Address: @Model.Home.Address.ToString()<br/>
-            </p>
+            <label> Agent ID: @Model.AgentID </label>
             <h2>Client Information</h2>
 
-            <label for="clientFirstName">First Name:</label>
-            <input asp-for="Showing.Client.FirstName" id="clientFirstName" class="form-control" />
+            <label>First Name:</label>
+            <input id="clientFirstName" class="form-control" />
 
-            <label for="clientLastName">Last Name:</label>
-            <input asp-for="Showing.Client.LastName" id="clientLastName" class="form-control" />
+            <label>Last Name:</label>
+            <input name="txtClientLastName" class="form-control" />
 
-            <label for="clientStreet">Street:</label>
-            <input asp-for="Showing.Client.ClientAddress.Street" id="clientStreet" class="form-control" />
+            <label>Street:</label>
+            <input name="txtClientStreet" class="form-control" />
 
-            <label for="clientCity">City:</label>
-            <input asp-for="Showing.Client.ClientAddress.City" id="clientCity" class="form-control" />
+            <label>City:</label>
+            <input name="txtClientCity" class="form-control" />
 
-            <label for="clientState">State:</label>
-            <select asp-for="Showing.Client.ClientAddress.State" id="clientState" class="form-control">
-                @foreach (string state in Enum.GetValues(typeof(States)))
+            <label>State:</label>
+            <select name="ddlClientState" class="form-control">
+                @foreach (States state in Enum.GetValues(typeof(States)))
                 {
                     <option value="@state">@state</option>
                 }
             </select>
 
-            <label for="clientZipCode">Zip Code:</label>
-            <input asp-for="Showing.Client.ClientAddress.ZipCode" id="clientZipCode" class="form-control" />
+            <label>Zip Code:</label>
+            <input name="txtClientZipCode" class="form-control" />
 
-            <label for="clientPhoneNumber">Phone Number:</label>
-            <input asp-for="Showing.Client.PhoneNumber" id="clientPhoneNumber" class="form-control" />
+            <label>Phone Number:</label>
+            <input name="txtClientPhoneNumber" class="form-control" />
 
-            <label for="clientEmail">Email:</label>
-            <input asp-for="Showing.Client.Email" id="clientEmail" class="form-control" />
+            <label>Email:</label>
+            <input name="txtClientEmail" class="form-control" />
 
-            <label for="showingTime">Showing Time:</label>
-            <input asp-for="Showing.ShowingTime" id="showingTime" type="date" class="form-control" />
+            <label>Showing Time:</label>
+            <input name="dateClientShowingTime" type="date" class="form-control" />
 
             <button id="btnSubmitShowing" type="submit">Schedule</button>
         </form>
     }
     else
     {
-        <p>No Home Provided to make a showing for...</p>
+        <h1>No Home Provided...</h1>
     }
 </body>
 </html>

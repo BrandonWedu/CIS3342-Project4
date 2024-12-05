@@ -10,7 +10,5 @@ namespace Project4.Models
         {
             return new Images(List);
         }
-		[JsonProperty("list")]
-		public List<Image> List { get; set; }
 	}
 }

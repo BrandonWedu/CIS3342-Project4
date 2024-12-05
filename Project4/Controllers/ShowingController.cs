@@ -9,53 +9,42 @@ namespace Project4.Controllers
     //Handles Showing Create and Manage
     public class ShowingController : Controller
     {
-        public IActionResult ViewShowings(ViewShowingsViewModel model)
+        public IActionResult ViewShowings()
         {
-            string agentJson = HttpContext.Session.GetString("Agent");
-            if (agentJson == null)
-            {
-                return View("Dashboard");
-            }
-            Agent agent = JsonConvert.DeserializeObject<Agent>(agentJson);
-            model.Showings = ReadShowing.GetShowingsByAgentID(agent.AgentID);
-            return View(model);
+            return View();
         }
 
         [HttpPost]
-        public IActionResult ChangeStatus(int showingID, ShowingStatus showingStatus)
+        public IActionResult ChangeStatus()
         {
-            if(WriteShowing.UpdateStatus(showingID, showingStatus))
-            {
-                TempData["SuccessMessage"] = $"{showingID} status updated to {showingStatus.ToString()}";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = $"{showingID} status NOT updated";
-            }
-            return View("ViewShowings", new ViewShowingsViewModel());
+            //if(WriteShowing.UpdateStatus(showingID, showingStatus))
+            //{
+            //    TempData["SuccessMessage"] = $"{showingID} status updated to {showingStatus.ToString()}";
+            //}
+            //else
+            //{
+            //    TempData["ErrorMessage"] = $"{showingID} status NOT updated";
+            //}
+            return View("ViewShowings");
         }
 
-        public IActionResult ScheduleShowing(int homeID)
+        public IActionResult ScheduleShowing(Home home)
         {
-            ScheduleShowingsViewModel model = new ScheduleShowingsViewModel();
-            string apiUrl = $"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadSingleHomeListing/{homeID}";
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.GetAsync(apiUrl).Result;
-            string jsonString = response.Content.ReadAsStringAsync().Result;
-            Home currentHome = JsonConvert.DeserializeObject<Home>(jsonString);
-            HttpContext.Session.SetString("CurrentHome", jsonString);
-            model.Home = currentHome;
-            return View(model);
+
+            return View();
         }
 
         [HttpPost]
         public IActionResult ShowingRequest()
         {
-            return View();
-            //maybe temp data 
-            //Client client = new Client(
-                
-                //);
+            Home home = (Home)TempData["Home"];
+            Client client = new Client(
+                    "firstname",
+                    "lastname",
+                    new Address(),
+                    "1231231234",
+                    "tui7895@temple.edu"
+                );
             //Showing showing = new Showing(
                 //get home
               //  client,
@@ -76,6 +65,7 @@ namespace Project4.Controllers
                 //make error text
         //        return View("ScheduleShowing", model);
            // }
+            return View();
         }
     }
 }
