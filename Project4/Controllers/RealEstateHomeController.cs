@@ -300,44 +300,57 @@ namespace Project4.Controllers
 
         public IActionResult AllEditHomes()
         {
-            string agentJson = HttpContext.Session.GetString("Agent");
+			if (HttpContext.Session.GetString("Agent") == null) { return RedirectToAction("Dashboard", "Dashboard"); }
+			string agentJson = HttpContext.Session.GetString("Agent");
             Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentJson);
-            string apiUrl = "https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadHomeListings";
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.GetAsync(apiUrl).Result;
-            string jsonString = response.Content.ReadAsStringAsync().Result;
-            Homes allHomes = JsonConvert.DeserializeObject<Homes>(jsonString);
-            Homes agentHomes = new Homes();
-            foreach (Home currentHome in allHomes.List)
-            {
-                Console.WriteLine("Home ID: " + currentHome.HomeID + " , AgentID: " + currentHome.AgentID + " , StoredAgentID: " + currentAgent.AgentID);
-                if (currentHome.AgentID.ToString() == currentAgent.AgentID.ToString())
-                {
-                    agentHomes.List.Add(currentHome);
-                    Console.WriteLine("Added Home To List");
-                }
-            }
-            Console.WriteLine("List Count: " + agentHomes.List.Count);
-
-            ViewBag.Agent = currentAgent;
+			string apiUrl = "https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadHomeListings";
+			WebRequest request = WebRequest.Create(apiUrl);
+			WebResponse response = request.GetResponse();
+			Stream dataStream = response.GetResponseStream();
+			StreamReader reader = new StreamReader(dataStream);
+			string data = reader.ReadToEnd();
+			reader.Close();
+			response.Close();
+            Homes allHomes = JsonConvert.DeserializeObject<Homes>(data); 
+			Homes agentHomes = new Homes();
+			foreach (Home currentHome in allHomes.List)
+			{
+				Console.WriteLine("Home ID: " + currentHome.HomeID + " , AgentID: " + currentHome.AgentID + " , StoredAgentID: " + currentAgent.AgentID);
+				if (currentHome.AgentID.ToString() == currentAgent.AgentID.ToString())
+				{
+					agentHomes.List.Add(currentHome);
+					Console.WriteLine("Added Home To List");
+				}
+			}
+			Console.WriteLine("List Count: " + agentHomes.List.Count);
+			ViewBag.Agent = currentAgent;
             ViewBag.AgentHomes = agentHomes;
             return View();
         }
 
 		[HttpGet]
-		public IActionResult EditHome(int homeID)
+		public IActionResult EditHome(int? homeID)
 		{
 			if (HttpContext.Session.GetString("Agent") == null)
 			{
 				return RedirectToAction("Dashboard", "Dashboard");
 			}
-            TempData.Clear();
-			string apiUrl = $"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadSingleHomeListing/{homeID}";
-			HttpClient client = new HttpClient();
-			HttpResponseMessage response = client.GetAsync(apiUrl).Result;
-			string jsonString = response.Content.ReadAsStringAsync().Result;
-			Home currentHome = JsonConvert.DeserializeObject<Home>(jsonString);
-            HttpContext.Session.SetString("EditHome", jsonString);
+            Home currentHome;
+            if (homeID.HasValue)
+            {
+				string apiUrl = $"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadSingleHomeListing/{homeID}";
+				HttpClient client = new HttpClient();
+				HttpResponseMessage response = client.GetAsync(apiUrl).Result;
+				string jsonString = response.Content.ReadAsStringAsync().Result;
+				currentHome = JsonConvert.DeserializeObject<Home>(jsonString);
+				HttpContext.Session.SetString("EditHome", jsonString);
+			}
+            else
+            {
+                string json = HttpContext.Session.GetString("EditHome");
+                currentHome = JsonConvert.DeserializeObject<Home>(json);
+            }
+			
 			for (int i = 0; i < currentHome.Rooms.List.Count; i++)
 			{
 				TempData[$"txtLength_{i}"] = currentHome.Rooms.List[i].Height;
@@ -387,7 +400,7 @@ namespace Project4.Controllers
 			TempData["ddlHeating"] = currentHome.TemperatureControl.Heating;
 			return View("EditHome");
 		}
-
+        /*
 		[HttpPost]
 		public IActionResult EditHome()
 		{
@@ -447,6 +460,7 @@ namespace Project4.Controllers
 			TempData["ddlHeating"] = currentHome.TemperatureControl.Heating;
 			return View("EditHome");
 		}
+        */
 
 		[HttpPost]
 		public IActionResult EditHomeForm(string button)
@@ -511,20 +525,63 @@ namespace Project4.Controllers
 
         public void UpdateHome(Home updatedHome)
         {
-            string apiUrl = "https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/UpdateHome/UpdateHomeListing";
+            try
+            {
+				string apiUrl = "https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/UpdateHome/UpdateHomeListing";
 
-            WebRequest request = WebRequest.Create(apiUrl + updatedHome);
-            WebResponse response = request.GetResponse();
-            Console.WriteLine(response.ToString());
+				WebRequest request = WebRequest.Create(apiUrl);
+				request.Method = "PUT";
+				request.ContentType = "application/json";
+				string jsonData = JsonConvert.SerializeObject(updatedHome);
+				byte[] byteArray = Encoding.UTF8.GetBytes(jsonData);
+				request.ContentLength = byteArray.Length;
 
-            Stream dataStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            string data = reader.ReadToEnd();
-            Console.WriteLine(data);
-            reader.Close();
-            response.Close();
+				using (Stream dataStream = request.GetRequestStream())
+				{
+					dataStream.Write(byteArray, 0, byteArray.Length);
+				}
 
-        }
+				using (WebResponse repsonse = request.GetResponse())
+				{
+					using (Stream responseStream = repsonse.GetResponseStream())
+					{
+						StreamReader reader = new StreamReader(responseStream);
+						string responseText = reader.ReadToEnd();
+						Console.WriteLine("Response: " + responseText);
+					}
+				}
+			}
+			catch (WebException webEx)
+			{
+				// Handle HTTP-specific exceptions, such as bad requests or server errors
+				if (webEx.Response != null)
+				{
+					using (Stream responseStream = webEx.Response.GetResponseStream())
+					{
+						if (responseStream != null)
+						{
+							StreamReader reader = new StreamReader(responseStream);
+							string errorText = reader.ReadToEnd();
+							Console.WriteLine($"HTTP Error: {((HttpWebResponse)webEx.Response).StatusCode}");
+							Console.WriteLine("Error Details: " + errorText);
+						}
+					}
+				}
+				else
+				{
+					Console.WriteLine("WebException occurred: " + webEx.Message);
+				}
+			}
+			catch (Exception ex)
+			{
+				// Handle other potential exceptions
+				Console.WriteLine("An error occurred: " + ex.Message);
+			}
+
+
+
+
+		}
         /*
 		public async Task UpdateHome(Home updatedHome)
 		{

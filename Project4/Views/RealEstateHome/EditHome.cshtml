@@ -122,7 +122,7 @@
 			<h2>Add Room Information</h2>
 			@if (TempData["RoomCount"] == null)
 			{
-				TempData["RoomCount"] = 1;
+				TempData["RoomCount"] = 0;
 			}
 			@for (int i = 0; i < (int)TempData["RoomCount"]; i++)
 			{
@@ -172,7 +172,7 @@
 			<h2>Add Utility Information</h2>
 			@if (TempData["UtilityCount"] == null)
 			{
-				TempData["UtilityCount"] = 1;
+				TempData["UtilityCount"] = 0;
 			}
 			@for (int i = 0; i < (int)TempData["UtilityCount"]; i++)
 			{
@@ -215,7 +215,7 @@
 			<h2>Add Amenity Information</h2>
 			@if (TempData["AmenityCount"] == null)
 			{
-				TempData["AmenityCount"] = 1;
+				TempData["AmenityCount"] = 0;
 			}
 			@for (int i = 0; i < (int)TempData["AmenityCount"]; i++)
 			{
@@ -258,7 +258,7 @@
 			<h2>Add Image Information</h2>
 			@if (TempData["ImageCount"] == null)
 			{
-				TempData["ImageCount"] = 1;
+				TempData["ImageCount"] = 0;
 			}
 			@for (int i = 0; i < (int)TempData["ImageCount"]; i++)
 			{

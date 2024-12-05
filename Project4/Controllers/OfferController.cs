@@ -105,7 +105,8 @@ namespace Project4.Controllers
 
         public IActionResult AllOffers()
         {
-            string agentSession = HttpContext.Session.GetString("Agent");
+			if (HttpContext.Session.GetString("Agent") == null) { return RedirectToAction("Dashboard", "Dashboard"); }
+			string agentSession = HttpContext.Session.GetString("Agent");
             Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentSession);
             ViewBag.Agent = currentAgent;
             return View("AllOffers");
