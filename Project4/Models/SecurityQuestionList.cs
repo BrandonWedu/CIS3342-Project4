@@ -1,7 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using System.Data;
-
-namespace Project4.Models
+﻿namespace Project4.Models
 {
     public class SecurityQuestionList
     {

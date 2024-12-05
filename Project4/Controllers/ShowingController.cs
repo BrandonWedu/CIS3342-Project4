@@ -20,28 +20,65 @@ namespace Project4.Controllers
                 TempData["Showings"] = showings;
                 return View();
             }
-            return View("Dashboard", "Dashboard");
+            //Send to Error Page
+            return RedirectErrorConfirm(false, new List<string>
+            {
+                $"You are not signed in as an Agent"
+            });
         }
 
         [HttpPost]
         public IActionResult ChangeStatus()
         {
-            if (HttpContext.Session.GetString("Agent") == null) { return RedirectToAction("Dashboard", "Dashboard"); }
-            int showingID = int.Parse(Request.Form["ShowingID"].ToString());
-            ShowingStatus showingStatus = (ShowingStatus)Enum.Parse(typeof(ShowingStatus), Request.Form["ddlShowingStatus"].ToString());
-            if(WriteShowing.UpdateStatus(showingID, showingStatus))
+            try
             {
-                TempData["SuccessMessage"] = $"ShowingID: {showingID} status updated to {showingStatus.ToString()}";
+                if (HttpContext.Session.GetString("Agent") == null) 
+                {
+                    //Send to Error Page
+                    return RedirectErrorConfirm(false, new List<string>
+                    {
+                        $"You are not signed in as an Agent"
+                    });
+                }
+                int showingID = int.Parse(Request.Form["ShowingID"].ToString());
+                ShowingStatus showingStatus = (ShowingStatus)Enum.Parse(typeof(ShowingStatus), Request.Form["ddlShowingStatus"].ToString());
+                ShowingStatus originalShowingStatus = (ShowingStatus)Enum.Parse(typeof(ShowingStatus), TempData["OriginalShowingStatus"].ToString());
+                if(showingStatus == originalShowingStatus)
+                {
+                    //Send to Error Page
+                    return RedirectErrorConfirm(false, new List<string>
+                    {
+                        $"ShowingID: {showingID} is already Status: {showingStatus}"
+                    });
+                }
+                else if(WriteShowing.UpdateStatus(showingID, showingStatus))
+                {
+                    return RedirectErrorConfirm(true, new List<string>
+                    {
+                        $"ShowingID: {showingID} status updated to Status: {showingStatus.ToString()}"
+                    });
+                }
+                else
+                {
+                    return RedirectErrorConfirm(false, new List<string>
+                    {
+                        $"{showingID} status NOT updated"
+                    });
+                }
+                //Send to confirmation page
+                return RedirectErrorConfirm(true, new List<string>
+                {
+                    $"Confirmation Message: ShowingID: {showingID} status updated to Status: {showingStatus.ToString()}"
+                });
             }
-            else
+            catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"{showingID} status NOT updated";
+                //Send to Error Page
+                return RedirectErrorConfirm(false, new List<string>
+                {
+                    $"Error Message: {ex}"
+                });
             }
-                string agentJson = HttpContext.Session.GetString("Agent");
-                Agent agent = System.Text.Json.JsonSerializer.Deserialize<Agent>(agentJson);
-                Showings showings = ReadShowing.GetShowingsByAgentID(agent.AgentID);
-                TempData["Showings"] = showings;
-            return View("ViewShowings");
         }
 
         public IActionResult ScheduleShowing()
@@ -89,6 +126,19 @@ namespace Project4.Controllers
                 //make error text
             }
             return  RedirectToAction("Dashboard", "Dashboard");
+        }
+        //Sends user to confirmation or error page
+        public IActionResult RedirectErrorConfirm(bool confirm, List<string> message)
+        {
+            //Send to Error Page
+            TempData["Message"] = JsonConvert.SerializeObject(message);
+            TempData["Action"] = "AgentDashboard";
+            TempData["Controller"] = "Account";
+            if (confirm)
+            {
+                return RedirectToAction("SharedConfirmation", "Shared");
+            }
+            return RedirectToAction("SharedError", "Shared");
         }
     }
 }

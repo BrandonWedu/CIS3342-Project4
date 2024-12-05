@@ -4,8 +4,8 @@ namespace Project4.Models
 {
     public class ListOfObjects<T> : IListOfObjects<T> where T : ICloneable<T>
     {
-		[JsonProperty("list")]
-		protected List<T> list = new List<T>();
+        [JsonProperty("list")]
+        protected List<T> list = new List<T>();
 
 
         public List<T> List

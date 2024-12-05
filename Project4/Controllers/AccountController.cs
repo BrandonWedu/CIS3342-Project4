@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Win32;
 using Newtonsoft.Json;
 using Project4.Models;
 using Project4.Models.ViewModels;
-using System.Net.Http;
-using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
 
 namespace Project4.Controllers
 {
@@ -60,7 +55,7 @@ namespace Project4.Controllers
                 return View("CreateAccount", model);
             }
 
-            if ( uniqueName == false)
+            if (uniqueName == false)
             {
                 ViewBag.CreateAccountError = "Please enter a different username! The username you are trying to enter is already taken!";
                 return View("CreateAccount");
@@ -120,7 +115,7 @@ namespace Project4.Controllers
                 WriteVerification.CreateNew(agentID, code);
 
                 EmailInfo info = new EmailInfo(
-                        model.WorkEmail, 
+                        model.WorkEmail,
                         "tui78495@temple.edu",
                         "Account Verification",
                         $"Please click this link or enter the code on the website to verify your account\n" +
@@ -137,7 +132,8 @@ namespace Project4.Controllers
                         HttpResponseMessage response = await httpClient.PostAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPITest/Email/SendToTempleEmail", content);
                         string responseBody = await response.Content.ReadAsStringAsync();
                         Console.WriteLine($"Response Body: {responseBody}");
-                    } catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
                     }
@@ -153,13 +149,13 @@ namespace Project4.Controllers
         }
 
         [HttpPost]
-        public IActionResult VerifyAccountWithCode(int code) 
+        public IActionResult VerifyAccountWithCode(int code)
         {
             if (ReadVerification.GetVerifiedCode((int)TempData["AgentID"]) == code)
             {
                 //Set agent verified to true
                 WriteVerification.Verify((int)TempData["AgentID"]);
-                return View("Login"); 
+                return View("Login");
             }
             TempData["AgentID"] = TempData["AgentID"];
             TempData["Error"] = "Code Invalid";
@@ -174,7 +170,7 @@ namespace Project4.Controllers
             {
                 //Set agent verified to true
                 WriteVerification.Verify((int)TempData["AgentID"]);
-                return View("Login"); 
+                return View("Login");
             }
             TempData["Error"] = "Code Invalid";
             return View("VerifyAccount");
@@ -186,28 +182,28 @@ namespace Project4.Controllers
         }
         public IActionResult FinalizeCompanyCreation(CreateCompanyViewModel model)
         {
-			if (ModelState.IsValid == false)
-			{
-				foreach (var modelStateKey in ModelState.Keys)
-				{
-					var modelStateVal = ModelState[modelStateKey];
-					foreach (var error in modelStateVal.Errors)
-					{
-						Console.WriteLine($"Key: {modelStateKey}, Error: {error.ErrorMessage}");
-					}
-				}
-				ViewBag.CreateCompanyError = "Please correct all the errors below and resubmit the form!";
-				return View("CreateCompany", model);
-			}
+            if (ModelState.IsValid == false)
+            {
+                foreach (var modelStateKey in ModelState.Keys)
+                {
+                    var modelStateVal = ModelState[modelStateKey];
+                    foreach (var error in modelStateVal.Errors)
+                    {
+                        Console.WriteLine($"Key: {modelStateKey}, Error: {error.ErrorMessage}");
+                    }
+                }
+                ViewBag.CreateCompanyError = "Please correct all the errors below and resubmit the form!";
+                return View("CreateCompany", model);
+            }
             else
             {
-				//Create Company
-				Address newAddress = new Address(model.CompanyStreet, model.CompanyCity, Enum.Parse<States>(model.CompanyState), model.CompanyZip);
-				Company newCompany = new Company(model.CompanyName, newAddress, model.CompanyPhone, model.CompanyEmail);
-				int companyID = WriteCompany.CreateNew(newCompany);
-				int actualCompanyID = ReadCompanies.GetComapnyByNameAndAddress(model.CompanyName, newAddress).List[0].CompanyID;
-				return View("CreateAccount");
-			}
+                //Create Company
+                Address newAddress = new Address(model.CompanyStreet, model.CompanyCity, Enum.Parse<States>(model.CompanyState), model.CompanyZip);
+                Company newCompany = new Company(model.CompanyName, newAddress, model.CompanyPhone, model.CompanyEmail);
+                int companyID = WriteCompany.CreateNew(newCompany);
+                int actualCompanyID = ReadCompanies.GetComapnyByNameAndAddress(model.CompanyName, newAddress).List[0].CompanyID;
+                return View("CreateAccount");
+            }
 
         }
         [HttpPost]
@@ -226,7 +222,7 @@ namespace Project4.Controllers
                 string questionJson = JsonConvert.SerializeObject(randomQuestion);
                 HttpContext.Session.SetString("RecoveryQuestion", questionJson);
 
-				ViewBag.Question = randomQuestion.Question.ToString();
+                ViewBag.Question = randomQuestion.Question.ToString();
                 return View("ForgotPasswordSecurity");
             }
             else
@@ -250,8 +246,8 @@ namespace Project4.Controllers
         [HttpPost]
         public IActionResult ForgotPasswordSecurity(string answer)
         {
-			string quesitonJson = HttpContext.Session.GetString("RecoveryQuestion");
-			AgentSecurity question = JsonConvert.DeserializeObject<AgentSecurity>(quesitonJson);
+            string quesitonJson = HttpContext.Session.GetString("RecoveryQuestion");
+            AgentSecurity question = JsonConvert.DeserializeObject<AgentSecurity>(quesitonJson);
             if (question.Answer.ToString() == answer.ToString())
             {
                 return View("ResetPassword");
@@ -260,7 +256,7 @@ namespace Project4.Controllers
             {
                 ViewBag.Question = question.Question.ToString();
                 ViewBag.ForgotPasswordError = "Incorrect Answer To Security Question! Please Try Again!";
-				return View();
+                return View();
             }
 
         }
@@ -279,18 +275,18 @@ namespace Project4.Controllers
             {
                 if (newPassword.Length > 6)
                 {
-					string agentJson = HttpContext.Session.GetString("RecoveryAgent");
-					Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentJson);
-					PasswordHasher hasher = new PasswordHasher();
-					hasher.GenerateSalt();
-					string salt = hasher.GetSalt();
-					string hashedPassword = hasher.HashPasswordWithSalt(newPassword, salt);
-					WriteAgent.UpdateAgentPassword(currentAgent, hashedPassword, salt);
+                    string agentJson = HttpContext.Session.GetString("RecoveryAgent");
+                    Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentJson);
+                    PasswordHasher hasher = new PasswordHasher();
+                    hasher.GenerateSalt();
+                    string salt = hasher.GetSalt();
+                    string hashedPassword = hasher.HashPasswordWithSalt(newPassword, salt);
+                    WriteAgent.UpdateAgentPassword(currentAgent, hashedPassword, salt);
 
                     HttpContext.Session.Remove("RecoveryAgent");
                     HttpContext.Session.Remove("RecoveryQuestion");
-					return View("Login");
-				}
+                    return View("Login");
+                }
                 else
                 {
                     ViewBag.ResetPasswordError = "Your New Password Must Be Longer Than 6 Characters!";

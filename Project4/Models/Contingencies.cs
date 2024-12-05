@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
-
-namespace Project4.Models
+﻿namespace Project4.Models
 {
-	[Serializable]
-	public class Contingencies : ListOfObjects<Contingency>
-	{
-		public Contingencies() { }
+    [Serializable]
+    public class Contingencies : ListOfObjects<Contingency>
+    {
+        public Contingencies() { }
 
-		public Contingencies(List<Contingency> list) { List = list; }
+        public Contingencies(List<Contingency> list) { List = list; }
 
-		public Contingencies Clone()
-		{
-			return new Contingencies(List);
-		}
-	}
+        public Contingencies Clone()
+        {
+            return new Contingencies(List);
+        }
+    }
 }

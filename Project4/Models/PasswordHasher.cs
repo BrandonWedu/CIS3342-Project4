@@ -1,6 +1,4 @@
-﻿using Project4.Controllers;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Identity;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace Project4.Models

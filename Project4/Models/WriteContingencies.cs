@@ -1,11 +1,10 @@
 ﻿using Microsoft.Data.SqlClient;
-using System;
 using System.Data;
 
 namespace Project4.Models
 {
-	public class WriteContingencies
-	{
+    public class WriteContingencies
+    {
         internal static void CreateNew(Contingencies newContingencies)
         {
 

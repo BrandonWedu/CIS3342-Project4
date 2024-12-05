@@ -86,101 +86,101 @@ namespace Project4.Models
         {
 
         }
-		[JsonProperty("homeID")]
-		public int? HomeID
+        [JsonProperty("homeID")]
+        public int? HomeID
         {
             get { return homeID; }
             set { homeID = value; }
         }
-		[JsonProperty("agentID")]
-		public int AgentID
+        [JsonProperty("agentID")]
+        public int AgentID
         {
             get { return agentID; }
             set { agentID = value; }
         }
-		[JsonProperty("cost")]
-		public int Cost
+        [JsonProperty("cost")]
+        public int Cost
         {
             get { return cost; }
             set { cost = value; }
         }
-		[JsonProperty("address")]
-		public Address Address
+        [JsonProperty("address")]
+        public Address Address
         {
-			get { return address != null ? address.Clone() : null; }
-			set { address = value != null ? value.Clone() : null; }
-		}
-		[JsonProperty("propertyType")]
-		public PropertyType PropertyType
+            get { return address != null ? address.Clone() : null; }
+            set { address = value != null ? value.Clone() : null; }
+        }
+        [JsonProperty("propertyType")]
+        public PropertyType PropertyType
         {
             get { return propertyType; }
             set { propertyType = value; }
         }
-		[JsonProperty("homeSize")]
-		public int HomeSize
+        [JsonProperty("homeSize")]
+        public int HomeSize
         {
             get { return CalculateHomeSize(); }
         }
-		[JsonProperty("yearConstructed")]
-		public int YearConstructed
+        [JsonProperty("yearConstructed")]
+        public int YearConstructed
         {
             get { return yearConstructed; }
             set { yearConstructed = value; }
         }
-		[JsonProperty("garageType")]
-		public GarageType GarageType
+        [JsonProperty("garageType")]
+        public GarageType GarageType
         {
             get { return garageType; }
             set { garageType = value; }
         }
-		[JsonProperty("description")]
-		public string Description
+        [JsonProperty("description")]
+        public string Description
         {
             get { return description; }
             set { description = value; }
         }
-		[JsonProperty("dateListed")]
-		public DateTime DateListed
+        [JsonProperty("dateListed")]
+        public DateTime DateListed
         {
             get { return new DateTime(dateListed.Ticks); }
             set { dateListed = new DateTime(value.Ticks); }
         }
-		[JsonProperty("saleStatus")]
-		public SaleStatus SaleStatus
+        [JsonProperty("saleStatus")]
+        public SaleStatus SaleStatus
         {
             get { return saleStatus; }
             set { saleStatus = value; }
         }
-		[JsonProperty("images")]
-		public Images Images
+        [JsonProperty("images")]
+        public Images Images
         {
-			get { return images ??= new Images(); } 
-			set { images = value; } 
-		}
-		[JsonProperty("amenities")]
-		public Amenities Amenities
+            get { return images ??= new Images(); }
+            set { images = value; }
+        }
+        [JsonProperty("amenities")]
+        public Amenities Amenities
         {
-			get { return amenities ??= new Amenities(); }
-			set { amenities = value; }
-		}
-		[JsonProperty("temperatureControl")]
-		public TemperatureControl TemperatureControl
+            get { return amenities ??= new Amenities(); }
+            set { amenities = value; }
+        }
+        [JsonProperty("temperatureControl")]
+        public TemperatureControl TemperatureControl
         {
-			get { return temperatureControl ??= new TemperatureControl(); }
-			set { temperatureControl = value; }
-		}
-		[JsonProperty("rooms")]
-		public Rooms Rooms
+            get { return temperatureControl ??= new TemperatureControl(); }
+            set { temperatureControl = value; }
+        }
+        [JsonProperty("rooms")]
+        public Rooms Rooms
         {
-			get { return rooms ??= new Rooms(); }
-			set { rooms = value; }
-		}
-		[JsonProperty("utilities")]
-		public Utilities Utilities
+            get { return rooms ??= new Rooms(); }
+            set { rooms = value; }
+        }
+        [JsonProperty("utilities")]
+        public Utilities Utilities
         {
-			get { return utilities ??= new Utilities(); }
-			set { utilities = value; }
-		}
+            get { return utilities ??= new Utilities(); }
+            set { utilities = value; }
+        }
 
         //Calculate home size
         private int CalculateHomeSize()
@@ -199,7 +199,7 @@ namespace Project4.Models
         }
         public Home Clone()
         {
-            return new Home(HomeID, AgentID, Cost, Address, PropertyType,YearConstructed, GarageType, Description, DateListed, SaleStatus, Images, Amenities, TemperatureControl, Rooms, Utilities);
+            return new Home(HomeID, AgentID, Cost, Address, PropertyType, YearConstructed, GarageType, Description, DateListed, SaleStatus, Images, Amenities, TemperatureControl, Rooms, Utilities);
         }
     }
 }

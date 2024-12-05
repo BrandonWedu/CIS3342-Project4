@@ -4,7 +4,7 @@
     {
         private byte[] image;
         public ModifyImage() { }
-        
+
         public byte[] Image
         {
             get { return image; }

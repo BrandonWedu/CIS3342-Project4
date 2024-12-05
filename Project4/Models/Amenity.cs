@@ -48,20 +48,20 @@ namespace Project4.Models
         {
 
         }
-		[JsonProperty("amenityID")]
-		public int? AmenityID
+        [JsonProperty("amenityID")]
+        public int? AmenityID
         {
             get { return amenityID; }
             set { amenityID = value; }
         }
-		[JsonProperty("type")]
-		public AmenityType Type
+        [JsonProperty("type")]
+        public AmenityType Type
         {
             get { return type; }
             set { type = value; }
         }
-		[JsonProperty("description")]
-		public string Description
+        [JsonProperty("description")]
+        public string Description
         {
             get { return description; }
             set { description = value; }

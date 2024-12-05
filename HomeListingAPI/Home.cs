@@ -185,7 +185,7 @@ namespace HomeListingAPI
         }
         public Home Clone()
         {
-            return new Home(HomeID, AgentID, Cost, Address, PropertyType,YearConstructed, GarageType, Description, DateListed, SaleStatus, Images, Amenities, TemperatureControl, Rooms, Utilities);
+            return new Home(HomeID, AgentID, Cost, Address, PropertyType, YearConstructed, GarageType, Description, DateListed, SaleStatus, Images, Amenities, TemperatureControl, Rooms, Utilities);
         }
     }
 }

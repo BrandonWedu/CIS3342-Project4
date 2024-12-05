@@ -15,8 +15,8 @@
         WasteManagement,
         StormwaterManagement
     }
-	[Serializable]
-	public class Utility : ICloneable<Utility>
+    [Serializable]
+    public class Utility : ICloneable<Utility>
     {
         private int? utilityID;
         private UtilityTypes type;

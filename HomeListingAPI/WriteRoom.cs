@@ -1,5 +1,5 @@
-﻿using System.Data;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace HomeListingAPI
 {
@@ -27,7 +27,7 @@ namespace HomeListingAPI
         internal static void UpdateRooms(int homeID, Rooms updatedRooms, Rooms oldRooms)
         {
             //Update or add rooms
-            foreach(Room currentRoom in updatedRooms.List)
+            foreach (Room currentRoom in updatedRooms.List)
             {
                 if (currentRoom.RoomID != 0 || currentRoom.RoomID != null)
                 {
@@ -57,10 +57,10 @@ namespace HomeListingAPI
                     sqlCommand.Parameters.Add(outputParam);
                     dbConnect.DoUpdate(sqlCommand);
                 }
-			}
+            }
 
             //Remove deleted rooms
-            foreach(Room currentOldRoom in oldRooms.List)
+            foreach (Room currentOldRoom in oldRooms.List)
             {
                 foreach (Room currentRoom in updatedRooms.List)
                 {

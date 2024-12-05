@@ -32,32 +32,32 @@ namespace Project4.Models
         {
 
         }
-		[JsonProperty("imageID")]
-		public int? ImageID
+        [JsonProperty("imageID")]
+        public int? ImageID
         {
             get { return imageID; }
             set { imageID = value; }
         }
-		[JsonProperty("url")]
-		public string Url
+        [JsonProperty("url")]
+        public string Url
         {
             get { return url; }
             set { url = value; }
         }
-		[JsonProperty("type")]
-		public RoomType Type
+        [JsonProperty("type")]
+        public RoomType Type
         {
             get { return type; }
             set { type = value; }
         }
-		[JsonProperty("description")]
-		public string Description
+        [JsonProperty("description")]
+        public string Description
         {
             get { return description; }
             set { description = value; }
         }
-		[JsonProperty("mainImage")]
-		public bool MainImage
+        [JsonProperty("mainImage")]
+        public bool MainImage
         {
             get { return mainImage; }
             set { mainImage = value; }

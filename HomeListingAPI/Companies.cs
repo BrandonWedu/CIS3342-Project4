@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
-
-namespace HomeListingAPI
+﻿namespace HomeListingAPI
 {
-	[Serializable]
-	public class Companies : ListOfObjects<Company>
-	{
-		public Companies() { }
+    [Serializable]
+    public class Companies : ListOfObjects<Company>
+    {
+        public Companies() { }
 
-		public Companies(List<Company> list) { List = list; }
+        public Companies(List<Company> list) { List = list; }
 
-		public Companies Clone()
-		{
-			return new Companies(List);
-		}
-	}
+        public Companies Clone()
+        {
+            return new Companies(List);
+        }
+    }
 }
