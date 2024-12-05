@@ -31,6 +31,7 @@ namespace Project4.Controllers
         [HttpPost]
         public IActionResult HomeForm(string button)
         {
+            if (HttpContext.Session.GetString("Agent") == null) { return RedirectToAction("Dashboard", "Dashboard"); }
             //Gets the ID number of a button is it has an ID number. These are present in submit buttons dunamically generated
             int buttonNumber = button.Contains('_') ? int.Parse(button.Split('_').Last()) : -1;
             //handles which submit button was clicked

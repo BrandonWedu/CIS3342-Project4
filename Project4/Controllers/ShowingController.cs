@@ -26,6 +26,7 @@ namespace Project4.Controllers
         [HttpPost]
         public IActionResult ChangeStatus()
         {
+            if (HttpContext.Session.GetString("Agent") == null) { return RedirectToAction("Dashboard", "Dashboard"); }
             int showingID = int.Parse(Request.Form["ShowingID"].ToString());
             ShowingStatus showingStatus = (ShowingStatus)Enum.Parse(typeof(ShowingStatus), Request.Form["ddlShowingStatus"].ToString());
             if(WriteShowing.UpdateStatus(showingID, showingStatus))
