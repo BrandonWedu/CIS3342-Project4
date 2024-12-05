@@ -30,7 +30,8 @@ namespace Project4.Controllers
 
         public IActionResult ScheduleShowing(Home home)
         {
-
+            string homeJson = HttpContext.Session.GetString("ShowingHome");
+            Home showingHome = JsonConvert.DeserializeObject<Home>(homeJson);
             return View("ScheduleShowing", home);
         }
 

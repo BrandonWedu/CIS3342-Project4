@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Project4.Models;
 using System.Text;
 using System.Text.Json;
+using System.IO;
 
 namespace Project4.Controllers
 {
@@ -432,6 +433,52 @@ namespace Project4.Controllers
             return RedirectToAction("EditHome", currentHome.HomeID);
         }
 
+        public IActionResult AddEditUtility(string utilityType, string utilityInformation)
+		{
+			string roomsJson = HttpContext.Session.GetString("EditRooms");
+			string imagesJson = HttpContext.Session.GetString("EditImages");
+			string amenitiesJson = HttpContext.Session.GetString("EditAmenities");
+			string utilitiesJson = HttpContext.Session.GetString("EditUtilities");
+			string temperatureJson = HttpContext.Session.GetString("EditTemperature");
+			string homeJson = HttpContext.Session.GetString("EditHome");
+			Rooms homeRooms = JsonConvert.DeserializeObject<Rooms>(roomsJson);
+			Images homeImages = JsonConvert.DeserializeObject<Images>(imagesJson);
+			Amenities homeAmenities = JsonConvert.DeserializeObject<Amenities>(amenitiesJson);
+			Utilities homeUtilities = JsonConvert.DeserializeObject<Utilities>(utilitiesJson);
+			TemperatureControl homeTemperature = JsonConvert.DeserializeObject<TemperatureControl>(temperatureJson);
+			Home currentHome = JsonConvert.DeserializeObject<Home>(homeJson);
+            homeUtilities.List.Add(new Project4.Models.Utility(0, Enum.Parse<UtilityTypes>(utilityType), utilityInformation));
+            currentHome.Utilities = homeUtilities;
+			string researlizedUtilities = JsonConvert.SerializeObject(homeUtilities);
+			string researlizedHomeJson = JsonConvert.SerializeObject(currentHome);
+			HttpContext.Session.SetString("EditUtilities", researlizedUtilities);
+			HttpContext.Session.SetString("EditHome", researlizedHomeJson);
+			return RedirectToAction("EditHome", currentHome.HomeID);
+		}
+
+        public IActionResult AddEditAmenity(string amenityType, string amenityInformation)
+        {
+			string roomsJson = HttpContext.Session.GetString("EditRooms");
+			string imagesJson = HttpContext.Session.GetString("EditImages");
+			string amenitiesJson = HttpContext.Session.GetString("EditAmenities");
+			string utilitiesJson = HttpContext.Session.GetString("EditUtilities");
+			string temperatureJson = HttpContext.Session.GetString("EditTemperature");
+			string homeJson = HttpContext.Session.GetString("EditHome");
+			Rooms homeRooms = JsonConvert.DeserializeObject<Rooms>(roomsJson);
+			Images homeImages = JsonConvert.DeserializeObject<Images>(imagesJson);
+			Amenities homeAmenities = JsonConvert.DeserializeObject<Amenities>(amenitiesJson);
+			Utilities homeUtilities = JsonConvert.DeserializeObject<Utilities>(utilitiesJson);
+			TemperatureControl homeTemperature = JsonConvert.DeserializeObject<TemperatureControl>(temperatureJson);
+			Home currentHome = JsonConvert.DeserializeObject<Home>(homeJson);
+            homeAmenities.List.Add(new Amenity(0, Enum.Parse<AmenityType>(amenityType), amenityInformation));
+            currentHome.Amenities = homeAmenities;
+			string researlizedAmenityJson = JsonConvert.SerializeObject(homeAmenities);
+			string researlizedHomeJson = JsonConvert.SerializeObject(currentHome);
+			HttpContext.Session.SetString("EditUtilities", researlizedAmenityJson);
+			HttpContext.Session.SetString("EditHome", researlizedHomeJson);
+			return RedirectToAction("EditHome", currentHome.HomeID);
+		}
+
 		public IActionResult AddEditImage(string imageDescription, string imageType, IFormFile imageFile, string mainImage, string defaultImage)
 		{
 			if (imageFile == null || imageFile.FileName.Split('.').Last() != "png")
@@ -449,15 +496,25 @@ namespace Project4.Controllers
 				//Generate File Name
 				string imageName = DateTime.Now.Ticks.ToString() + ".png";
 				//get the server path 
+                
+
+				string serverPath = webhostenvironment.WebRootPath;
+
+                string serverParent = Path.GetFullPath(Path.Combine(serverPath, ".."));
+                Console.WriteLine(serverParent);
+
+				string path = Path.Combine(serverParent, "FileStorage", imageName);
+                Console.WriteLine(path);
+
+				string fileStoragePath = Path.Combine(serverParent, "FileStorage");
+                Console.WriteLine(fileStoragePath);
+
+ 
                 /*
-                 * 
-				//string serverPath = environment.WebRootPath;
-				string path = Path.Combine(serverPath, "FileStorage", imageName);
-				string fileStoragePath = Path.Combine(environment.WebRootPath, "FileStorage");
-				if (!Directory.Exists(fileStoragePath))
-				{
-					Directory.CreateDirectory(fileStoragePath);
-				}
+                if (!Directory.Exists(fileStoragePath))
+                {
+                    Directory.CreateDirectory(fileStoragePath);
+                }
 
                 FileStream fileSteam = new FileStream(fileStoragePath, FileMode.Create);
                 imageFile.CopyToAsync(fileSteam);
@@ -475,14 +532,53 @@ namespace Project4.Controllers
 				Utilities homeUtilities = JsonConvert.DeserializeObject<Utilities>(utilitiesJson);
 				TemperatureControl homeTemperature = JsonConvert.DeserializeObject<TemperatureControl>(temperatureJson);
 				Home currentHome = JsonConvert.DeserializeObject<Home>(homeJson);
-				homeImages.List.Add(new Image(0, imageName, Enum.Parse<RoomType>(imageType), imageDescription, bool.Parse(defaultImage)));
+                Console.WriteLine(homeImages.List.Count);
+				homeImages.List.Add(new Image(0, path, Enum.Parse<RoomType>(imageType), imageDescription, bool.Parse(defaultImage)));
                 currentHome.Images = homeImages;
+				Console.WriteLine(homeImages.List.Count);
 				string researlizedImagesJson = JsonConvert.SerializeObject(homeImages);
 				string researlizedHomeJson = JsonConvert.SerializeObject(currentHome);
 				HttpContext.Session.SetString("EditImages", researlizedImagesJson);
 				HttpContext.Session.SetString("EditHome", researlizedHomeJson);
 				return RedirectToAction("EditHome", currentHome.HomeID);
 			}
+		}
+
+        [HttpPost]
+        [Route("RealEstateHome/RemoveEditImage/{imageCount}")]
+        public IActionResult RemoveEditImage(int imageCount)
+        {
+			string roomsJson = HttpContext.Session.GetString("EditRooms");
+			string imagesJson = HttpContext.Session.GetString("EditImages");
+			string amenitiesJson = HttpContext.Session.GetString("EditAmenities");
+			string utilitiesJson = HttpContext.Session.GetString("EditUtilities");
+			string temperatureJson = HttpContext.Session.GetString("EditTemperature");
+			string homeJson = HttpContext.Session.GetString("EditHome");
+			Rooms homeRooms = JsonConvert.DeserializeObject<Rooms>(roomsJson);
+			Images homeImages = JsonConvert.DeserializeObject<Images>(imagesJson);
+			Amenities homeAmenities = JsonConvert.DeserializeObject<Amenities>(amenitiesJson);
+			Utilities homeUtilities = JsonConvert.DeserializeObject<Utilities>(utilitiesJson);
+			TemperatureControl homeTemperature = JsonConvert.DeserializeObject<TemperatureControl>(temperatureJson);
+			Home currentHome = JsonConvert.DeserializeObject<Home>(homeJson);
+            Image removedImage = homeImages.List[imageCount];
+            homeImages.List.RemoveAt(imageCount);
+
+            if (removedImage.ImageID != 0)
+            {
+				string imagePath = removedImage.Url.ToString();
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+			}
+
+            currentHome.Images = homeImages;
+			string researlizedImagesJson = JsonConvert.SerializeObject(homeImages);
+			string researlizedHomeJson = JsonConvert.SerializeObject(currentHome);
+			HttpContext.Session.SetString("EditImages", researlizedImagesJson);
+			HttpContext.Session.SetString("EditHome", researlizedHomeJson);
+
+			return RedirectToAction("EditHome", currentHome.HomeID);
 		}
 
 
@@ -512,10 +608,54 @@ namespace Project4.Controllers
             return RedirectToAction("EditHome", currentHome.HomeID);
         }
 
+        [HttpPost]
+        [Route("RealEstateHome/RemoveEditAmenity/{amenityCount}")]
+        public IActionResult RemoveEditAmenity(int amenityCount)
+        {
+			string roomsJson = HttpContext.Session.GetString("EditRooms");
+			string imagesJson = HttpContext.Session.GetString("EditImages");
+			string amenitiesJson = HttpContext.Session.GetString("EditAmenities");
+			string utilitiesJson = HttpContext.Session.GetString("EditUtilities");
+			string temperatureJson = HttpContext.Session.GetString("EditTemperature");
+			string homeJson = HttpContext.Session.GetString("EditHome");
+			Rooms homeRooms = JsonConvert.DeserializeObject<Rooms>(roomsJson);
+			Images homeImages = JsonConvert.DeserializeObject<Images>(imagesJson);
+			Amenities homeAmenities = JsonConvert.DeserializeObject<Amenities>(amenitiesJson);
+			Utilities homeUtilities = JsonConvert.DeserializeObject<Utilities>(utilitiesJson);
+			TemperatureControl homeTemperature = JsonConvert.DeserializeObject<TemperatureControl>(temperatureJson);
+			Home currentHome = JsonConvert.DeserializeObject<Home>(homeJson);
+
+			return RedirectToAction("EditHome", currentHome.HomeID);
+		}
+
+        [HttpPost]
+        [Route("RealEstatehome/RemoveEditUtility/{utilityID}")]
+        public IActionResult  RemoveEditUtility(int utilityCount)
+        {
+			string roomsJson = HttpContext.Session.GetString("EditRooms");
+			string imagesJson = HttpContext.Session.GetString("EditImages");
+			string amenitiesJson = HttpContext.Session.GetString("EditAmenities");
+			string utilitiesJson = HttpContext.Session.GetString("EditUtilities");
+			string temperatureJson = HttpContext.Session.GetString("EditTemperature");
+			string homeJson = HttpContext.Session.GetString("EditHome");
+			Rooms homeRooms = JsonConvert.DeserializeObject<Rooms>(roomsJson);
+			Images homeImages = JsonConvert.DeserializeObject<Images>(imagesJson);
+			Amenities homeAmenities = JsonConvert.DeserializeObject<Amenities>(amenitiesJson);
+			Utilities homeUtilities = JsonConvert.DeserializeObject<Utilities>(utilitiesJson);
+			TemperatureControl homeTemperature = JsonConvert.DeserializeObject<TemperatureControl>(temperatureJson);
+			Home currentHome = JsonConvert.DeserializeObject<Home>(homeJson);
+            homeUtilities.List.RemoveAt(utilityCount);
+			currentHome.Utilities = homeUtilities;
+			string researlizedUtilities = JsonConvert.SerializeObject(homeUtilities);
+			string researlizedHomeJson = JsonConvert.SerializeObject(currentHome);
+			HttpContext.Session.SetString("EditUtilities", researlizedUtilities);
+			HttpContext.Session.SetString("EditHome", researlizedHomeJson);
+			return RedirectToAction("EditHome", currentHome.HomeID);
+		}
+
         public IActionResult TryFinalizeEditHome()
         {
             Console.WriteLine("Made It To TryFinalize!");
-            //Add validation of each object from session to make sure each object is completely filled out
             string roomsJson = HttpContext.Session.GetString("EditRooms");
             string imagesJson = HttpContext.Session.GetString("EditImages");
             string amenitiesJson = HttpContext.Session.GetString("EditAmenities");
@@ -528,17 +668,22 @@ namespace Project4.Controllers
             Utilities homeUtilities = JsonConvert.DeserializeObject<Utilities>(utilitiesJson);
             TemperatureControl homeTemperature = JsonConvert.DeserializeObject<TemperatureControl>(temperatureJson);
             Home currentHome = JsonConvert.DeserializeObject<Home>(homeJson);
-            //Validate each smaller componet and after validation readd them to the home object
 
+            /*
             //Do api call
             HttpClient client = new HttpClient();
-            StringContent apiContent = new StringContent(JsonConvert.SerializeObject(currentHome), Encoding.UTF8, "application/json");
+            string jsonString = JsonConvert.SerializeObject(currentHome);
+            StringContent apiContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
 			//"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/UpdateHome/UpdateHomeListing"
-			HttpResponseMessage apiResponse = client.PutAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tur31103/WebAPITest/UpdateHome/UpdateHomeListing", apiContent).Result;
+			HttpResponseMessage apiResponse = client.PutAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/UpdateHome/UpdateHomeListing", apiContent).Result;
             Console.WriteLine(apiContent.ToString());
             Console.WriteLine(apiResponse);
+            */
 
-            HttpContext.Session.Remove("EditRooms");
+
+            UpdateHome(currentHome);
+
+			HttpContext.Session.Remove("EditRooms");
             HttpContext.Session.Remove("EditImages");
             HttpContext.Session.Remove("EditAmenities");
             HttpContext.Session.Remove("EditUtilities");
@@ -547,5 +692,30 @@ namespace Project4.Controllers
             return RedirectToAction("EditHome", currentHome.HomeID);
 
         }
+
+
+        public async Task UpdateHome(Home updatedHome)
+        {
+			string jsonString = JsonConvert.SerializeObject(updatedHome);
+            Console.WriteLine(jsonString);
+			StringContent apiContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            Console.WriteLine("We Made it to Update home");
+			using (HttpClient httpClient = new HttpClient())
+			{
+				//TODO: show error if there is an error
+				try
+				{
+					HttpResponseMessage response = await httpClient.PutAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/UpdateHome/UpdateHomeListing", apiContent);
+					string responseBody = await response.Content.ReadAsStringAsync();
+					Console.WriteLine($"Response Body: {responseBody}");
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+				}
+			}
+
+			Console.WriteLine("We Made it to past the api!");
+		}
     }
 }

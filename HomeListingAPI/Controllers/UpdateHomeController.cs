@@ -6,7 +6,8 @@ namespace HomeListingAPI.Controllers
 	[Route("[controller]")]
 	public class UpdateHomeController : Controller
 	{
-		[HttpPut("UpdateHomeListing")]
+		[HttpPut]
+		[Route("UpdateHomeListing")]
 		public IActionResult Put([FromBody] Home updatedHome)
 		{
 			if (updatedHome == null)

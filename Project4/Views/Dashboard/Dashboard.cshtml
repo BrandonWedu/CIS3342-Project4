@@ -151,7 +151,7 @@
 										<form method="POST" asp-controller="Dashboard" asp-action="ViewDetail" asp-route-homeID="@currentHome.HomeID">
 											<button type="submit" class="btn btn-primary btn-sm" name="btnViewDetials" id="btnViewDetails">View Details</button>
 										</form>
-										<form method="POST" asp-controller="Dashboard" asp-action="PassShowing" asp-route-homeID="@currentHome">
+										<form method="POST" asp-controller="Dashboard" asp-action="PassShowing" asp-route-homeID="@currentHome.HomeID">
 											<button type="submit" class="btn btn-primary btn-sm" name="btnRequestShowing" id="btnRequestShowing">Request Showing</button>
 										</form>
 										<form method="POST" asp-controller="Offer" asp-action="MakeOffer" asp-route-homeID="@currentHome.HomeID">

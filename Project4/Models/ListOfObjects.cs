@@ -1,8 +1,12 @@
-﻿namespace Project4.Models
+﻿using Newtonsoft.Json;
+
+namespace Project4.Models
 {
     public class ListOfObjects<T> : IListOfObjects<T> where T : ICloneable<T>
     {
-        protected List<T> list = new List<T>();
+		[JsonProperty("list")]
+		protected List<T> list = new List<T>();
+
 
         public List<T> List
         {

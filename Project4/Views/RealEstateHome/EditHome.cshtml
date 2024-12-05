@@ -22,25 +22,19 @@
 	int roomCount = 0;
 
 }
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Create Home Listing</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-	<form asp-controller="RealEstateHome" asp-action="TryFinalizeEditHome" method="POST">
+
+<div class="container my-4">
+	<form asp-controller="RealEstateHome" asp-action="TryFinalizeEditHome" enctype="multipart/form-data" method="POST" class="card shadow mt-5 p-3">
 		<h1>Create a Home Listing</h1>
 
-		<div>
+		<div class="mt-1">
 			<h2>Home Address</h2>
-			<span>Street</span>
-			<input name="txtHomeStreet" type="text" placeholder="Enter Street" value="@TempData["txtHomeStreet"]">
-			<span>City</span>
-			<input name="txtHomeCity" type="text" placeholder="Enter City" value="@TempData["txtHomeCity"]">
-			<span>State</span>
-			<select name="ddlHomeState" type="text">
+			<span class="form-label">Street</span>
+			<input class="form-control" name="txtHomeStreet" type="text" placeholder="Enter Street" value="@TempData["txtHomeStreet"]">
+			<span class="form-label">City</span>
+			<input class="form-control" name="txtHomeCity" type="text" placeholder="Enter City" value="@TempData["txtHomeCity"]">
+			<span class="form-label">State</span>
+			<select class="form-control" name="ddlHomeState" type="text">
 				@foreach (States state in Enum.GetValues(typeof(States)))
 				{
 					if (TempData["ddlHomeState"] != null && TempData["ddlHomeState"].ToString() == state.ToString())
@@ -54,16 +48,16 @@
 				}
 			</select>
 			<span>Zip Code</span>
-			<input name="txtHomeZipCode" type="text" placeholder="Enter Zip Code" value="@TempData["txtHomeZipCode"]">
+			<input class="form-control" name="txtHomeZipCode" type="text" placeholder="Enter Zip Code" value="@TempData["txtHomeZipCode"]">
 
 		</div>
 
-		<div>
+		<div class="mt-1">
 			<h2>Home Information</h2>
-			<span>Asking Price</span>
-			<input name="txtHomeCost" type="text" placeholder="Enter Asking Price" value="@TempData["txtHomeCost"]">
+			<span class="form-label">Asking Price</span>
+			<input class="form-control" name="txtHomeCost" type="text" placeholder="Enter Asking Price" value="@TempData["txtHomeCost"]">
 			<span id="lblPropertyType">Property Type</span>
-			<select name="ddlPropertyType">
+			<select class="form-control" name="ddlPropertyType">
 				@foreach (PropertyType propertyType in Enum.GetValues(typeof(PropertyType)))
 				{
 					if (TempData["ddlPropertyType"] != null && TempData["ddlPropertyType"].ToString() == propertyType.ToString())
@@ -76,10 +70,10 @@
 					}
 				}
 			</select>
-			<span>Year Constructed</span>
-			<input name="txtYearConstructed" type="text" placeholder="Enter Year Constructed" value="@TempData["txtYearConstructed"]">
-			<span>Garage Type</span>
-			<select name="ddlGarageType">
+			<span class="form-label">Year Constructed</span>
+			<input class="form-control" name="txtYearConstructed" type="text" placeholder="Enter Year Constructed" value="@TempData["txtYearConstructed"]">
+			<span class="form-label">Garage Type</span>
+			<select class="form-control" name="ddlGarageType">
 				@foreach (GarageType garageType in Enum.GetValues(typeof(GarageType)))
 				{
 					if (TempData["ddlGarageType"] != null && TempData["ddlGarageType"].ToString() == garageType.ToString())
@@ -92,10 +86,10 @@
 					}
 				}
 			</select>
-			<span>Home Description</span>
-			<textarea name="txtHomeDescription" rows="4" cols="20" placeholder="Home Description">@TempData["txtHomeDescription"]</textarea>
-			<span>SaleStatus</span>
-			<select name="ddlSaleStatus">
+			<span class="form-label">Home Description</span>
+			<textarea class="form-control" name="txtHomeDescription" rows="4" cols="20" placeholder="Home Description">@TempData["txtHomeDescription"]</textarea>
+			<span class="form-label">SaleStatus</span>
+			<select class="form-control" name="ddlSaleStatus">
 				@foreach (SaleStatus saleStatus in Enum.GetValues(typeof(SaleStatus)))
 				{
 					if (TempData["ddlSaleStatus"] != null && TempData["ddlSaleStatus"].ToString() == saleStatus.ToString())
@@ -110,10 +104,10 @@
 			</select>
 		</div>
 
-		<div>
+		<div class="mt-1">
 			<h2>Add Temperature Control Information</h2>
-			<span>Cooling</span>
-			<select name="ddlCooling">
+			<span class="form-label">Cooling</span>
+			<select class="form-control" name="ddlCooling">
 				@foreach (CoolingTypes coolingType in Enum.GetValues(typeof(CoolingTypes)))
 				{
 					if (TempData["ddlCooling"] != null && TempData["ddlCooling"].ToString() == coolingType.ToString())
@@ -126,8 +120,8 @@
 					}
 				}
 			</select>
-			<span>Heating</span>
-			<select name="ddlHeating">
+			<span class="form-label">Heating</span>
+			<select class="form-control" name="ddlHeating">
 				@foreach (HeatingTypes heatingType in Enum.GetValues(typeof(HeatingTypes)))
 				{
 					if (TempData["ddlHeating"] != null && TempData["ddlHeating"].ToString() == heatingType.ToString())
@@ -142,7 +136,7 @@
 			</select>
 		</div>
 
-		<div>
+		<div class="mt-1">
 			<h2>Home Room Information</h2>
 			<table class="table table-hover">
 				<thead>
@@ -177,12 +171,12 @@
 
 			<h3>Add New Room</h3>
 			<div>
-				<span>Length: </span>
-				<input name="roomLength" type="text" placeholder="Enter Length">
-				<span>Width: </span>
-				<input name="roomWidth" type="text" placeholder="Enter Width">
-				<span>RoomType: </span>
-				<select name="roomType">
+				<span class="form-label">Length: </span>
+				<input class="form-control" name="roomLength" type="text" placeholder="Enter Length">
+				<span class="form-label">Width: </span>
+				<input class="form-control" name="roomWidth" type="text" placeholder="Enter Width">
+				<span class="form-label">RoomType: </span>
+				<select class="form-control" name="roomType">
 					@foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
 					{
 
@@ -190,11 +184,11 @@
 
 					}
 				</select>
-				<button type="submit" formaction="/RealEstateHome/AddEditRoom" formmethod="POST" class="btn btn-primary">Add Room</button>
+				<button type="submit" formaction="/RealEstateHome/AddEditRoom" formmethod="POST" class="btn btn-primary mt-3 w-100">Add Room</button>
 			</div>
 		</div>
 
-		<div>
+		<div class="mt-1">
 			<h2>Home Image Information</h2>
 			<table class="table table-hover">
 				<thead>
@@ -228,32 +222,121 @@
 			</table>
 			<h3>Add New Image</h3>
 			<div>
-				<span>Image Description: </span>
-				<input name="imageDescription" type="text" placeholder="Enter Image Description">
-				<span>Image Type: </span>
-				<select name="imageType">
+				<span class="form-label">Image Description: </span>
+				<input class="form-control" name="imageDescription" type="text" placeholder="Enter Image Description">
+				<span class="form-label">Image Type: </span>
+				<select class="form-control" name="imageType">
 					@foreach (RoomType roomType in Enum.GetValues(typeof(RoomType)))
 					{
 						<option value="@roomType">@roomType</option>
 					}
 				</select>
-				<span>Upload Image</span>
-				<input type="file" name="imageFile">
+				<span class="form-label">Upload Image</span>
+				<input class="form-control" type="file" name="imageFile">
 				<label class="form-label">Default Image</label>
-				<div class="form-check">
+				<div class="form-control" class="form-check">
 					<input type="radio" id="yes" name="defaultImage" value="true" class="form-check-input" />
 					<label for="yes" class="form-check-label">Yes</label>
 				</div>
-				<div class="form-check">
+				<div class="form-control" class="form-check">
 					<input type="radio" id="no" name="defaultImage" value="false" class="form-check-input" />
 					<label for="no" class="form-check-label">No</label>
 				</div>
-				<button type="submit" formaction="/RealEstateHome/AddEditImage" formmethod="POST" class="btn btn-primary">Add Room</button>
+				<button type="submit" formaction="/RealEstateHome/AddEditImage" formmethod="POST" class="btn btn-primary mt-3 w-100">Add Image</button>
 			</div>
 		</div>
 
-		<button type="submit" name="save">Save Edit</button>
-		<a asp-controller="RealEstateHome" asp-action="AllEditHomes" class="btn btn-secondary w-100">Cancel Edit</a>
+		<div class="mt-1">
+			<h2>Home Utility Information</h2>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<td>Utility Type</td>
+						<td>Utility Information</td>
+						<td>Remove Utility</td>
+					</tr>
+				</thead>
+				<tbody>
+					@if (currentUtilities.List.Count == 0)
+					{
+						<tr>
+							<td>No Utility Data</td>
+						</tr>
+					}
+					else
+					{
+						@for (int i = 0; i < currentUtilities.List.Count; i++)
+						{
+							<tr>
+								<td>@currentUtilities.List[i].Type</td>
+								<td>@currentUtilities.List[i].Information</td>
+								<td><button type="submit" formaction="/RealEstateHome/RemoveEditUtility/@i" formmethod="POST" class="btn btn-danger">Remove Image</button></td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+			<div>
+				<h3>Add New Utility</h3>
+				<span class="form-label">Utility Information: </span>
+				<input class="form-control" name="utilityInformation" type="text" placeholder="Enter Utility Information">
+				<span class="form-label">Utility Type: </span>
+				<select class="form-control" name="utilityType">
+					@foreach (UtilityTypes utilityType in Enum.GetValues(typeof(UtilityTypes)))
+					{
+						<option value="@utilityType">@utilityType</option>
+					}
+				</select>
+				<button type="submit" formaction="/RealEstateHome/AddEditUtility" formmethod="POST" class="btn btn-primary mt-3 w-100">Add Utility</button>
+			</div>
+		</div>
+
+		<div class="mt-1">
+			<h2>Home Amenity Information</h2>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<td>Amenity Type</td>
+						<td>Amenity Information</td>
+						<td>Remove Utility</td>
+					</tr>
+				</thead>
+				<tbody>
+					@if (currentAmenities.List.Count == 0)
+					{
+						<tr>
+							<td>No Amenity Data</td>
+						</tr>
+					}
+					else
+					{
+						@for (int i = 0; i < currentAmenities.List.Count; i++)
+						{
+							<tr>
+								<td>@currentAmenities.List[i].Type</td>
+								<td>@currentAmenities.List[i].Description</td>
+								<td><button type="submit" formaction="/RealEstateHome/RemoveEditAmenity/@i" formmethod="POST" class="btn btn-danger">Remove Amenity</button></td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+			<div>
+				<h3>Add New Amenity</h3>
+				<span class="form-label">Amenity Information: </span>
+				<input class="form-control" name="amenityInformation" type="text" placeholder="Enter Amenity Information">
+				<span class="form-label">Amenity Type: </span>
+				<select class="form-control" name="amenityType">
+					@foreach (AmenityType amenityType in Enum.GetValues(typeof(AmenityType)))
+					{
+						<option value="@amenityType">@amenityType</option>
+					}
+				</select>
+				<button type="submit" formaction="/RealEstateHome/AddEditAmenity" formmethod="POST" class="btn btn-primary mt-3 w-100">Add Amenity</button>
+			</div>
+		</div>
+		<button type="submit" name="save" class="btn btn-success mt-3 w-100">Save Edit</button>
+		<a asp-controller="RealEstateHome" asp-action="AllEditHomes" class="btn btn-secondary mt-3 w-100">Cancel Edit</a>
 	</form>
-</body>
-</html>
+</div>
+

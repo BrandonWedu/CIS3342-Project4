@@ -92,7 +92,8 @@ namespace Project4.Controllers
 			HttpResponseMessage response = client.GetAsync(apiUrl).Result;
 			string jsonString = response.Content.ReadAsStringAsync().Result;
 			Home currentHome = JsonConvert.DeserializeObject<Home>(jsonString);
-			return RedirectToAction("ScheduleShowing", "Showing", currentHome);
+			HttpContext.Session.SetString("ShowingHome", jsonString);
+			return RedirectToAction("ScheduleShowing", "Showing");
 		}
     }
 }
