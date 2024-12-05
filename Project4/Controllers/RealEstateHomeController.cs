@@ -26,7 +26,7 @@ namespace Project4.Controllers
         {
             if (HttpContext.Session.GetString("Agent") == null)
             {
-                return View("Dashboard");
+                return RedirectToAction("Dashboard", "Dashboard");
             }
             return View();
         }
