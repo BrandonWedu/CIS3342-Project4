@@ -3,65 +3,75 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    MortgageCalculatorAPI mortgageData = null;
-    if (TempData["MortgageResult"] != null)
-    {
-        string mortgageJSON = TempData["MortgageResult"].ToString();
-        mortgageData = JsonConvert.DeserializeObject<MortgageCalculatorAPI>(mortgageJSON);
-    }
+	MortgageCalculatorAPI mortgageData = null;
+	if (TempData["MortgageResult"] != null)
+	{
+		string mortgageJSON = TempData["MortgageResult"].ToString();
+		mortgageData = JsonConvert.DeserializeObject<MortgageCalculatorAPI>(mortgageJSON);
+	}
 
-    Home currentHome = null;
-    if (ViewBag.Home != null)
-    {
-        currentHome = ViewBag.Home;
-    }
+	Home currentHome = null;
+	if (ViewBag.Home != null)
+	{
+		currentHome = ViewBag.Home;
+	}
 
 }
-<div>
-    <form asp-controller="MortgageCalculator" asp-action="CalculateMortgage" method="GET">
-        <h1>Mortgage Calculator</h1>
-        <input type="text" id="homeValue" name="homeValue" value="@currentHome.Cost" readonly />
-        <input type="text" id="downPayment" name="downPayment" placeholder="Enter down payment Here" />
-        <input type="text" id="interestRate" name="interestRate" placeholder="Enter interest rate Here" />
-        <input type="text" id="durationYears" name="durationYears" placeholder="Enter duration in years Here" />
-        <input type="submit" value="Submit">
-        @if (TempData["Error"] != null)
-        {
-            @foreach (string error in (List<string>)TempData["Error"])
-            {
-                <p>@error</p>
-            }
-        }
+<div class="container mt-5">
+	<form asp-controller="MortgageCalculator" asp-action="CalculateMortgage" method="GET" class="card shadow p-3">
+		<h1 class="card-title">Mortgage Calculator</h1>
+		<div class="row">
 
+			<div class="col-md-3">
+				<input class="form-control" type="text" id="homeValue" name="homeValue" value="@currentHome.Cost" readonly />
+			</div>
+			<div class="col-md-3">
+				<input class="form-control" type="text" id="downPayment" name="downPayment" placeholder="Enter down payment Here" />
+			</div>
+			<div class="col-md-3">
+				<input class="form-control" type="text" id="interestRate" name="interestRate" placeholder="Enter interest rate Here" />
+			</div>
+			<div class="col-md-3">
+				<input class="form-control" type="text" id="durationYears" name="durationYears" placeholder="Enter duration in years Here" />
+			</div>
+		</div>
+		<input class="btn btn-primary mt-3" type="submit" value="Submit">
+		@if (TempData["Error"] != null)
+		{
+			@foreach (string error in (List<string>)TempData["Error"])
+			{
+				<p>@error</p>
+			}
+		}
 
-        @if (mortgageData != null)
-        {
-            <h3>Monthly Payment</h3>
-            <ul>
-                <li><strong>Total:</strong> @mortgageData.MonthlyPayment.Total.ToString("C")</li>
-                <li><strong>Mortgage:</strong> @mortgageData.MonthlyPayment.Mortgage.ToString("C")</li>
-                <li><strong>Property Tax:</strong> @mortgageData.MonthlyPayment.PropertyTax.ToString("C")</li>
-                <li><strong>HOA:</strong> @mortgageData.MonthlyPayment.HOA.ToString("C")</li>
-                <li><strong>Annual Home Insurance:</strong> @mortgageData.MonthlyPayment.AnnualHomeIns.ToString("C")</li>
-            </ul>
+		@if (mortgageData != null)
+		{
+			<h3>Monthly Payment</h3>
+			<ul>
+				<li><strong>Total:</strong> @mortgageData.MonthlyPayment.Total.ToString("C")</li>
+				<li><strong>Mortgage:</strong> @mortgageData.MonthlyPayment.Mortgage.ToString("C")</li>
+				<li><strong>Property Tax:</strong> @mortgageData.MonthlyPayment.PropertyTax.ToString("C")</li>
+				<li><strong>HOA:</strong> @mortgageData.MonthlyPayment.HOA.ToString("C")</li>
+				<li><strong>Annual Home Insurance:</strong> @mortgageData.MonthlyPayment.AnnualHomeIns.ToString("C")</li>
+			</ul>
 
-            <h3>Annual Payment</h3>
-            <ul>
-                <li><strong>Total:</strong> @mortgageData.AnnualPayment.Total.ToString("C")</li>
-                <li><strong>Mortgage:</strong> @mortgageData.AnnualPayment.Mortgage.ToString("C")</li>
-                <li><strong>Property Tax:</strong> @mortgageData.AnnualPayment.PropertyTax.ToString("C")</li>
-                <li><strong>HOA:</strong> @mortgageData.AnnualPayment.HOA.ToString("C")</li>
-                <li><strong>Home Insurance:</strong> @mortgageData.AnnualPayment.HomeInsurance.ToString("C")</li>
-            </ul>
+			<h3>Annual Payment</h3>
+			<ul>
+				<li><strong>Total:</strong> @mortgageData.AnnualPayment.Total.ToString("C")</li>
+				<li><strong>Mortgage:</strong> @mortgageData.AnnualPayment.Mortgage.ToString("C")</li>
+				<li><strong>Property Tax:</strong> @mortgageData.AnnualPayment.PropertyTax.ToString("C")</li>
+				<li><strong>HOA:</strong> @mortgageData.AnnualPayment.HOA.ToString("C")</li>
+				<li><strong>Home Insurance:</strong> @mortgageData.AnnualPayment.HomeInsurance.ToString("C")</li>
+			</ul>
 
-            <h3>Total Interest Paid</h3>
-            <p>@mortgageData.TotalInterestPaid.ToString("C")</p>
-        }
-        else
-        {
-            <p>No data available. Please calculate a mortgage!</p>
-        }
+			<h3>Total Interest Paid</h3>
+			<p>@mortgageData.TotalInterestPaid.ToString("C")</p>
+		}
+		else
+		{
+			<p>No data available. Please calculate a mortgage!</p>
+		}
 
-        <a asp-controller="Dashboard" asp-action="Dashboard" class="btn btn-secondary">Go Back To All Listings</a>
-    </form>
+		<a asp-controller="Dashboard" asp-action="Dashboard" class="btn btn-secondary">Go Back To All Listings</a>
+	</form>
 </div>

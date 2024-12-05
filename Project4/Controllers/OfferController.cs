@@ -184,17 +184,22 @@ namespace Project4.Controllers
                 WriteContingencies.CreateNew(newContingencies);
 
 
-                TempData["Message"] = "Congratulations! Your offer was successfully placed!";
-                TempData["FirstName"] = actualOffer.Client.FirstName;
-                TempData["LastName"] = actualOffer.Client.LastName;
-                TempData["OfferHomeAddress"] = actualOffer.Home.Address.Street + ", " + actualOffer.Home.Address.City + "," + actualOffer.Home.Address.State + ", " + actualOffer.Home.Address.ZipCode;
-                TempData["OfferAmount"] = actualOffer.Amount;
+         
 
+                List<string> confirmationMessage = new List<string>();
+                confirmationMessage.Add("Congraulations! Your offer was sucessfully placed!");
+                confirmationMessage.Add("Offer First Name: " + actualOffer.Client.FirstName);
+				confirmationMessage.Add("Offer Last Name: " + actualOffer.Client.LastName);
+				confirmationMessage.Add("Offer Home Address: " + actualOffer.Home.Address.ToString());
+                confirmationMessage.Add("Offer Amount: " + actualOffer.Amount);
+                TempData["Message"] = JsonConvert.SerializeObject(confirmationMessage);
+                TempData["Action"] = "Dashboard";
+                TempData["Controller"] = "Dashboard";
 
-                HttpContext.Session.Remove("OfferContingencies");
+				HttpContext.Session.Remove("OfferContingencies");
                 HttpContext.Session.Remove("CurrentHome");
 
-                return RedirectToAction("Confirmation");
+                return RedirectToAction("SharedConfirmation", "Shared");
             }
 
 
@@ -246,12 +251,12 @@ namespace Project4.Controllers
             if (string.IsNullOrEmpty(inputs[8]))
             {
                 isValid = false;
-                ViewBag.CityError = "City Sale Is Requried!";
+                ViewBag.CityError = "City Is Requried!";
             }
             if (string.IsNullOrEmpty(inputs[9]))
             {
                 isValid = false;
-                ViewBag.ZipError = "Zip Code Sale Is Requried!";
+                ViewBag.ZipError = "Zip CodeIs Requried!";
             }
 
 

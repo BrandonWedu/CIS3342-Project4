@@ -1,0 +1,32 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+	List<string> Message = ViewBag.Message;
+	string ActionName = (string)ViewBag.Action;
+	string ControllerName = (string)ViewBag.Controller;
+}
+<div class="container mt-5">
+	<div class="row justify-content-center">
+		<div class="col-md-8">
+			<div class="card shadow-lg mt-5 mb-5">
+				<h4 class="card-title">Confirmation</h4>
+				<div class="card-body">
+					@foreach (string currentMessage in Message)
+					{
+						<p class="text-center">@currentMessage</p>
+
+						<br />
+					}
+				</div>
+				<span class="text-muted">You will be redirected shortly...</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	setTimeout(function () {
+		window.location.href = '@Url.Action(ActionName, ControllerName)';
+	}, 6000);
+</script>

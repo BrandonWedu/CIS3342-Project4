@@ -5,101 +5,139 @@
 	DateTime currentDate = DateTime.Now.Date;
 	Home currentHome = null;
 	Agent homeAgent = null;
+	int currentImage = 0;
+	Images allHomeImages = null;
 	if (ViewBag.Home != null)
 	{
 		currentHome = ViewBag.Home;
 		homeAgent = ReadAgents.GetAgentByAgentID((int)currentHome.AgentID);
+		allHomeImages = currentHome.Images;
+		currentImage = ViewBag.CurrentImage;
 	}
 }
 
-	<div class="container">
-
-		<div class="row mb-3">
-			<div id="carousel">
-				<img src="" class="d-block w-100" style="height:500px;" alt="Listing Image" />
-				<div id="carouselControls" class="row">
-					<div class="col">
-						<button class="btn btn-primary w-100">Previous Image</button>
-					</div>
-					<div class="col">
-						<button class="btn btn-primary w-100">Next Image</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row mb-3">
-			<div class="d-flex flex-column">
-				<span class="fw-bold">Agent Company</span>
-				<p>@homeAgent.WorkCompany.CompanyName</p>
-				<span class="fw-bold">Agent Name</span>
-				<p>@homeAgent.PersonalInformation.FirstName @homeAgent.PersonalInformation.LastName</p>
-				<span class="fw-bold">Agent Email</span>
-				<p>@homeAgent.AgentContactInfo.Email</p>
-			</div>
-		</div>
-
-		<div class="row mb-3">
-			<div class="col-12">
-				
-				<h3>@currentHome.Address.Street, @currentHome.Address.City, @currentHome.Address.State, @currentHome.Address.ZipCode</h3>
-				<p class="mb-1"><strong>Asking Price:</strong> @currentHome.Cost</p>
-				<p class="mb-1"><strong>Year Built:</strong> @currentHome.YearConstructed</p>
-				<p class="mb-1"><strong>Total Square Feet:</strong> @currentHome.HomeSize</p>
-				<p class="mb-1"><strong>Bedrooms:</strong> @currentHome.Rooms.GetBedrooms()</p>
-				<p class="mb-1"><strong>Bathrooms:</strong> @currentHome.Rooms.GetFullBaths()</p>
-				<p class="mb-1"><strong>Half-Bathrooms:</strong> @currentHome.Rooms.GetHalfBaths()</p>
-				<p class="mb-1"><strong>Garage:</strong> @currentHome.GarageType</p>
-				<p class="mb-1"><strong>Heating System:</strong> @currentHome.TemperatureControl.Heating</p>
-				<p class="mb-1"><strong>Cooling System:</strong> @currentHome.TemperatureControl.Cooling</p>
-				<p class="mb-1"><strong>Listed on:</strong> @currentHome.DateListed</p>
-				<p class="mb-1"><strong>Days on Market:</strong> @((currentDate - @currentHome.DateListed.Date).Days)</p>
-				
-			</div>
-		</div>
-
-		<div class="row mb-3">
-			<div class="col-12">
-				<h4>Property Description</h4>
-				<p>@currentHome.Description</p>
-			</div>
-		</div>
-
-		<div class="row mb-3">
-			<div class="col-12">
-				<h4>Property Amenities</h4>
-			@foreach(Amenity currentAmenity in currentHome.Amenities.List)
-			{
-				<p>@currentAmenity.Type.ToString()</p><br/>
-			}
-		</div>
-		</div>
+<div class="container">
 
 	<div class="row mb-3">
-		<div class="col-12">
-			<h4>Property Utilities</h4>
-			@foreach (Utility currentUtil in currentHome.Utilities.List)
+		<div id="carousel">
+			@if ((allHomeImages.List.Count == 0 || allHomeImages == null))
 			{
-				<p>@currentUtil.Information.ToString(); <br /></p>
-
+				<h2>No Image Saved With Home Listing</h2>
+			}
+			else
+			{
+				<img src="@allHomeImages.List[currentImage].Url" class="d-block w-100" style="height:500px;" alt="Listing Image" />
+				<span class="text-center text-muted">@allHomeImages.List[currentImage].Description</span>
+				<div id="carouselControls" class="row">
+					<div class="col">
+						<a asp-controller="Dashboard" asp-action="PreviousImage" class="btn btn-secondary w-100">Previous Image</a>
+					</div>
+					<div class="col">
+						<a asp-controller="Dashboard" asp-action="NextImage" class="btn btn-secondary w-100">Next Image</a>
+					</div>
+				</div>
 			}
 		</div>
 	</div>
 
-		<div class="row mb-3">
-			<div class="col-12">
-				<h4>Rooms Information</h4>
-				<table class="table table-striped">
-					<thead>
+	<div class="row mb-3">
+		<div class="d-flex flex-column">
+			<span class="fw-bold">Agent Company</span>
+			<p>@homeAgent.WorkCompany.CompanyName</p>
+			<span class="fw-bold">Agent Name</span>
+			<p>@homeAgent.PersonalInformation.FirstName @homeAgent.PersonalInformation.LastName</p>
+			<span class="fw-bold">Agent Email</span>
+			<p>@homeAgent.AgentContactInfo.Email</p>
+		</div>
+	</div>
+
+	<div class="row mb-3">
+		<div class="col-12">
+
+			<h3>@currentHome.Address.ToString()</h3>
+			<p class="mb-1"><strong>Asking Price:</strong> @currentHome.Cost</p>
+			<p class="mb-1"><strong>Year Built:</strong> @currentHome.YearConstructed</p>
+			<p class="mb-1"><strong>Total Square Feet:</strong> @currentHome.HomeSize</p>
+			<p class="mb-1"><strong>Bedrooms:</strong> @currentHome.Rooms.GetBedrooms()</p>
+			<p class="mb-1"><strong>Bathrooms:</strong> @currentHome.Rooms.GetFullBaths()</p>
+			<p class="mb-1"><strong>Half-Bathrooms:</strong> @currentHome.Rooms.GetHalfBaths()</p>
+			<p class="mb-1"><strong>Garage:</strong> @currentHome.GarageType</p>
+			<p class="mb-1"><strong>Heating System:</strong> @currentHome.TemperatureControl.Heating</p>
+			<p class="mb-1"><strong>Cooling System:</strong> @currentHome.TemperatureControl.Cooling</p>
+			<p class="mb-1"><strong>Listed on:</strong> @currentHome.DateListed.Date</p>
+			<p class="mb-1"><strong>Days on Market:</strong> @((currentDate - @currentHome.DateListed.Date).Days)</p>
+
+		</div>
+	</div>
+
+	<div class="row mb-3">
+		<div class="col-12">
+			<h4>Property Description</h4>
+			<p>@currentHome.Description</p>
+		</div>
+	</div>
+
+	<div class="row mb-3">
+		<div class="col-12">
+			<h4>Property Amenities</h4>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<td>Amenity Type</td>
+						<td>Amenity Description</td>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (Amenity currentAmenity in currentHome.Amenities.List)
+					{
 						<tr>
-							<th>Room Type</th>
-							<th>Room Length</th>
-							<th>Room Width</th>
-							<th>Total Sq Ft</th>
+							<td>@currentAmenity.Type</td>
+							<td>@currentAmenity.Description</td>
 						</tr>
-					</thead>
-					<tbody>
-					@foreach(Room currentRoom in currentHome.Rooms.List)
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="row mb-3">
+		<div class="col-12">
+			<h4>Property Utilities</h4>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<td>Utility Type</td>
+						<td>Utility Information</td>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (Utility currentUtil in currentHome.Utilities.List)
+					{
+						<tr>
+							<td>@currentUtil.Type</td>
+							<td>@currentUtil.Information</td>
+						</tr>
+
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="row mb-3">
+		<div class="col-12">
+			<h4>Rooms Information</h4>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Room Type</th>
+						<th>Room Length</th>
+						<th>Room Width</th>
+						<th>Total Sq Ft</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (Room currentRoom in currentHome.Rooms.List)
 					{
 						<tr>
 							<td>@currentRoom.Type</td>
@@ -109,26 +147,35 @@
 						</tr>
 					}
 
-					</tbody>
-				</table>
-			</div>
+				</tbody>
+			</table>
 		</div>
+	</div>
 
-		<div class="row mb-3">
-			<div class="col-12 d-flex gap-2">
-			<form method="POST" asp-controller="Dashboard" asp-action="PassShowing" asp-route-homeID="@currentHome.HomeID">
+	<div class="row mb-3">
+		<div class="col-12 d-flex gap-2">
+			@if((currentHome.SaleStatus == SaleStatus.Sold || currentHome.SaleStatus == SaleStatus.OffMarket))
+			{
+				<form method="POST" asp-controller="Dashboard" asp-action="Dashboard">
+					<button type="submit" class="btn btn-secondary btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Return To All Listings</button>
+				</form>
+			}
+			else
+			{
+				<form method="POST" asp-controller="Dashboard" asp-action="PassShowing" asp-route-homeID="@currentHome.HomeID">
 					<button type="submit" class="btn btn-primary btn-sm me-2" name="btnRequestShowing" id="btnRequestShowing">Request Showing</button>
 				</form>
-			<form method="POST" asp-controller="Offer" asp-action="MakeOffer" asp-route-homeID="@currentHome.HomeID">
+				<form method="POST" asp-controller="Offer" asp-action="MakeOffer" asp-route-homeID="@currentHome.HomeID">
 					<button type="submit" class="btn btn-success btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Make Offer</button>
 				</form>
 				<form method="POST" asp-controller="Dashboard" asp-action="Dashboard">
 					<button type="submit" class="btn btn-secondary btn-sm me-2" name="btnMakeOffer" id="btnMakeOffer">Return To All Listings</button>
 				</form>
-			</div>
+			}
 		</div>
-
-
-
-
 	</div>
+
+
+
+
+</div>

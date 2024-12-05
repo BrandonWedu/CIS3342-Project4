@@ -329,6 +329,7 @@ namespace Project4.Controllers
 			{
 				return RedirectToAction("Dashboard", "Dashboard");
 			}
+            TempData.Clear();
 			string apiUrl = $"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadSingleHomeListing/{homeID}";
 			HttpClient client = new HttpClient();
 			HttpResponseMessage response = client.GetAsync(apiUrl).Result;
