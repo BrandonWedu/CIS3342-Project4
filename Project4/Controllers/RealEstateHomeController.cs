@@ -449,9 +449,11 @@ namespace Project4.Controllers
 				//Generate File Name
 				string imageName = DateTime.Now.Ticks.ToString() + ".png";
 				//get the server path 
-				string serverPath = _environment.WebRootPath;
+                /*
+                 * 
+				//string serverPath = environment.WebRootPath;
 				string path = Path.Combine(serverPath, "FileStorage", imageName);
-				string fileStoragePath = Path.Combine(_environment.WebRootPath, "FileStorage");
+				string fileStoragePath = Path.Combine(environment.WebRootPath, "FileStorage");
 				if (!Directory.Exists(fileStoragePath))
 				{
 					Directory.CreateDirectory(fileStoragePath);
@@ -459,7 +461,7 @@ namespace Project4.Controllers
 
                 FileStream fileSteam = new FileStream(fileStoragePath, FileMode.Create);
                 imageFile.CopyToAsync(fileSteam);
-
+                */
 
 				string roomsJson = HttpContext.Session.GetString("EditRooms");
 				string imagesJson = HttpContext.Session.GetString("EditImages");

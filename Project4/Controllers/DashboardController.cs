@@ -84,5 +84,15 @@ namespace Project4.Controllers
 			ViewBag.Home = currentHome;
 			return View();
         }
+
+		public IActionResult PassShowing(int homeID)
+		{
+			string apiUrl = $"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadSingleHomeListing/{homeID}";
+			HttpClient client = new HttpClient();
+			HttpResponseMessage response = client.GetAsync(apiUrl).Result;
+			string jsonString = response.Content.ReadAsStringAsync().Result;
+			Home currentHome = JsonConvert.DeserializeObject<Home>(jsonString);
+			return RedirectToAction("ScheduleShowing", "Showing", currentHome);
+		}
     }
 }
