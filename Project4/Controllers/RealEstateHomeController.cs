@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.IO;
 using System.Net;
+using System;
 
 namespace Project4.Controllers
 {
@@ -129,7 +130,6 @@ namespace Project4.Controllers
         //Uploads image to the server
         public void UploadImage(int i)
         {
-            string here = Request.Form[$"fuImage_{i}"];
             IFormFile file = Request.Form.Files[$"fuImage_{i}"];
             if (file == null || file.FileName.Split('.').Last() != "png")
             {
@@ -140,37 +140,62 @@ namespace Project4.Controllers
             //TODO: Modify Image Learning Opportunity
             //-------------------------------------------------------
             ModifyImage modifyImage = new ModifyImage();
-
-            //-------------------------------------------------------
-            using (MemoryStream memoryStream = new MemoryStream())
+			using (MemoryStream memoryStream = new MemoryStream())
             {
                 file.CopyTo(memoryStream);
                 modifyImage.Image = memoryStream.ToArray();
             }
-
+            modifyImage.Resize();
+            modifyImage.Compress();
+            modifyImage.AddWatermark();
+            //-------------------------------------------------------
+            
             //Generate File Name
             string imageName = DateTime.Now.Ticks.ToString() + ".png";
 
-            //get the server path 
-            string serverPath = webhostenvironment.ContentRootPath;
-            string path = Path.Combine(serverPath, "..", "Project3", "FileStorage");
+			//I DO NOT HAVE WRITE PERMISSION TO THE SERVER FILE STORAGE 
+			//-------------------------------------------------------
+			//get the server path 
+			//string serverPath = webhostenvironment.ContentRootPath;
+			//string path = Path.Combine(serverPath, "..", "Project3", "FileStorage");
 
-            //Upload or display error when uploading image to server
-            try
-            {
-                using (FileStream fileStream = new FileStream(path, FileMode.CreateNew))
-                {
-                    fileStream.Write(modifyImage.Image, 0, modifyImage.Image.Length);
-                }
-                TempData[$"ImageURL_{i}"] = path;
-            }
-            catch (Exception ex)
-            {
-                TempData["Errors"] = $"An error occurred while uploading the image. Path: {path} Image Name: {imageName} Error: {ex}";
-                return;
-            }
-            //To remove the upload button from that specific image on the razor view
-            TempData[$"ImageUploaded_{i}"] = true;
+			//Upload or display error when uploading image to server
+			//try
+			//{
+			//    using (FileStream fileStream = new FileStream(path, FileMode.CreateNew))
+			//    {
+			//        fileStream.Write(modifyImage.Image, 0, modifyImage.Image.Length);
+			//    }
+			//   TempData[$"ImageURL_{i}"] = path;
+			//}
+			//catch (Exception ex)
+			//{
+			//    TempData["Errors"] = $"An error occurred while uploading the image. Path: {path} Image Name: {imageName} Error: {ex}";
+			//    return;
+			//}
+			//-------------------------------------------------------
+			//To remove the upload button from that specific image on the razor view
+
+			//TODO: Upload File To Local Machine
+			string relativePath = $"FileStorage"; // Relative path to the file
+			string absolutePath = Path.Combine(Directory.GetCurrentDirectory(), relativePath); // Absolute path to the file
+			string fullPath = Path.Combine(absolutePath, imageName);
+			Console.WriteLine(fullPath);
+			try
+			{
+			    using (FileStream fileStream = new FileStream(fullPath, FileMode.CreateNew))
+			    {
+			        fileStream.Write(modifyImage.Image, 0, modifyImage.Image.Length);
+			    }
+			   TempData[$"ImageURL_{i}"] = imageName;
+			}
+			catch (Exception ex)
+			{
+                //TODO: add to errors 
+			    //$"An error occurred while uploading the image. Path: {fullPath} Image Name: {imageName} Error: {ex}";
+			    return;
+			}
+			TempData[$"ImageUploaded_{i}"] = true;
             RetainData();
         }
 		//Code To Add Home to server through API
@@ -182,7 +207,7 @@ namespace Project4.Controllers
 				TempData["Response"] = "Invalid home data";
 				return;
 			}
-
+            //Serialize home to content json 
 			StringContent content = new StringContent(
 				System.Text.Json.JsonSerializer.Serialize(home),
 				Encoding.UTF8,
@@ -193,14 +218,14 @@ namespace Project4.Controllers
 			{
 				try
 				{
-					// Blocking call to PostAsync
+					// Post Request to api sending info through body 
 					HttpResponseMessage response = httpClient.PostAsync(
 						"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/CreateHome/CreateHomeListing",
 						content
 					).GetAwaiter().GetResult();
 
-					// Blocking call to ReadAsStringAsync
-					string responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+					// Read Response
+       				string responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 					Console.WriteLine($"Response Body: {responseBody}");
 
 					// Error handling
@@ -216,7 +241,6 @@ namespace Project4.Controllers
 				}
 				catch (Exception ex)
 				{
-					// Handle exceptions
 					Console.WriteLine($"Exception: {ex.Message}");
 					TempData["Response"] = "Web API Connection Error";
 				}
@@ -443,8 +467,8 @@ namespace Project4.Controllers
 						//var test = (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"]);
 						//var test2 = Request.Form[$"txtImageInformation_{i}"];
 						images.Add(new Image(
-								//        (string)Request.Form[$"ImageURL{i}"],
-								"https://img.freepik.com/premium-vector/isolated-home-vector-illustration_1076263-25.jpg",
+						        (string)TempData[$"ImageURL_{i}"],
+								//"https://img.freepik.com/premium-vector/isolated-home-vector-illustration_1076263-25.jpg",
 								(RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"].ToString()),
 								Request.Form[$"txtImageInformation_{i}"],
 								i == 1
