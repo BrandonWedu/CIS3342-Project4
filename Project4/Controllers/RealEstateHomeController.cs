@@ -449,7 +449,7 @@ namespace Project4.Controllers
 								Request.Form[$"txtImageInformation_{i}"],
 								i == 1
 							));
-                    //}
+                    }
                 }
                 //read amenities
                 Amenities amenities = new Amenities();
@@ -461,7 +461,7 @@ namespace Project4.Controllers
                                 (AmenityType)Enum.Parse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"].ToString()),
                                 Request.Form[$"txtAmenityInformation_{i}"]
 						));
-                  //  }
+                    }
                 }
 
                 //read temperature control
@@ -480,7 +480,7 @@ namespace Project4.Controllers
                                 int.Parse(Request.Form[$"txtLength_{i}"]),
                                 int.Parse(Request.Form[$"txtWidth_{i}"])
                             ));
-                    //}
+                    }
                 }
 
                 //read Utilities
@@ -493,7 +493,7 @@ namespace Project4.Controllers
                                 (UtilityTypes)Enum.Parse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"].ToString()),
                                 Request.Form[$"txtUtilityInformation_{i}"]
                             ));
-                    //}
+                    }
                 }
 
                 Home home = new Home(
