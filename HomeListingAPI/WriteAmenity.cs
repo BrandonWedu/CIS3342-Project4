@@ -52,7 +52,7 @@ namespace HomeListingAPI
         {
             foreach (Amenity currentAmenity in updatedAmenities.List)
             {
-                if (currentAmenity.AmenityID != 0 || currentAmenity.AmenityID != null)
+                if (currentAmenity.AmenityID != 0)
                 {
                     DBConnect dbConnect = new DBConnect();
                     SqlCommand sqlCommand = new SqlCommand();

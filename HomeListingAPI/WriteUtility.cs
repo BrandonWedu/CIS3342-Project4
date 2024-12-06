@@ -54,7 +54,7 @@ namespace HomeListingAPI
             //Update or add utilities
             foreach (Utility currentUtility in updatedUtilites.List)
             {
-                if (currentUtility.UtilityID != 0 || currentUtility.UtilityID != null)
+                if (currentUtility.UtilityID != 0)
                 {
                     DBConnect dbConnect = new DBConnect();
                     SqlCommand sqlCommand = new SqlCommand();

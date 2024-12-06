@@ -54,7 +54,7 @@ namespace HomeListingAPI
             //Update or add rooms
             foreach (Room currentRoom in updatedRooms.List)
             {
-                if (currentRoom.RoomID != 0 || currentRoom.RoomID != null)
+                if (currentRoom.RoomID != 0)
                 {
                     DBConnect dbConnect = new DBConnect();
                     SqlCommand sqlCommand = new SqlCommand();

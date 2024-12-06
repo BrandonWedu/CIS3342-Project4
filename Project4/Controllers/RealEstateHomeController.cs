@@ -248,18 +248,18 @@ namespace Project4.Controllers
 				{
 					if (!Enum.TryParse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"], out _))
 					{
-						validationErrors.Add($"Invalid room type for the {i + 1} room.");
+						validationErrors.Add($"Invalid room type for the room.");
 						isValidHome = false;
 					}
 					if (!int.TryParse(Request.Form[$"txtLength_{i}"], out _))
 					{
-						validationErrors.Add($"Room {i + 1} length must be a valid number.");
+						validationErrors.Add($"Room length must be a valid number.");
 						isValidHome = false;
 					}
 
 					if (!int.TryParse(Request.Form[$"txtWidth_{i}"], out _))
 					{
-						validationErrors.Add($"Room {i + 1} width must be a valid number.");
+						validationErrors.Add($"Room width must be a valid number.");
 						isValidHome = false;
 					}
 				}
@@ -276,12 +276,12 @@ namespace Project4.Controllers
 				{
 					if (!Enum.TryParse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"], out _))
 					{
-						validationErrors.Add($"Invalid room type for image {i + 1}.");
+						validationErrors.Add($"Invalid room type for image.");
 						isValidHome = false;
 					}
 					if (string.IsNullOrWhiteSpace(Request.Form[$"txtImageInformation_{i}"]))
 					{
-						validationErrors.Add($"Description is required for image {i + 1}.");
+						validationErrors.Add($"Description is required for image.");
 						isValidHome = false;
 					}
 				}
@@ -298,12 +298,12 @@ namespace Project4.Controllers
 				{
 					if (!Enum.TryParse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"], out _))
 					{
-						validationErrors.Add($"Invalid amenity type for amenity {i + 1}.");
+						validationErrors.Add($"Invalid amenity type for amenity.");
 						isValidHome = false;
 					}
 					if (string.IsNullOrWhiteSpace(Request.Form[$"txtAmenityInformation_{i}"]))
 					{
-						validationErrors.Add($"Description is required for amenity {i + 1}.");
+						validationErrors.Add($"Description is required for amenity.");
 						isValidHome = false;
 					}
 				}
@@ -320,12 +320,12 @@ namespace Project4.Controllers
 				{
 					if (!Enum.TryParse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"], out _))
 					{
-						validationErrors.Add($"Invalid utility type for utility {i + 1}.");
+						validationErrors.Add($"Invalid utility type for utility.");
 						isValidHome = false;
 					}
 					if (string.IsNullOrWhiteSpace(Request.Form[$"txtUtilityInformation_{i}"]))
 					{
-						validationErrors.Add($"Information is required for utility {i + 1}.");
+						validationErrors.Add($"Information is required for utility.");
 						isValidHome = false;
 					}
 				}
@@ -480,6 +480,8 @@ namespace Project4.Controllers
 
                     HttpResponseMessage response = await client.PutAsync(apiUrl, content);
 
+
+                    Console.WriteLine(jsonData);
                     if (response.IsSuccessStatusCode)
                     {
                         string responseBody = await response.Content.ReadAsStringAsync();
@@ -975,7 +977,7 @@ namespace Project4.Controllers
 			updatedHome.TemperatureControl.Heating = Enum.Parse<HeatingTypes>(Request.Form["ddlHeating"]);
 
             UpdateHome(updatedHome);
-
+            TempData.Clear();
 			HttpContext.Session.Remove("EditRooms");
 			HttpContext.Session.Remove("EditImages");
 			HttpContext.Session.Remove("EditAmenities");

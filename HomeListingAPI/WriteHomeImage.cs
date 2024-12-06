@@ -57,7 +57,7 @@ namespace HomeListingAPI
             //Update or add images
             foreach (Image currentImage in updatedImages.List)
             {
-                if (currentImage.ImageID != 0 || currentImage.ImageID != null)
+                if (currentImage.ImageID != 0)
                 {
                     DBConnect dbConnect = new DBConnect();
                     SqlCommand sqlCommand = new SqlCommand();
