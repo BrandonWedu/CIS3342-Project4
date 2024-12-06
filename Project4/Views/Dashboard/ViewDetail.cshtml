@@ -22,11 +22,12 @@
 		<div id="carousel">
 			@if ((allHomeImages.List.Count == 0 || allHomeImages == null))
 			{
+				// This is because no write permission to server :(((
 				<img src="https://img.freepik.com/free-vector/house-with-red-roof_1308-104540.jpg" />
 			}
 			else
 			{
-				<img src="@allHomeImages.List[currentImage].Url" class="d-block w-100" style="height:500px;" alt="Listing Image" />
+				<img src="@allHomeImages.List[currentImage].GetAbsoluteURL()" class="d-block w-100" style="height:500px;" alt="Listing Image" />
 				<span class="text-center text-muted">@allHomeImages.List[currentImage].Description</span>
 				<div id="carouselControls" class="row">
 					<div class="col">

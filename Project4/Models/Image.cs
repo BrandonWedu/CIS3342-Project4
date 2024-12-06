@@ -66,5 +66,13 @@ namespace Project4.Models
         {
             return new Image(ImageID, Url, Type, Description, MainImage);
         }
+
+        public string GetAbsoluteURL()
+        {
+            string relativePath = $"FileStorage";
+            string absolutePath = Path.Combine(Directory.GetCurrentDirectory(), relativePath);
+            string fullPath = Path.Combine(absolutePath, Url);
+            return fullPath;
+        }
     }
 }

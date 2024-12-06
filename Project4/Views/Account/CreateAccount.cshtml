@@ -96,7 +96,7 @@
             <div class="col-md-4">
                 <label asp-for="WorkState" class="form-label">State:</label>
                 <select asp-for="WorkState" id="workstate" class="form-select">
-                    @foreach (var state in Enum.GetNames(typeof(States)))
+                    @foreach (States state in Enum.GetValues(typeof(States)))
                     {
                         <option value="@state">@state</option>
                     }

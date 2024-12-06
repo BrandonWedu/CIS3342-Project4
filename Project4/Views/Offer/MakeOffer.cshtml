@@ -50,7 +50,7 @@
             <div class="col-md-6">
                 <label for="OfferState" class="form-label">State</label>
                 <select id="OfferState" name="clientState" class="form-control">
-                    @foreach (var state in Enum.GetNames(typeof(States)))
+                    @foreach (States state in Enum.GetValues(typeof(States)))
                     {
                         <option value="@state">@state</option>
                     }
@@ -72,7 +72,7 @@
             <div class="col-md-6">
                 <label for="SaleType" class="form-label">Offer Type</label>
                 <select id="SaleType" name="SaleType" class="form-control">
-                    @foreach (var saleType in Enum.GetNames(typeof(TypeOfSale)))
+                    @foreach (TypeOfSale saleType in Enum.GetValues(typeof(TypeOfSale)))
                     {
                         <option value="@saleType">@saleType</option>
                     }
