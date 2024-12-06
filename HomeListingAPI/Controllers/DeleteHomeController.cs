@@ -14,13 +14,6 @@ namespace HomeListingAPI.Controllers
 				return NotFound("Home Listing Could Not Be Found");
 			}
 
-			WriteRoom.DeleteRoom(homeID);
-			WriteHomeImage.DeleteHomeImage(homeID);
-			WriteAmenity.DeleteAmenity(homeID);
-			WriteUtility.DeleteUtility(homeID);
-			WriteTemperatureControl.DeleteTemperatureControl(homeID);
-			WriteOffers.DeleteOffer(homeID);
-			WriteShowings.DeleteShowing(homeID);
 			WriteHome.DeleteHome(homeID);
 
 

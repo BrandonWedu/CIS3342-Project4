@@ -260,223 +260,152 @@ namespace Project4.Controllers
 				isValidHome = false;
 			}
 
+
 			//room
-			if (TempData["RoomCount"] == null || !int.TryParse(TempData["RoomCount"].ToString(), out int roomCount))
-			{
-				validationErrors.Add("Home listing requires at least one room");
-				isValidHome = false;
-			}
-			else
-			{
-				bool hidden = false;
-				for (int i = 0; i < roomCount; i++)
-				{
-					if (TempData[$"RoomHidden_{i}"] == null || (bool)TempData[$"RoomHidden_{i}"] == true)
-					{
-						if (!hidden)
-						{
-							hidden = true;
+            if (TempData["RoomCount"] != null)
+            {
+                int roomCount = int.Parse(TempData["RoomCount"].ToString());
+                int nonHiddenRoomCount = 0;
+                for (int i = 0; i < roomCount; i++)
+                {
+                    if (!(TempData[$"RoomHidden_{i}"] is bool hidden && hidden))
+                    {
+                        nonHiddenRoomCount++;
+						string roomType = Request.Form[$"ddlRoomType_{i}"];
+						string length = Request.Form[$"txtLength_{i}"];
+						string width = Request.Form[$"txtWidth_{i}"];
+						if (string.IsNullOrWhiteSpace(roomType) || !Enum.TryParse(typeof(RoomType), roomType, out _))
+                        {
+							validationErrors.Add($"Valid room type is required for room {i + 1}.");
+						}	
+						if (!int.TryParse(length, out _) || !int.TryParse(width, out _))
+                        {
+							validationErrors.Add($"Length and width must be valid numbers for room {i + 1}.");
 						}
-						else
-						{
-							continue; // Skip validation if HiddenRoom_{i} is true
-						}
-					}
-					if (!Enum.TryParse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"], out _))
-					{
-						validationErrors.Add($"Invalid room type for the room.");
-						isValidHome = false;
-					}
-					if (!int.TryParse(Request.Form[$"txtLength_{i}"], out _))
-					{
-						validationErrors.Add($"Room length must be a valid number.");
-						isValidHome = false;
-					}
 
-					if (!int.TryParse(Request.Form[$"txtWidth_{i}"], out _))
-					{
-						validationErrors.Add($"Room width must be a valid number.");
-						isValidHome = false;
 					}
-				}
-				bool isAllHidden = true;
-				for (int i = 0; i < roomCount; i++)
-				{
-					if (TempData[$"RoomHidden_{i}"] == null || (bool)TempData[$"RoomHidden_{i}"] == false)
-					{
-						isAllHidden = false;
-					}
-				}
-				if (isAllHidden)
-				{
-					validationErrors.Add("Home listing requires at least one room");
-				}
-			}
+                }
+                if (nonHiddenRoomCount == 0)
+                {
+                    isValidHome = false;
+                    validationErrors.Add("At least one room is required");
+                }
+            }
+            else
+            {
+                isValidHome = false;
+                validationErrors.Add("At least one room is required.");
+            }
 
-			// Image Validation
-			if (TempData["ImageCount"] == null || !int.TryParse(TempData["ImageCount"].ToString(), out int imageCount))
+			// Images
+			if (TempData["ImageCount"] != null)
 			{
-				validationErrors.Add("Home listing requires at least one image.");
-				isValidHome = false;
-			}
-			else
-			{
-				bool hidden = false;
+				int imageCount = int.Parse(TempData["ImageCount"].ToString());
+				int nonHiddenImageCount = 0;
 				for (int i = 0; i < imageCount; i++)
 				{
-					// Check if Image is hidden
-					if (TempData[$"ImageHidden_{i}"] == null || (bool)TempData[$"ImageHidden_{i}"] == true)
+					if (!(TempData[$"ImageHidden_{i}"] is bool hidden && hidden))
 					{
-						if (!hidden)
+						nonHiddenImageCount++;
+						string roomType = Request.Form[$"ddlImageRoomType_{i}"];
+						string imageInfo = Request.Form[$"txtImageInformation_{i}"];
+
+						if (string.IsNullOrWhiteSpace(roomType) || !Enum.TryParse(typeof(RoomType), roomType, out _))
 						{
-							hidden = true;
+							validationErrors.Add($"Valid room type is required for image {i + 1}.");
 						}
-						else
+						if (string.IsNullOrWhiteSpace(imageInfo))
 						{
-							continue; // Skip validation if HiddenImage_{i} is true
+							validationErrors.Add($"Image information is required for image {i + 1}.");
 						}
 					}
-
-					// Validate the associated room type for the image
-					if (!Enum.TryParse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"], out _))
-					{
-						validationErrors.Add($"Invalid room type associated with image.");
-						isValidHome = false;
-					}
-
-					// Validate the image description
-					if (string.IsNullOrWhiteSpace(Request.Form[$"txtImageInformation_{i}"]))
-					{
-						validationErrors.Add($"Description is required for image.");
-						isValidHome = false;
-					}
 				}
-
-				// Check if all images are hidden
-				bool isAllHidden = true;
-				for (int i = 0; i < imageCount; i++)
+				if (nonHiddenImageCount == 0)
 				{
-					if (TempData[$"ImageHidden_{i}"] == null || (bool)TempData[$"ImageHidden_{i}"] == false)
-					{
-						isAllHidden = false;
-					}
+					isValidHome = false;
+					validationErrors.Add("At least one image is required.");
 				}
-				if (isAllHidden)
-				{
-					validationErrors.Add("Home listing requires at least one visible image.");
-				}
-			}
-
-
-
-			// Amenity Validation
-			if (TempData["AmenityCount"] == null || !int.TryParse(TempData["AmenityCount"].ToString(), out int amenityCount))
-			{
-				validationErrors.Add("Home listing requires at least one amenity.");
-				isValidHome = false;
 			}
 			else
 			{
-				bool hidden = false;
+				isValidHome = false;
+				validationErrors.Add("At least one image is required.");
+			}
+
+
+
+
+			// Amenities
+			if (TempData["AmenityCount"] != null)
+			{
+				int amenityCount = int.Parse(TempData["AmenityCount"].ToString());
+				int nonHiddenAmenityCount = 0;
 				for (int i = 0; i < amenityCount; i++)
 				{
-					// Check if Amenity is hidden
-					if (TempData[$"AmenityHidden_{i}"] == null || (bool)TempData[$"AmenityHidden_{i}"] == true)
+					if (!(TempData[$"AmenityHidden_{i}"] is bool hidden && hidden))
 					{
-						if (!hidden)
-						{
-							hidden = true;
-						}
-						else
-						{
-							continue; // Skip validation if HiddenAmenity_{i} is true
-						}
-					}
+						nonHiddenAmenityCount++;
+						string amenityType = Request.Form[$"ddlAmenityType_{i}"];
+						string amenityInfo = Request.Form[$"txtAmenityInformation_{i}"];
 
-					// Validate amenity type
-					if (!Enum.TryParse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"], out _))
-					{
-						validationErrors.Add($"Invalid amenity type for the amenity.");
-						isValidHome = false;
-					}
-
-					// Validate amenity information
-					if (string.IsNullOrWhiteSpace(Request.Form[$"txtAmenityInformation_{i}"]))
-					{
-						validationErrors.Add($"Description is required for the amenity.");
-						isValidHome = false;
+						if (string.IsNullOrWhiteSpace(amenityType) || !Enum.TryParse(typeof(AmenityType), amenityType, out _))
+						{
+							validationErrors.Add($"Valid amenity type is required for amenity {i + 1}.");
+						}
+						if (string.IsNullOrWhiteSpace(amenityInfo))
+						{
+							validationErrors.Add($"Amenity information is required for amenity {i + 1}.");
+						}
 					}
 				}
-
-				// Check if all amenities are hidden
-				bool isAllHidden = true;
-				for (int i = 0; i < amenityCount; i++)
+				if (nonHiddenAmenityCount == 0)
 				{
-					if (TempData[$"AmenityHidden_{i}"] == null || (bool)TempData[$"AmenityHidden_{i}"] == false)
-					{
-						isAllHidden = false;
-					}
-				}
-				if (isAllHidden)
-				{
-					validationErrors.Add("Home listing requires at least one visible amenity.");
+					isValidHome = false;
+					validationErrors.Add("At least one amenity is required.");
 				}
 			}
+			else
+			{
+				isValidHome = false;
+				validationErrors.Add("At least one amenity is required.");
+			}
+
 
 
 
 			// Utility Validation
-			if (TempData["UtilityCount"] == null || !int.TryParse(TempData["UtilityCount"].ToString(), out int utilityCount))
+			if (TempData["UtilityCount"] != null)
 			{
-				validationErrors.Add("Home listing requires at least one utility.");
-				isValidHome = false;
+				int utilityCount = int.Parse(TempData["UtilityCount"].ToString());
+				int nonHiddenUtilityCount = 0;
+				for (int i = 0; i < utilityCount; i++)
+				{
+					if (!(TempData[$"UtilityHidden_{i}"] is bool hidden && hidden))
+					{
+						nonHiddenUtilityCount++;
+						string utilityType = Request.Form[$"ddlUtilityType_{i}"];
+						string utilityInfo = Request.Form[$"txtUtilityInformation_{i}"];
+
+						if (string.IsNullOrWhiteSpace(utilityType) || !Enum.TryParse(typeof(UtilityTypes), utilityType, out _))
+						{
+							validationErrors.Add($"Valid utility type is required for utility {i + 1}.");
+						}
+						if (string.IsNullOrWhiteSpace(utilityInfo))
+						{
+							validationErrors.Add($"Utility information is required for utility {i + 1}.");
+						}
+					}
+				}
+				if (nonHiddenUtilityCount == 0)
+				{
+					isValidHome = false;
+					validationErrors.Add("At least one utility is required.");
+				}
 			}
 			else
 			{
-				bool hidden = false;
-				for (int i = 0; i < utilityCount; i++)
-				{
-					// Check if Utility is hidden
-					if (TempData[$"UtilityHidden_{i}"] == null || (bool)TempData[$"UtilityHidden_{i}"] == true)
-					{
-						if (!hidden)
-						{
-							hidden = true;
-						}
-						else
-						{
-							continue; // Skip validation if HiddenUtility_{i} is true
-						}
-					}
-
-					// Validate utility type
-					if (!Enum.TryParse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"], out _))
-					{
-						validationErrors.Add($"Invalid utility type for the utility.");
-						isValidHome = false;
-					}
-
-					// Validate utility information
-					if (string.IsNullOrWhiteSpace(Request.Form[$"txtUtilityInformation_{i}"]))
-					{
-						validationErrors.Add($"Information is required for the utility.");
-						isValidHome = false;
-					}
-				}
-
-				// Check if all utilities are hidden
-				bool isAllHidden = true;
-				for (int i = 0; i < utilityCount; i++)
-				{
-					if (TempData[$"UtilityHidden_{i}"] == null || (bool)TempData[$"UtilityHidden_{i}"] == false)
-					{
-						isAllHidden = false;
-					}
-				}
-				if (isAllHidden)
-				{
-					validationErrors.Add("Home listing requires at least one visible utility.");
-				}
+				isValidHome = false;
+				validationErrors.Add("At least one utility is required.");
 			}
 
 
@@ -509,8 +438,8 @@ namespace Project4.Controllers
                 Images images = new Images();
                 for (int i = 0; i < int.Parse(TempData["ImageCount"].ToString()); i++)
                 {
-                   // if ((bool)TempData[$"ImageHidden_{i}"] == false)
-                    //{
+                    if (TempData[$"ImageHidden_{i}"] == null ||(bool)TempData[$"ImageHidden_{i}"] == false)
+                    {
 						//var test = (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"]);
 						//var test2 = Request.Form[$"txtImageInformation_{i}"];
 						images.Add(new Image(
@@ -526,8 +455,8 @@ namespace Project4.Controllers
                 Amenities amenities = new Amenities();
                 for (int i = 0; i < int.Parse(TempData["AmenityCount"].ToString()); i++)
                 {
-                    //if ((bool)TempData[$"AmenityHidden_{i}"] == false)
-                   // {
+                    if (TempData[$"AmenityHidden_{i}"] == null || (bool)TempData[$"AmenityHidden_{i}"] == false)
+                    {
                         amenities.Add(new Amenity(
                                 (AmenityType)Enum.Parse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"].ToString()),
                                 Request.Form[$"txtAmenityInformation_{i}"]
@@ -544,8 +473,8 @@ namespace Project4.Controllers
                 Rooms rooms = new Rooms();
                 for (int i = 0; i < int.Parse(TempData["RoomCount"].ToString()); i++)
                 {
-                   // if ((bool)TempData[$"RoomHidden_{i}"] == false)
-                    //{
+                    if (TempData[$"RoomHidden_{i}"] == null || (bool)TempData[$"RoomHidden_{i}"] == false)
+                    {
                         rooms.Add(new Room(
                                 (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"].ToString()),
                                 int.Parse(Request.Form[$"txtLength_{i}"]),
@@ -558,8 +487,8 @@ namespace Project4.Controllers
                 Utilities utilities = new Utilities();
                 for (int i = 0; i < int.Parse(TempData["UtilityCount"].ToString()); i++)
                 {
-                   // if ((bool)TempData[$"RoomHidden_{i}"] == false)
-                    //{
+                    if (TempData[$"RoomHidden_{i}"] == null || (bool)TempData[$"RoomHidden_{i}"] == false)
+                    {
                         utilities.Add(new Project4.Models.Utility(
                                 (UtilityTypes)Enum.Parse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"].ToString()),
                                 Request.Form[$"txtUtilityInformation_{i}"]
@@ -1148,5 +1077,41 @@ namespace Project4.Controllers
 			HttpContext.Session.Remove("EditHome");
 			return RedirectToAction("AllEditHomes");
 		}
+
+        public async Task TryDeleteHome(int homeID)
+        {
+            try
+            {
+				string apiUrl = $"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/DeleteHomeListing/{homeID}";
+				using (HttpClient client = new HttpClient())
+				{
+					HttpResponseMessage response = await client.DeleteAsync(apiUrl);
+
+					if (response.IsSuccessStatusCode)
+					{
+						string responseBody = await response.Content.ReadAsStringAsync();
+						Console.WriteLine("Successfully deleted home listing.");
+						Console.WriteLine("Response: " + responseBody);
+					}
+					else
+					{
+						Console.WriteLine($"HTTP Error: {response.StatusCode}");
+						string errorBody = await response.Content.ReadAsStringAsync();
+						Console.WriteLine("Error Details: " + errorBody);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				// Handle other potential exceptions
+				Console.WriteLine("An error occurred: " + ex.Message);
+			}
+        }
+
+        public IActionResult DeleteHome(int home)
+        {
+            TryDeleteHome(home);
+            return RedirectToAction("AllEditHomes", "RealEstateHome");
+        }
 	}
 }
