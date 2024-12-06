@@ -16,12 +16,22 @@ namespace Project4.Controllers
             {
                 string agentJson = HttpContext.Session.GetString("Agent");
                 Agent agent = System.Text.Json.JsonSerializer.Deserialize<Agent>(agentJson);
-                Showings showings = ReadShowing.GetShowingsByAgentID(agent.AgentID);
-                TempData["Showings"] = showings;
-                return View();
+                try
+                {
+                    Showings showings = ReadShowing.GetShowingsByAgentID(agent.AgentID);
+                    TempData["Showings"] = showings;
+                    return View();
+                } catch (Exception ex)
+                {
+                    //Send to Error Page
+                    return ViewShowingErrorConfirm(false, new List<string>
+                    {
+                        $"Error Message: {ex}"
+                    });
+                }
             }
             //Send to Error Page
-            return RedirectErrorConfirm(false, new List<string>
+            return ViewShowingErrorConfirm(false, new List<string>
             {
                 $"You are not signed in as an Agent"
             });
@@ -35,7 +45,7 @@ namespace Project4.Controllers
                 if (HttpContext.Session.GetString("Agent") == null) 
                 {
                     //Send to Error Page
-                    return RedirectErrorConfirm(false, new List<string>
+                    return ViewShowingErrorConfirm(false, new List<string>
                     {
                         $"You are not signed in as an Agent"
                     });
@@ -46,35 +56,30 @@ namespace Project4.Controllers
                 if(showingStatus == originalShowingStatus)
                 {
                     //Send to Error Page
-                    return RedirectErrorConfirm(false, new List<string>
+                    return ViewShowingErrorConfirm(false, new List<string>
                     {
                         $"ShowingID: {showingID} is already Status: {showingStatus}"
                     });
                 }
                 else if(WriteShowing.UpdateStatus(showingID, showingStatus))
                 {
-                    return RedirectErrorConfirm(true, new List<string>
+                    return ViewShowingErrorConfirm(true, new List<string>
                     {
                         $"ShowingID: {showingID} status updated to Status: {showingStatus.ToString()}"
                     });
                 }
                 else
                 {
-                    return RedirectErrorConfirm(false, new List<string>
+                    return ViewShowingErrorConfirm(false, new List<string>
                     {
                         $"{showingID} status NOT updated"
                     });
                 }
-                //Send to confirmation page
-                return RedirectErrorConfirm(true, new List<string>
-                {
-                    $"Confirmation Message: ShowingID: {showingID} status updated to Status: {showingStatus.ToString()}"
-                });
             }
             catch (Exception ex)
             {
                 //Send to Error Page
-                return RedirectErrorConfirm(false, new List<string>
+                return ViewShowingErrorConfirm(false, new List<string>
                 {
                     $"Error Message: {ex}"
                 });
@@ -83,15 +88,27 @@ namespace Project4.Controllers
 
         public IActionResult ScheduleShowing()
         {
-            string homeJson = HttpContext.Session.GetString("ShowingHome");
-            Home showingHome = JsonConvert.DeserializeObject<Home>(homeJson);
-            TempData["Home"] = showingHome;
-            return View();
+            try
+            {
+                string homeJson = HttpContext.Session.GetString("ShowingHome");
+                Home showingHome = JsonConvert.DeserializeObject<Home>(homeJson);
+                TempData["Home"] = showingHome;
+                return View();
+
+            } catch (Exception ex)
+            {
+                //Send to Error Page
+                return MakeShowingErrorConfirm(false, new List<string>
+                {
+                    $"Error Message: {ex}"
+                });
+            }
         }
 
         [HttpPost]
         public IActionResult ShowingRequest()
         {
+            if (!ValidateMakeShowing()) { return ScheduleShowing(); }
             string homeJson = HttpContext.Session.GetString("ShowingHome");
             Home home = JsonConvert.DeserializeObject<Home>(homeJson);
             string firstName = Request.Form["txtFirstName"];
@@ -118,22 +135,67 @@ namespace Project4.Controllers
                 ShowingStatus.Pending
                 );
 
-            if(WriteShowing.CreateNew(showing))
+            try
             {
-                //return success
-            } else
-            {
-                //make error text
+                if(WriteShowing.CreateNew(showing))
+                {
+                    return MakeShowingErrorConfirm(true, new List<string>
+                    {
+                        $"Congratulations {showing.Client.FirstName} {showing.Client.LastName}!",
+                        $"You made a showing request for {showing.ShowingTime}"
+                    });
+                }
+                else
+                {
+                    return MakeShowingErrorConfirm(false, new List<string>
+                    {
+                        $"Sorry {showing.Client.FirstName} {showing.Client.LastName}.",
+                        $"failed to make a showing request"
+                    });
+                }
             }
-            return  RedirectToAction("Dashboard", "Dashboard");
+            catch (Exception ex)
+            {
+                return MakeShowingErrorConfirm(false, new List<string>
+                {
+                    $"Error Message: {ex}"
+                });
+            }
+        }
+        //Validate Make Showing inputs
+        public bool ValidateMakeShowing()
+        {
+            List<string> errors = new List<string>();
+            TempData["Errors"] = null;
+            
+            //TODO: Validate
+            
+            
+            if(errors.Count > 0 )
+            {
+                TempData["Errors"] = errors;
+            }
+            return true;
         }
         //Sends user to confirmation or error page
-        public IActionResult RedirectErrorConfirm(bool confirm, List<string> message)
+        public IActionResult ViewShowingErrorConfirm(bool confirm, List<string> message)
         {
             //Send to Error Page
             TempData["Message"] = JsonConvert.SerializeObject(message);
             TempData["Action"] = "AgentDashboard";
             TempData["Controller"] = "Account";
+            if (confirm)
+            {
+                return RedirectToAction("SharedConfirmation", "Shared");
+            }
+            return RedirectToAction("SharedError", "Shared");
+        }
+        public IActionResult MakeShowingErrorConfirm(bool confirm, List<string> message)
+        {
+            //Send to Error Page
+            TempData["Message"] = JsonConvert.SerializeObject(message);
+            TempData["Action"] = "Dashboard";
+            TempData["Controller"] = "Dashboard";
             if (confirm)
             {
                 return RedirectToAction("SharedConfirmation", "Shared");
