@@ -1,9 +1,4 @@
-﻿using Azure.Identity;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Project4.Models;
 using System.Text;
@@ -25,17 +20,15 @@ namespace Project4.Controllers
         [HttpGet]
         public IActionResult CreateHome()
         {
-            if (HttpContext.Session.GetString("Agent") == null)
-            {
-                return View("Dashboard");
-            }
+            if (HttpContext.Session.GetString("Agent") == null) { return RedirectToAction("Dashboard", "Dashboard"); }
             return View();
         }
         //Button Controller for Home Form
         [HttpPost]
         public IActionResult HomeForm(string button)
         {
-            //Gets the ID number of a button is it has an ID number. These are present in submit buttons dunamically generated
+            if (HttpContext.Session.GetString("Agent") == null) { return RedirectToAction("Dashboard", "Dashboard"); }
+            //Gets the ID number of a button is it has an ID number. These are present in submit buttons dynamically generated
             int buttonNumber = button.Contains('_') ? int.Parse(button.Split('_').Last()) : -1;
             //handles which submit button was clicked
             switch (button.Split('_').First())
@@ -655,7 +648,7 @@ namespace Project4.Controllers
                 var test = (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"]);
                 var test2 = Request.Form[$"txtImageInformation_{i}"];
                 images.Add(new Image(
-            //        (string)Request.Form[$"ImageURL{i}"],
+                        //        (string)Request.Form[$"ImageURL{i}"],
                         "https://img.freepik.com/premium-vector/isolated-home-vector-illustration_1076263-25.jpg",
                         (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"].ToString()),
                         Request.Form[$"txtImageInformation_{i}"],
@@ -664,7 +657,7 @@ namespace Project4.Controllers
             }
             //read amenities
             Amenities amenities = new Amenities();
-            for(int i = 0; i < int.Parse(TempData["AmenityCount"].ToString()); i++)
+            for (int i = 0; i < int.Parse(TempData["AmenityCount"].ToString()); i++)
             {
                 amenities.Add(new Amenity(
                         (AmenityType)Enum.Parse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"].ToString()),
@@ -679,7 +672,7 @@ namespace Project4.Controllers
                 );
             //read rooms
             Rooms rooms = new Rooms();
-            for(int i = 0; i < int.Parse(TempData["RoomCount"].ToString()); i++)
+            for (int i = 0; i < int.Parse(TempData["RoomCount"].ToString()); i++)
             {
                 rooms.Add(new Room(
                         (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"].ToString()),
@@ -690,7 +683,7 @@ namespace Project4.Controllers
 
             //read Utilities
             Utilities utilities = new Utilities();
-            for(int i = 0; i < int.Parse(TempData["UtilityCount"].ToString()); i++)
+            for (int i = 0; i < int.Parse(TempData["UtilityCount"].ToString()); i++)
             {
                 utilities.Add(new Project4.Models.Utility(
                         (UtilityTypes)Enum.Parse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"].ToString()),

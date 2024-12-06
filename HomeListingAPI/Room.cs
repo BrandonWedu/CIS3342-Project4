@@ -21,8 +21,8 @@
         Storage,
         Outside
     }
-	[Serializable]
-	public class Room : ICloneable<Room>
+    [Serializable]
+    public class Room : ICloneable<Room>
     {
         private int? roomID;
         private RoomType type;
@@ -72,7 +72,7 @@
 
         public Room Clone()
         {
-            return new Room(RoomID, Type, Width, Height);  
+            return new Room(RoomID, Type, Width, Height);
         }
     }
 }

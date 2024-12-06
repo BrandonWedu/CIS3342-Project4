@@ -59,21 +59,21 @@ namespace Project4.Models
 
         }
 
-		//Get Set
-		[JsonProperty("temperatureControlID")]
-		public int? TemperatureControlID
+        //Get Set
+        [JsonProperty("temperatureControlID")]
+        public int? TemperatureControlID
         {
             get { return temperatureControlID; }
             set { temperatureControlID = value; }
         }
-		[JsonProperty("heating")]
-		public HeatingTypes Heating
+        [JsonProperty("heating")]
+        public HeatingTypes Heating
         {
             get { return heating; }
             set { heating = value; }
         }
-		[JsonProperty("cooling")]
-		public CoolingTypes Cooling
+        [JsonProperty("cooling")]
+        public CoolingTypes Cooling
         {
             get { return cooling; }
             set { cooling = value; }

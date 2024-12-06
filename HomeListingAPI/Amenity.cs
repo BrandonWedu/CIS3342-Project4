@@ -22,8 +22,8 @@
         GraniteCountertops,
         Garden
     }
-	[Serializable]
-	public class Amenity : ICloneable<Amenity>
+    [Serializable]
+    public class Amenity : ICloneable<Amenity>
     {
         private int? amenityID;
         private AmenityType type;

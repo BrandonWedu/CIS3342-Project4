@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace Project4.Models.ViewModels
 {
@@ -62,11 +61,11 @@ namespace Project4.Models.ViewModels
         public string State { get; set; }
 
         [Required(ErrorMessage = "Personal Zip Code is required!")]
-        [RegularExpression(@"^[0-9]{5}(?:-[0-9]{4})?$", ErrorMessage="Zip code must be 5 or 9 digits!")]
+        [RegularExpression(@"^[0-9]{5}(?:-[0-9]{4})?$", ErrorMessage = "Zip code must be 5 or 9 digits!")]
         public string Zip { get; set; }
 
         [Required(ErrorMessage = "Personal Phone Number is required!")]
-        [RegularExpression(@"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}", ErrorMessage ="Phone Number must be a proper phone number!")]
+        [RegularExpression(@"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}", ErrorMessage = "Phone Number must be a proper phone number!")]
         public string Phone { get; set; }
 
         [Required(ErrorMessage = "Personal Email is required!")]

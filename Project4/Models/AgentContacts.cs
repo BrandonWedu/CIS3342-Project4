@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-
-namespace Project4.Models
+﻿namespace Project4.Models
 {
-	public class AgentContacts : ListOfObjects<AgentContact>
-	{
-		public AgentContacts() { }
+    public class AgentContacts : ListOfObjects<AgentContact>
+    {
+        public AgentContacts() { }
 
-		public AgentContacts(List<AgentContact> list) { List = list; }
+        public AgentContacts(List<AgentContact> list) { List = list; }
 
-		public AgentContacts Clone()
-		{
-			return new AgentContacts(List);
-		}
-	}
+        public AgentContacts Clone()
+        {
+            return new AgentContacts(List);
+        }
+    }
 }

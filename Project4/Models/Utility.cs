@@ -41,20 +41,20 @@ namespace Project4.Models
 
         }
 
-		[JsonProperty("utilityID")]
-		public int? UtilityID
+        [JsonProperty("utilityID")]
+        public int? UtilityID
         {
             get { return utilityID; }
             set { utilityID = value; }
         }
-		[JsonProperty("type")]
-		public UtilityTypes Type
+        [JsonProperty("type")]
+        public UtilityTypes Type
         {
             get { return type; }
             set { type = value; }
         }
-		[JsonProperty("information")]
-		public string Information
+        [JsonProperty("information")]
+        public string Information
         {
             get { return information; }
             set { information = value; }

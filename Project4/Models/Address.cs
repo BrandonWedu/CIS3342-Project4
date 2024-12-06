@@ -82,26 +82,26 @@ namespace Project4.Models
             this.zipCode = zipCode;
         }
 
-		[JsonProperty("street")]
-		public string Street
+        [JsonProperty("street")]
+        public string Street
         {
             get { return street; }
             set { this.street = value; }
         }
-		[JsonProperty("city")]
-		public string City
+        [JsonProperty("city")]
+        public string City
         {
             get { return city; }
             set { this.city = value; }
         }
-		[JsonProperty("state")]
-		public States State
+        [JsonProperty("state")]
+        public States State
         {
             get { return state; }
             set { this.state = value; }
         }
-		[JsonProperty("zipCode")]
-		public string ZipCode
+        [JsonProperty("zipCode")]
+        public string ZipCode
         {
             get { return zipCode; }
             set { this.zipCode = value; }

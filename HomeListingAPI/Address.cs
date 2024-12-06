@@ -53,8 +53,8 @@
         Wisconsin,
         Wyoming
     }
-	[Serializable]
-	public class Address : ICloneable<Address>
+    [Serializable]
+    public class Address : ICloneable<Address>
     {
         private int? addressID;
         private string street;

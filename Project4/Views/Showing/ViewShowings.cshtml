@@ -10,48 +10,57 @@
         <meta charset="utf-8" />
     </head>
     <body>
+<div class="container">
+    <div class="row p-4 shadow mt-5 mb-5">
         <h1>Showings</h1>
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <p>@TempData["SuccessMessage"]</p>
-        }
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <p>@TempData["ErrorMessage"]</p>
-        }
-        @if(showings != null)
+        @if(showings != null && showings.List.Count > 0)
         {
             @foreach (Showing showing in @showings.List)
             {
+            if(showing.Status == ShowingStatus.Pending)
+            {
+            <div class="col-md-4 mt-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
                 <form asp-controller="Showing" asp-action="ChangeStatus" method="POST">
                     <div>
                         <input type="hidden" name="ShowingID" value="@showing.ShowingID"/>
-                        <h2>Showing</h2>
+                        <h2>Showing ID: @showing.ShowingID</h2>
                         <span>Home: @showing.HomeID</span><br />
                         <span>Client Name: @showing.Client.FirstName @showing.Client.LastName</span><br />
                         <span>Showing Time: @showing.ShowingTime.ToShortDateString()</span><br />
                         <span>Time Requested: @showing.TimeRequestCreated.ToLongDateString()</span><br />
-                        <span>Status</span>
+                        <span>Status:</span>
                         <select name="ddlShowingStatus" id="showingStatus">
                             @foreach (ShowingStatus status in Enum.GetValues(typeof(ShowingStatus)))
                             {
                                 if(showing.Status == status)
                                 {
                                     <option value="@status" selected="selected">@status</option>
+                                    @(TempData["OriginalShowingStatus"] = @status);
                                 } else
                                 {
                                     <option value="@status">@status</option>
                                 }
                             }
                         </select>
-                        <button type="submit" name="btnChangeStatus">Change Status</button>
+                        <button class="btn btn-primary btn-sm me-2" type="submit" name="btnChangeStatus">Change Status</button>
                     </div>
                 </form>
+        </div>
+        </div>
+        </div>
             }
+            }
+        }
+        else if(showings.List.Count == 0) {
+            <p>This Agent has no showing requests</p>
         }
         else
         {
             <p>No showings...</p>
         }
+        </div>
+        </div>
 </body>
 </html>

@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace Project4.Models
+﻿namespace Project4.Models
 {
     public class Agent : ICloneable<Agent>
     {

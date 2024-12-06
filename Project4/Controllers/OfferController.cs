@@ -10,9 +10,9 @@ namespace Project4.Controllers
     //Handles Offer Create and Manage
     public class OfferController : Controller
     {
-		[HttpPost]        
-		
-		public IActionResult MakeOffer(int homeID)
+        [HttpPost]
+
+        public IActionResult MakeOffer(int homeID)
         {
             if (homeID > 0)
             {
@@ -48,8 +48,8 @@ namespace Project4.Controllers
                 return RedirectToAction("Dashboard", "Dashboard");
             }
 
-		}
-		[HttpPost]
+        }
+        [HttpPost]
         public IActionResult AddContingency(string newContingency)
         {
             ViewBag.FirstName = Request.Form["FirstName"];
@@ -76,8 +76,8 @@ namespace Project4.Controllers
             }
             return View("MakeOffer");
 
-		}
-		[HttpPost]
+        }
+        [HttpPost]
         public IActionResult RemoveContingency(string removedContingency)
         {
             ViewBag.FirstName = Request.Form["FirstName"];
@@ -138,7 +138,7 @@ namespace Project4.Controllers
             inputs.Add(clientAddress);
             inputs.Add(clientCity);
             inputs.Add(clientZip);
-            
+
             if (ValidateOffer(inputs) == false)
             {
                 ViewBag.OfferError = "Please fix errors below and resubmit the offer!";
@@ -178,19 +178,19 @@ namespace Project4.Controllers
                 WriteContingencies.CreateNew(newContingencies);
 
 
-         
+
 
                 List<string> confirmationMessage = new List<string>();
                 confirmationMessage.Add("Congraulations! Your offer was sucessfully placed!");
                 confirmationMessage.Add("Offer First Name: " + actualOffer.Client.FirstName);
-				confirmationMessage.Add("Offer Last Name: " + actualOffer.Client.LastName);
-				confirmationMessage.Add("Offer Home Address: " + actualOffer.Home.Address.ToString());
+                confirmationMessage.Add("Offer Last Name: " + actualOffer.Client.LastName);
+                confirmationMessage.Add("Offer Home Address: " + actualOffer.Home.Address.ToString());
                 confirmationMessage.Add("Offer Amount: " + actualOffer.Amount);
                 TempData["Message"] = JsonConvert.SerializeObject(confirmationMessage);
                 TempData["Action"] = "Dashboard";
                 TempData["Controller"] = "Dashboard";
 
-				HttpContext.Session.Remove("OfferContingencies");
+                HttpContext.Session.Remove("OfferContingencies");
                 HttpContext.Session.Remove("CurrentHome");
 
                 return RedirectToAction("SharedConfirmation", "Shared");
@@ -222,7 +222,7 @@ namespace Project4.Controllers
                 isValid = false;
                 ViewBag.PhoneError = "Phone Number Is Requried!";
             }
-            if (string.IsNullOrEmpty(inputs[4]) || int.TryParse(inputs[4], out _ ) == false)
+            if (string.IsNullOrEmpty(inputs[4]) || int.TryParse(inputs[4], out _) == false)
             {
                 isValid = false;
                 ViewBag.AmountError = "Offer Amount Is Requried!";
@@ -265,20 +265,20 @@ namespace Project4.Controllers
         public IActionResult AcceptOffer(int offerID)
         {
             WriteOffer.UpdateOfferStatus(offerID, OfferStatus.Accepted);
-			string agentSession = HttpContext.Session.GetString("Agent");
-			Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentSession);
-			ViewBag.Agent = currentAgent;
-			return View("AllOffers");
+            string agentSession = HttpContext.Session.GetString("Agent");
+            Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentSession);
+            ViewBag.Agent = currentAgent;
+            return View("AllOffers");
         }
 
         public IActionResult DenyOffer(int offerID)
         {
-			WriteOffer.UpdateOfferStatus(offerID, OfferStatus.Rejected);
-			string agentSession = HttpContext.Session.GetString("Agent");
-			Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentSession);
-			ViewBag.Agent = currentAgent;
-			return View("AllOffers");
-		}
+            WriteOffer.UpdateOfferStatus(offerID, OfferStatus.Rejected);
+            string agentSession = HttpContext.Session.GetString("Agent");
+            Agent currentAgent = JsonConvert.DeserializeObject<Agent>(agentSession);
+            ViewBag.Agent = currentAgent;
+            return View("AllOffers");
+        }
 
 
 

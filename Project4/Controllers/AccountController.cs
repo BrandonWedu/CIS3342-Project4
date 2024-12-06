@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Win32;
 using Newtonsoft.Json;
 using Project4.Models;
 using Project4.Models.ViewModels;
-using System.Net.Http;
-using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
 
 namespace Project4.Controllers
 {
@@ -111,7 +106,7 @@ namespace Project4.Controllers
                 WriteVerification.CreateNew(agentID, code);
 
                 EmailInfo info = new EmailInfo(
-                        model.WorkEmail, 
+                        model.WorkEmail,
                         "tui78495@temple.edu",
                         "Account Verification",
                         $"Please click this link or enter the code on the website to verify your account\n" +
@@ -128,7 +123,8 @@ namespace Project4.Controllers
                         HttpResponseMessage response = await httpClient.PostAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPITest/Email/SendToTempleEmail", content);
                         string responseBody = await response.Content.ReadAsStringAsync();
                         Console.WriteLine($"Response Body: {responseBody}");
-                    } catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
                     }
@@ -144,13 +140,13 @@ namespace Project4.Controllers
         }
 
         [HttpPost]
-        public IActionResult VerifyAccountWithCode(int code) 
+        public IActionResult VerifyAccountWithCode(int code)
         {
             if (ReadVerification.GetVerifiedCode((int)TempData["AgentID"]) == code)
             {
                 //Set agent verified to true
                 WriteVerification.Verify((int)TempData["AgentID"]);
-                return View("Login"); 
+                return View("Login");
             }
             TempData["AgentID"] = TempData["AgentID"];
             TempData["Error"] = "Code Invalid";
@@ -165,7 +161,7 @@ namespace Project4.Controllers
             {
                 //Set agent verified to true
                 WriteVerification.Verify((int)TempData["AgentID"]);
-                return View("Login"); 
+                return View("Login");
             }
             TempData["Error"] = "Code Invalid";
             return View("VerifyAccount");

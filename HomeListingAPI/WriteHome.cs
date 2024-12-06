@@ -1,5 +1,5 @@
-﻿using System.Data;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace HomeListingAPI
 {
@@ -76,21 +76,21 @@ namespace HomeListingAPI
 
         internal static void UpdateHome(Home home, Home oldHome)
         {
-			DBConnect dbConnect = new DBConnect();
-			SqlCommand sqlCommand = new SqlCommand();
-			sqlCommand.CommandType = CommandType.StoredProcedure;
-			sqlCommand.CommandText = "P4_UpdateHomeListing";
-			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@HomeID", (int)home.HomeID, SqlDbType.Int, 8));
-			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@Cost", home.Cost, SqlDbType.Int, 8));
-			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<byte[]>("@HomeAddress", Serializer.SerializeData<Address>(home.Address), SqlDbType.VarBinary));
-			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@PropertyType", home.PropertyType.ToString(), SqlDbType.VarChar, 50));
-			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@HomeSize", home.HomeSize, SqlDbType.Int, 8));
-			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@ConstructionYear", home.YearConstructed, SqlDbType.Int, 8));
-			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@Garage", home.GarageType.ToString(), SqlDbType.VarChar, 50));
-			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@HomeDescription", home.Description, SqlDbType.VarChar));
-			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<DateTime>("@DateListed", home.DateListed, SqlDbType.DateTime));
-			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@SaleStatus", home.SaleStatus.ToString(), SqlDbType.VarChar, 50));
-			dbConnect.DoUpdate(sqlCommand);
+            DBConnect dbConnect = new DBConnect();
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.CommandText = "P4_UpdateHomeListing";
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@HomeID", (int)home.HomeID, SqlDbType.Int, 8));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@Cost", home.Cost, SqlDbType.Int, 8));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<byte[]>("@HomeAddress", Serializer.SerializeData<Address>(home.Address), SqlDbType.VarBinary));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@PropertyType", home.PropertyType.ToString(), SqlDbType.VarChar, 50));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@HomeSize", home.HomeSize, SqlDbType.Int, 8));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@ConstructionYear", home.YearConstructed, SqlDbType.Int, 8));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@Garage", home.GarageType.ToString(), SqlDbType.VarChar, 50));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@HomeDescription", home.Description, SqlDbType.VarChar));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<DateTime>("@DateListed", home.DateListed, SqlDbType.DateTime));
+            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@SaleStatus", home.SaleStatus.ToString(), SqlDbType.VarChar, 50));
+            dbConnect.DoUpdate(sqlCommand);
 
             WriteAmenity.UpdateAmenities((int)home.HomeID, home.Amenities, oldHome.Amenities);
             WriteHomeImage.UpdateHomeImages((int)home.HomeID, home.Images, oldHome.Images);
@@ -98,6 +98,6 @@ namespace HomeListingAPI
             WriteTemperatureControl.UpdateTemperatureControl((int)home.HomeID, home.TemperatureControl);
             WriteUtility.UpdateUtilities((int)home.HomeID, home.Utilities, oldHome.Utilities);
 
-		}
+        }
     }
 }

@@ -49,26 +49,26 @@ namespace Project4.Models
         {
 
         }
-		[JsonProperty("roomID")]
-		public int? RoomID
+        [JsonProperty("roomID")]
+        public int? RoomID
         {
             get { return roomID; }
             set { roomID = value; }
         }
-		[JsonProperty("type")]
-		public RoomType Type
+        [JsonProperty("type")]
+        public RoomType Type
         {
             get { return type; }
             set { type = value; }
         }
-		[JsonProperty("height")]
-		public int Height
+        [JsonProperty("height")]
+        public int Height
         {
             get { return height; }
             set { height = value; }
         }
-		[JsonProperty("width")]
-		public int Width
+        [JsonProperty("width")]
+        public int Width
         {
             get { return width; }
             set { width = value; }
@@ -76,7 +76,7 @@ namespace Project4.Models
 
         public Room Clone()
         {
-            return new Room(RoomID, Type, Width, Height);  
+            return new Room(RoomID, Type, Width, Height);
         }
     }
 }

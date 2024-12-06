@@ -1,7 +1,7 @@
 ﻿namespace HomeListingAPI
 {
-	[Serializable]
-	public class Rooms : ListOfObjects<Room> , ICloneable<Rooms>
+    [Serializable]
+    public class Rooms : ListOfObjects<Room>, ICloneable<Rooms>
     {
         public Rooms() { }
         public Rooms(List<Room> list) { List = list; }

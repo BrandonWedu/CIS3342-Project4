@@ -4,30 +4,30 @@ namespace Project4.Models.ViewModels
 {
     public class CreateCompanyViewModel
     {
-		[Required(ErrorMessage = "Company Name is required!")]
-		public string CompanyName { get; set; }
+        [Required(ErrorMessage = "Company Name is required!")]
+        public string CompanyName { get; set; }
 
-		[Required(ErrorMessage = "Company Street Address is required!")]
-		public string CompanyStreet { get; set; }
+        [Required(ErrorMessage = "Company Street Address is required!")]
+        public string CompanyStreet { get; set; }
 
-		[Required(ErrorMessage = "Company City is required!")]
-		public string CompanyCity { get; set; }
+        [Required(ErrorMessage = "Company City is required!")]
+        public string CompanyCity { get; set; }
 
-		[Required(ErrorMessage = "Company State is required!")]
-		public string CompanyState { get; set; }
+        [Required(ErrorMessage = "Company State is required!")]
+        public string CompanyState { get; set; }
 
-		[Required(ErrorMessage = "Company Zip Code is required!")]
-		[RegularExpression(@"^[0-9]{5}(?:-[0-9]{4})?$", ErrorMessage = "Zip code must be 5 or 9 digits!")]
-		public string CompanyZip { get; set; }
+        [Required(ErrorMessage = "Company Zip Code is required!")]
+        [RegularExpression(@"^[0-9]{5}(?:-[0-9]{4})?$", ErrorMessage = "Zip code must be 5 or 9 digits!")]
+        public string CompanyZip { get; set; }
 
-		[Required(ErrorMessage = "Company Phone Number is required!")]
+        [Required(ErrorMessage = "Company Phone Number is required!")]
         [RegularExpression(@"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}", ErrorMessage = "Company Phone Number must be a proper phone number!")]
 
         public string CompanyPhone { get; set; }
 
-		[Required(ErrorMessage = "Company Email is required!")]
-		public string CompanyEmail { get; set; }
+        [Required(ErrorMessage = "Company Email is required!")]
+        public string CompanyEmail { get; set; }
 
 
-	}
+    }
 }

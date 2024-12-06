@@ -3,8 +3,8 @@
     public class EmailInfo
     {
         private String recipient;
-        private String sender; 
-        private String subject; 
+        private String sender;
+        private String subject;
         private String message;
 
         public EmailInfo(string recipient, string sender, string subject, string message)

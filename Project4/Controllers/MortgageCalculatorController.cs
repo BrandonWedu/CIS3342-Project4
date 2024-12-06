@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Project4.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Project4.Controllers
 {
@@ -57,7 +56,7 @@ namespace Project4.Controllers
                 { "x-rapidapi-key", "f1f1321212msh46f5644e29dcfc1p187b28jsn8dff8b93a11b" },
                 { "x-rapidapi-host", "mortgage-calculator-by-api-ninjas.p.rapidapi.com" },
             },
-                    };
+            };
             using (var response = await client.SendAsync(request))
             {
                 response.EnsureSuccessStatusCode();

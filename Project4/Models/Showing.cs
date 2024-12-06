@@ -12,7 +12,7 @@
         //Fields
         private int? showingID;
         private int homeID;
-        private Client client; 
+        private Client client;
         private DateTime timeRequestCreated;
         private DateTime showingTime;
         private ShowingStatus status;
