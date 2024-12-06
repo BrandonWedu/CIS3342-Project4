@@ -8,12 +8,12 @@ namespace Project4.Models
         private static string password = "ingeeze7Ein7"; // Brandon Connection PW
         //private static string password = "chohgui7Thae"; // Nathan Connection PW
         //Main Connection String - used for the published web application and project submissions.
-        //String SqlConnectString = $"server=cis-mssql1.temple.edu;Database=FA24_3342_tui78495;User id=tui78495;Password={password};Encrypt=True;TrustServerCertificate=True;";
+        String SqlConnectString = $"server=cis-mssql1.temple.edu;Database=FA24_3342_tui78495;User id=tui78495;Password={password};Encrypt=True;TrustServerCertificate=True;";
         //String SqlConnectString = $"server=cis-mssql1.temple.edu;Database=FA24_3342_tui78495;User id=tui78495;Password={password}Encrypt=True;TrustServerCertificate=True;;"; // Brandon connection string
         //String SqlConnectString = $"server=cis-mssql1.temple.edu;Database=FA24_3342_tur31103;User id=tur31103;Password={password}"; // Nathan connection string
 
         // Home Connection String - used for working from home using SSH Tunneling.
-        String SqlConnectString = $"server=127.0.0.1,5555;Database=FA24_3342_tui78495;User id=tui78495;Password={password};Encrypt=True;TrustServerCertificate=True;"; // Brandon home connection
+        //String SqlConnectString = $"server=127.0.0.1,5555;Database=FA24_3342_tui78495;User id=tui78495;Password={password};Encrypt=True;TrustServerCertificate=True;"; // Brandon home connection
         //String SqlConnectString = $"server=127.0.0.1,5555;Database=FA24_3342_tur31103;User id=tur31103;Password={password};Encrypt=True;TrustServerCertificate=True;"; // Nathan home connection
 
         SqlConnection myConnectionSql;

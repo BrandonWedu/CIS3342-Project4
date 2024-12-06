@@ -50,8 +50,23 @@ namespace Project4.Controllers
             return RedirectToAction("ViewDetail");
         }
 
-        public IActionResult ApplyFilter(string txtFilterCity)
+        //Search functionality
+        public IActionResult ApplyFilter()
         {
+            //Query API to get a list of all homes
+            string apiUrl = "https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/ReadHome/ReadHomeListings";
+            WebRequest request = WebRequest.Create(apiUrl);
+            WebResponse response = request.GetResponse();
+            Stream dataStream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string data = reader.ReadToEnd();
+            reader.Close();
+            response.Close();
+            Homes allHomes = JsonConvert.DeserializeObject<Homes>(data);
+            Homes listOfHomes = allHomes;
+            //Get Filtered Values
+
+            //Homes filteredHomes = SearchHomes.Search(listOfHomes);
             return View();
         }
 
