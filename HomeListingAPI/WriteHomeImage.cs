@@ -3,30 +3,30 @@ using System.Data;
 
 namespace HomeListingAPI
 {
-    internal static class WriteHomeImage
-    {
-        internal static int CreateNew(int homeID, Image homeImage)
-        {
-            DBConnect dbConnect = new DBConnect();
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "P4_CreateNewHomeImage";
+	internal static class WriteHomeImage
+	{
+		internal static int CreateNew(int homeID, Image homeImage)
+		{
+			DBConnect dbConnect = new DBConnect();
+			SqlCommand sqlCommand = new SqlCommand();
+			sqlCommand.CommandType = CommandType.StoredProcedure;
+			sqlCommand.CommandText = "P4_CreateNewHomeImage";
 
-            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@homeID", (int)homeID, SqlDbType.Int, 8));
-            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@imageURL", homeImage.Url, SqlDbType.VarChar));
-            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@imageLocation", homeImage.Type.ToString(), SqlDbType.VarChar, 50));
-            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@imageDescription", homeImage.Description, SqlDbType.VarChar));
-            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<bool>("@mainImage", homeImage.MainImage, SqlDbType.Bit));
+			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@homeID", (int)homeID, SqlDbType.Int, 8));
+			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@imageURL", homeImage.Url, SqlDbType.VarChar));
+			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@imageLocation", homeImage.Type.ToString(), SqlDbType.VarChar, 50));
+			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@imageDescription", homeImage.Description, SqlDbType.VarChar));
+			sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<bool>("@mainImage", homeImage.MainImage, SqlDbType.Bit));
 
-            SqlParameter outputParam = DBParameterHelper.OutputParameter("@imageID", SqlDbType.Int, 8);
-            sqlCommand.Parameters.Add(outputParam);
+			SqlParameter outputParam = DBParameterHelper.OutputParameter("@imageID", SqlDbType.Int, 8);
+			sqlCommand.Parameters.Add(outputParam);
 
-            dbConnect.DoUpdate(sqlCommand);
-            return (int)outputParam.Value;
-        }
+			dbConnect.DoUpdate(sqlCommand);
+			return (int)outputParam.Value;
+		}
 
-        internal static void DeleteHomeImage(int homeID)
-        {
+		internal static void DeleteHomeImage(int homeID)
+		{
 
 
 			try
@@ -52,63 +52,65 @@ namespace HomeListingAPI
 			}
 		}
 
-        internal static void UpdateHomeImages(int homeID, Images updatedImages, Images oldImages)
-        {
-            //Update or add images
-            foreach (Image currentImage in updatedImages.List)
-            {
-                if (currentImage.ImageID != 0)
-                {
-                    DBConnect dbConnect = new DBConnect();
-                    SqlCommand sqlCommand = new SqlCommand();
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlCommand.CommandText = "P4_UpdateHomeImage";
-                    sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@ImageID", (int)currentImage.ImageID, SqlDbType.Int, 8));
-                    sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@HomeID", homeID, SqlDbType.Int, 8));
-                    sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@ImageURL", currentImage.Url, SqlDbType.VarChar));
-                    sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@ImageLocation", currentImage.Type.ToString(), SqlDbType.VarChar, 50));
-                    sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@ImageDescription", currentImage.Description, SqlDbType.VarChar));
-                    sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<bool>("@MainImage", currentImage.MainImage, SqlDbType.Bit));
-                    dbConnect.DoUpdate(sqlCommand);
-                }
-                else
-                {
-                    //Create new images
-                    DBConnect dbConnect = new DBConnect();
-                    SqlCommand sqlCommand = new SqlCommand();
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlCommand.CommandText = "P4_CreateNewHomeImage";
-                    sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@homeID", (int)homeID, SqlDbType.Int, 8));
-                    sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@imageURL", currentImage.Url, SqlDbType.VarChar));
-                    sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@imageLocation", currentImage.Type.ToString(), SqlDbType.VarChar, 50));
-                    sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@imageDescription", currentImage.Description, SqlDbType.VarChar));
-                    sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<bool>("@mainImage", currentImage.MainImage, SqlDbType.Bit));
-                    SqlParameter outputParam = DBParameterHelper.OutputParameter("@imageID", SqlDbType.Int, 8);
-                    sqlCommand.Parameters.Add(outputParam);
-                    dbConnect.DoUpdate(sqlCommand);
-                }
-            }
+		internal static void UpdateHomeImages(int homeID, Images updatedImages, Images oldImages)
+		{
+			// Remove deleted images
+			foreach (Image currentOldImage in oldImages.List)
+			{
+				// Check if the current old image exists in the updated images list
+				bool existsInUpdatedList = updatedImages.List.Any(updatedImage => updatedImage.ImageID == currentOldImage.ImageID);
 
-            //Remove deleted images
-            foreach (Image currentOldImage in oldImages.List)
-            {
-                foreach (Image currentImage in updatedImages.List)
-                {
-                    // Every updated images gets compared to each old image
-                    if (currentOldImage.ImageID != currentImage.ImageID)
-                    {
-                        //Delete the old image because it wasnt present in the updated images 
-                        DBConnect dbConnect = new DBConnect();
-                        SqlCommand sqlCommand = new SqlCommand();
-                        sqlCommand.CommandType = CommandType.StoredProcedure;
-                        sqlCommand.CommandText = "P4_RemoveImage";
-                        sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@RoomID", (int)currentOldImage.ImageID, SqlDbType.Int, 8));
-                        dbConnect.DoUpdate(sqlCommand);
-                    }
-                }
-            }
+				if (!existsInUpdatedList)
+				{
+					// Delete the old image because it wasn't present in the updated images
+					DBConnect dbConnect = new DBConnect();
+					SqlCommand sqlCommand = new SqlCommand
+					{
+						CommandType = CommandType.StoredProcedure,
+						CommandText = "P4_RemoveImage"
+					};
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@ImageID", (int)currentOldImage.ImageID, SqlDbType.Int, 8));
+					dbConnect.DoUpdate(sqlCommand);
+				}
+			}
+
+			//Update or add images
+			foreach (Image currentImage in updatedImages.List)
+			{
+				if (currentImage.ImageID != 0)
+				{
+					DBConnect dbConnect = new DBConnect();
+					SqlCommand sqlCommand = new SqlCommand();
+					sqlCommand.CommandType = CommandType.StoredProcedure;
+					sqlCommand.CommandText = "P4_UpdateHomeImage";
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@ImageID", (int)currentImage.ImageID, SqlDbType.Int, 8));
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@HomeID", homeID, SqlDbType.Int, 8));
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@ImageURL", currentImage.Url, SqlDbType.VarChar));
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@ImageLocation", currentImage.Type.ToString(), SqlDbType.VarChar, 50));
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@ImageDescription", currentImage.Description, SqlDbType.VarChar));
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<bool>("@MainImage", currentImage.MainImage, SqlDbType.Bit));
+					dbConnect.DoUpdate(sqlCommand);
+				}
+				else
+				{
+					//Create new images
+					DBConnect dbConnect = new DBConnect();
+					SqlCommand sqlCommand = new SqlCommand();
+					sqlCommand.CommandType = CommandType.StoredProcedure;
+					sqlCommand.CommandText = "P4_CreateNewHomeImage";
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@homeID", (int)homeID, SqlDbType.Int, 8));
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@imageURL", currentImage.Url, SqlDbType.VarChar));
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@imageLocation", currentImage.Type.ToString(), SqlDbType.VarChar, 50));
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<string>("@imageDescription", currentImage.Description, SqlDbType.VarChar));
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<bool>("@mainImage", currentImage.MainImage, SqlDbType.Bit));
+					SqlParameter outputParam = DBParameterHelper.OutputParameter("@imageID", SqlDbType.Int, 8);
+					sqlCommand.Parameters.Add(outputParam);
+					dbConnect.DoUpdate(sqlCommand);
+				}
+			}
 
 
-        }
-    }
+
+		}
+	}
 }

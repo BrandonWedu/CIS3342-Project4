@@ -51,8 +51,28 @@ namespace HomeListingAPI
 
         internal static void UpdateRooms(int homeID, Rooms updatedRooms, Rooms oldRooms)
         {
-            //Update or add rooms
-            foreach (Room currentRoom in updatedRooms.List)
+
+			// Remove deleted rooms
+			foreach (Room currentOldRoom in oldRooms.List)
+			{
+				// Check if the current old room exists in the updated rooms list
+				bool existsInUpdatedList = updatedRooms.List.Any(updatedRoom => updatedRoom.RoomID == currentOldRoom.RoomID);
+
+				if (!existsInUpdatedList)
+				{
+					// Delete the old room because it wasn't present in the updated rooms
+					DBConnect dbConnect = new DBConnect();
+					SqlCommand sqlCommand = new SqlCommand
+					{
+						CommandType = CommandType.StoredProcedure,
+						CommandText = "P4_RemoveRoom"
+					};
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@RoomID", (int)currentOldRoom.RoomID, SqlDbType.Int, 8));
+					dbConnect.DoUpdate(sqlCommand);
+				}
+			}
+			//Update or add rooms
+			foreach (Room currentRoom in updatedRooms.List)
             {
                 if (currentRoom.RoomID != 0)
                 {
@@ -84,24 +104,7 @@ namespace HomeListingAPI
                 }
             }
 
-            //Remove deleted rooms
-            foreach (Room currentOldRoom in oldRooms.List)
-            {
-                foreach (Room currentRoom in updatedRooms.List)
-                {
-                    // Every updated room gets compared to each oldroom
-                    if (currentOldRoom.RoomID != currentRoom.RoomID)
-                    {
-                        //Delete the oldroomid because it wasnt present in the updated rooms ID
-                        DBConnect dbConnect = new DBConnect();
-                        SqlCommand sqlCommand = new SqlCommand();
-                        sqlCommand.CommandType = CommandType.StoredProcedure;
-                        sqlCommand.CommandText = "P4_RemoveRoom";
-                        sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@RoomID", (int)currentOldRoom.RoomID, SqlDbType.Int, 8));
-                        dbConnect.DoUpdate(sqlCommand);
-                    }
-                }
-            }
-        }
+
+		}
     }
 }
