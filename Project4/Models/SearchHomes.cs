@@ -106,34 +106,46 @@
                         continue;
                     }
                 }
-                if (amenities.Count > 0)
-                {
-                    if (amenities.Count > homes.List[i].Amenities.List.Count)
-                    {
-                        homes.RemoveAtIndex(i);
-                        i--;
-                        continue;
-                    }
-                    foreach (AmenityType amenity in amenities)
-                    {
-                        bool hasAmenity = false;
-                        foreach (Amenity homeAmenity in homes.List[i].Amenities.List)
-                        {
-                            if (amenity == homeAmenity.Type)
-                            {
-                                hasAmenity = true;
-                                break;
-                            }
-                        }
-                        if (!hasAmenity)
-                        {
-                            homes.RemoveAtIndex(i);
-                            i--;
-                            continue;
-                        }
-                    }
-                }
-                if (saleStatus != null)
+				if (amenities.Count > 0)
+				{
+					if (amenities.Count > homes.List[i].Amenities.List.Count)
+					{
+						homes.RemoveAtIndex(i);
+						i--;
+						continue;
+					}
+
+					bool shouldRemove = false;
+
+					foreach (Amenity homeAmenity in homes.List[i].Amenities.List)
+					{
+						bool hasAmenity = false;
+
+						foreach (AmenityType amenity in amenities)
+						{
+							if (amenity == homeAmenity.Type)
+							{
+								hasAmenity = true;
+								break;
+							}
+						}
+
+						if (!hasAmenity)
+						{
+							shouldRemove = true;
+							break;
+						}
+					}
+
+					if (shouldRemove)
+					{
+						homes.RemoveAtIndex(i);
+						i--; // Adjust the index after removal
+					}
+				}
+
+
+				if (saleStatus != null)
                 {
                     if (homes.List[i].SaleStatus != saleStatus)
                     {

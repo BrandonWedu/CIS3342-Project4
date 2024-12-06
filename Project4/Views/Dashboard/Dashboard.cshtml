@@ -76,7 +76,7 @@
                 {
                     if (TempData["radFilterPropertyType"] != null && TempData["radFilterPropertyType"].ToString() == propertyType.ToString())
                     {
-                        <input type="radio" id="@propertyType" name="radFilterPropertyType" value="@propertyType" selected="selected"/>
+                        <input type="radio" id="@propertyType" name="radFilterPropertyType" value="@propertyType" checked/>
                     }
                     else
                     {
@@ -90,13 +90,13 @@
 				<br/>
                 @foreach (AmenityType amenity in Enum.GetValues(typeof(AmenityType)))
                 {
-                    if (TempData["radFilterAmenities"] != null && TempData["radFilterAmenities"].ToString() == amenity.ToString())
+                    if (TempData[$"chkFilterAmenities_{amenity}"] != null && TempData[$"chkFilterAmenities_{amenity}"].ToString() == amenity.ToString())
                     {
-                        <input type="radio" id="@amenity" name="radFilterAmenities" value="@amenity" selected="selected"/>
+                        <input type="checkbox" id="@amenity" name="chkFilterAmenities_@amenity" value="@amenity" checked/>
                     }
                     else
                     {
-                        <input type="radio" id="@amenity" name="radFilterAmenities" value="@amenity"/>
+                        <input type="checkbox" id="@amenity" name="chkFilterAmenities_@amenity" value="@amenity"/>
                     }
                     <label for="@amenity">@amenity</label><br>
                 }
@@ -171,7 +171,7 @@
 										</form>
 										@if((currentHome.SaleStatus == SaleStatus.Sold || currentHome.SaleStatus == SaleStatus.OffMarket))
 										{
-
+											
 										}
 										else
 										{

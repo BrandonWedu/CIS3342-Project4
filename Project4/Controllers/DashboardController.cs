@@ -81,9 +81,20 @@ namespace Project4.Controllers
 			States? state = Request.Form["ddlFilterState"] == "Select a State"? null : Enum.Parse<States>(Request.Form["ddlFilterState"]);
 			SaleStatus? saleStatus = Request.Form["ddlFilterSaleStatus"] == "Select a Sale Status"? null : Enum.Parse<SaleStatus>(Request.Form["ddlFilterSaleStatus"]); 
 
-            PropertyType? propertyType = null;
+            PropertyType? propertyType =  string.IsNullOrWhiteSpace(Request.Form["radFilterPropertyType"]) ? null : Enum.Parse<PropertyType>(Request.Form["radFilterPropertyType"]);
 
 			List<AmenityType> amenities = new List<AmenityType>();
+			foreach (string key in Request.Form.Keys)
+			{
+				if (key.StartsWith("chkFilterAmenities_"))
+				{
+					string amenityValue = key.Replace("chkFilterAmenities_", ""); // Get the AmenityType name from the key
+					if (Enum.TryParse(amenityValue, out AmenityType selectedAmenity))
+					{
+						amenities.Add(selectedAmenity); // Add to the list if the parsing is successful
+					}
+				}
+			}
 
 			Homes filteredHomes = SearchHomes.Search(listOfHomes, street, city, state, zipCode, priceMin, priceMax, propertyType, houseSizeMin, houseSizeMax, bedroomMin, bathroomMin, amenities, saleStatus);
             ViewBag.Homes = filteredHomes;
