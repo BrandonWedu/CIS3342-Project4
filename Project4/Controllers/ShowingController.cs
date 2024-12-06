@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Project4.Models;
 using Project4.Models.ViewModels;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace Project4.Controllers
 {
@@ -88,6 +89,7 @@ namespace Project4.Controllers
 
         public IActionResult ScheduleShowing()
         {
+            TempData.Clear();
             try
             {
                 string homeJson = HttpContext.Session.GetString("ShowingHome");
@@ -108,7 +110,12 @@ namespace Project4.Controllers
         [HttpPost]
         public IActionResult ShowingRequest()
         {
-            if (!ValidateMakeShowing()) { return ScheduleShowing(); }
+            if (!ValidateMakeShowing()) 
+            {
+                Home showingHome = JsonConvert.DeserializeObject<Home>(HttpContext.Session.GetString("ShowingHome"));
+                TempData["Home"] = showingHome;
+                return View("ScheduleShowing"); 
+            }
             string homeJson = HttpContext.Session.GetString("ShowingHome");
             Home home = JsonConvert.DeserializeObject<Home>(homeJson);
             string firstName = Request.Form["txtFirstName"];
@@ -165,18 +172,60 @@ namespace Project4.Controllers
         //Validate Make Showing inputs
         public bool ValidateMakeShowing()
         {
+            RetainData();
             List<string> errors = new List<string>();
-            TempData["Errors"] = null;
-            
-            //TODO: Validate
-            
-            
-            if(errors.Count > 0 )
+            // Validate Fields
+            if (string.IsNullOrEmpty(Request.Form["txtFirstName"]) || !Regex.IsMatch(Request.Form["txtFirstName"], @"\S+"))
+            {
+                errors.Add("First Name is invalid or cannot be null.");
+            }
+            if (string.IsNullOrEmpty(Request.Form["txtLastName"]) || !Regex.IsMatch(Request.Form["txtLastName"], @"\S+"))
+            {
+                errors.Add("Last Name is invalid or cannot be null.");
+            }
+            if (string.IsNullOrEmpty(Request.Form["txtStreet"]) || !Regex.IsMatch(Request.Form["txtStreet"], @"\S+"))
+            {
+                errors.Add("Street is invalid or cannot be null.");
+            }
+            if (string.IsNullOrEmpty(Request.Form["ddlState"]) || !Regex.IsMatch(Request.Form["ddlState"], @"\S+"))
+            {
+                errors.Add("State is invalid or cannot be null.");
+            }
+            if (string.IsNullOrEmpty(Request.Form["txtZipCode"]) || !Regex.IsMatch(Request.Form["txtZipCode"], @"^\d{5}(-\d{4})?$"))
+            {
+                errors.Add("Zip Code is invalid. It must be 5 digits or in ZIP+4 format.");
+            }
+            if (string.IsNullOrEmpty(Request.Form["txtPhoneNumber"]) || !Regex.IsMatch(Request.Form["txtPhoneNumber"], @"^\d{9,10}$"))
+            {
+                errors.Add("Phone Number is invalid. It must be 9 or 10 digits.");
+            }
+            if (string.IsNullOrEmpty(Request.Form["txtEmail"]) || !Regex.IsMatch(Request.Form["txtEmail"], @"^[^@\s]+@temple\.edu$"))
+            {
+                errors.Add("Email is invalid. It must be a Temple University email address.");
+            }
+            if (string.IsNullOrEmpty(Request.Form["dateShowingTime"]) || !DateTime.TryParse(Request.Form["dateShowingTime"], out DateTime showingTime) || showingTime < DateTime.Now)
+            {
+                errors.Add("Showing Time is invalid, cannot be null, and must be a future date.");
+            }
+
+
+            if (errors.Count > 0 )
             {
                 TempData["Errors"] = errors;
+                return false;
             }
             return true;
         }
+        //save request.form to temp data
+        public void RetainData()
+        {
+            foreach (string key in Request.Form.Keys)
+            {
+                TempData[key] = Request.Form[key];
+            }
+            TempData.Keep();
+        }
+
         //Sends user to confirmation or error page
         public IActionResult ViewShowingErrorConfirm(bool confirm, List<string> message)
         {

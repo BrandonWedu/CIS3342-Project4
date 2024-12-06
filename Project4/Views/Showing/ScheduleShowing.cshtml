@@ -2,19 +2,19 @@
     ViewData["Title"] = "Project 4 - Schedule Showing";
     Home home = (Home)TempData["Home"];
     List<string> errors = null;
-    if(TempData["Errors"] != null)
+    if (TempData["Errors"] != null)
     {
         errors = (List<string>)TempData["Errors"];
-    } 
+    }
 }
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>@ViewData["Title"]</title>
-        <meta charset="utf-8" />
-    </head>
-    <body>
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="utf-8" />
+</head>
+<body>
     <div class="container my-4">
         @if (TempData["Home"] != null)
         {
@@ -45,63 +45,64 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="txtFirstName" class="form-label">First Name</label>
-                        <input id="txtFirstName" name="txtFirstName" class="form-control" />
+                        <input id="txtFirstName" name="txtFirstName" class="form-control" value="@TempData["txtFirstName"]" />
                     </div>
                     <div class="col-md-6">
                         <label for="txtLastName" class="form-label">Last Name</label>
-                        <input id="txtLastName" name="txtLastName" class="form-control" />
+                        <input id="txtLastName" name="txtLastName" class="form-control" value="@TempData["txtLastName"]" />
                     </div>
                 </div>
-
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="txtStreet" class="form-label">Street</label>
-                        <input id="txtStreet" name="txtStreet" class="form-control" />
+                        <input id="txtStreet" name="txtStreet" class="form-control" value="@TempData["txtStreet"]" />
                     </div>
                     <div class="col-md-6">
                         <label for="txtCity" class="form-label">City</label>
-                        <input id="txtCity" name="txtCity" class="form-control" />
+                        <input id="txtCity" name="txtCity" class="form-control" value="@TempData["txtCity"]" />
                     </div>
                 </div>
-
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="ddlState" class="form-label">State</label>
                         <select id="ddlState" name="ddlState" class="form-control">
                             @foreach (States state in Enum.GetValues(typeof(States)))
                             {
-                                <option value="@state">@state</option>
+                                @if (TempData["ddlState"] != null && TempData["ddlState"].ToString() == state.ToString())
+                                {
+                                    <option value="@state" selected>@state</option>
+                                }
+                                else
+                                {
+                                    <option value="@state">@state</option>
+                                }
                             }
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label for="txtZipCode" class="form-label">Zip Code</label>
-                        <input id="txtZipCode" name="txtZipCode" class="form-control" />
+                        <input id="txtZipCode" name="txtZipCode" class="form-control" value="@TempData["txtZipCode"]" />
                     </div>
                 </div>
-
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="txtPhoneNumber" class="form-label">Phone Number</label>
-                        <input id="txtPhoneNumber" name="txtPhoneNumber" class="form-control" />
+                        <input id="txtPhoneNumber" name="txtPhoneNumber" class="form-control" value="@TempData["txtPhoneNumber"]" />
                     </div>
                     <div class="col-md-6">
                         <label for="txtEmail" class="form-label">Email</label>
-                        <input id="txtEmail" name="txtEmail" class="form-control" />
+                        <input id="txtEmail" name="txtEmail" class="form-control" value="@TempData["txtEmail"]" />
                     </div>
                 </div>
-
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="dateShowingTime" class="form-label">Showing Time</label>
-                        <input id="dateShowingTime" name="dateShowingTime" type="date" class="form-control" />
+                        <input id="dateShowingTime" name="dateShowingTime" type="date" class="form-control" value="@TempData["dateShowingTime"]" />
                     </div>
                 </div>
-
                 <div class="d-flex justify-content-between mt-4">
                     <button id="btnSubmitShowing" type="submit" class="btn btn-success w-100">Schedule</button>
                 </div>
-
                 @if (errors != null)
                 {
                     <div class="mt-3">
@@ -118,6 +119,5 @@
             <h1 class="text-center text-warning mt-5">No Home Provided...</h1>
         }
     </div>
-
 </body>
 </html>
