@@ -558,37 +558,37 @@ namespace Project4.Controllers
             return View();
         }
 
-        public async Task UpdateHome(Home updatedHome)
+        public void UpdateHome(Home updatedHome)
         {
             try
             {
                 string apiUrl = "https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/UpdateHome/UpdateHomeListing";
 
-                using (HttpClient client = new HttpClient())
-                {
-                    string jsonData = JsonConvert.SerializeObject(updatedHome);
-                    StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+				using (HttpClient client = new HttpClient())
+				{
+					// Serialize the Home object to JSON
+					string jsonData = JsonConvert.SerializeObject(updatedHome);
+					StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PutAsync(apiUrl, content);
+					HttpResponseMessage response = client.PutAsync(apiUrl, content).Result;
 
-
-                    Console.WriteLine(jsonData);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string responseBody = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine("Response:" + responseBody);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"HTTP Error:  {response.StatusCode}");
-                        string errorBody = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine("Error Details:" + errorBody);
-                    }
-                }
-            }
-            catch (Exception ex)
+					Console.WriteLine(jsonData);
+					if (response.IsSuccessStatusCode)
+					{
+						string responseBody = response.Content.ReadAsStringAsync().Result;
+						Console.WriteLine("Response: " + responseBody);
+					}
+					else
+					{
+						Console.WriteLine($"HTTP Error: {response.StatusCode}");
+						string errorBody = response.Content.ReadAsStringAsync().Result;
+						Console.WriteLine("Error Details: " + errorBody);
+					}
+				}
+			}
+			catch (Exception ex)
             {
-                // Handle other potential exceptions
+                // Handle exceptions
                 Console.WriteLine("An error occurred: " + ex.Message);
             }
 
@@ -596,192 +596,6 @@ namespace Project4.Controllers
 
 
         }
-
-		/*
-         public Home GetHomeData()
-        {
-            RetainData();
-            
-            List<string> validationErrors = new List<string>();
-            if (string.IsNullOrWhiteSpace(Request.Form["txtHomeStreet"]))
-            {
-                validationErrors.Add("Street address is required.");
-                isValidHome = false;
-            }
-            if (string.IsNullOrWhiteSpace(Request.Form["txtHomeCity"]))
-            {
-                validationErrors.Add("City is required.");
-                isValidHome = false;
-            }
-            if (!Enum.TryParse(typeof(States), Request.Form["ddlHomeState"], out _))
-            {   
-                validationErrors.Add("Invalid state selected.");
-                isValidHome = false;
-            }
-            if (!int.TryParse(Request.Form["txtHomeCost"], out int cost))
-            {
-                validationErrors.Add("Cost must be a valid number.");
-                isValidHome = false;
-            }
-
-            for (int i = 0; i < int.Parse(TempData["RoomCount"].ToString()); i++)
-            {
-                if (!Enum.TryParse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"], out _))
-                {
-                    validationErrors.Add($"Invalid room type for the {i + 1} room.");
-                    isValidHome = false;
-                }
-                if (!int.TryParse(Request.Form[$"txtLength_{i}"], out _))
-                {
-                    validationErrors.Add($"Room {i + 1} length must be a valid number.");
-                    isValidHome = false;
-                }
-
-                if (!int.TryParse(Request.Form[$"txtWidth_{i}"], out _))
-                {
-                    validationErrors.Add($"Room {i + 1} width must be a valid number.");
-                    isValidHome = false;
-                }
-            }
-            
-            for (int i = 0; i < int.Parse(TempData["ImageCount"].ToString()); i++)
-            {
-                if (!Enum.TryParse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"], out _))
-                {
-                    validationErrors.Add($"Invalid room type for image {i + 1}.");
-                    isValidHome = false;
-                }
-                if (string.IsNullOrWhiteSpace(Request.Form[$"txtImageInformation_{i}"]))
-                {
-                    validationErrors.Add($"Description is required for image {i + 1}.");
-                    isValidHome = false;
-                }
-            }
-
-            for (int i = 0; i < int.Parse(TempData["AmenityCount"].ToString()); i++)
-            {
-                if (!Enum.TryParse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"], out _))
-                {
-                    validationErrors.Add($"Invalid amenity type for amenity {i + 1}.");
-                    isValidHome = false;
-                }
-                if (string.IsNullOrWhiteSpace(Request.Form[$"txtAmenityInformation_{i}"]))
-                {
-                    validationErrors.Add($"Description is required for amenity {i + 1}.");
-                    isValidHome = false;
-                }
-            }
-
-            for (int i = 0; i < int.Parse(TempData["UtilityCount"].ToString()); i++)
-            {
-                if (!Enum.TryParse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"], out _))
-                {
-                    validationErrors.Add($"Invalid utility type for utility {i + 1}.");
-                    isValidHome = false;
-                }
-                if (string.IsNullOrWhiteSpace(Request.Form[$"txtUtilityInformation_{i}"]))
-                {
-                    validationErrors.Add($"Information is required for utility {i + 1}.");
-                    isValidHome = false;
-                }
-            }
-
-            
-            if (isValidHome == false)
-            {
-                //Just need to add validation error span somewhere in create and edit home and test 
-                //Also will need to make CreateHome and UpdateHome check for null home object
-                TempData["ValidationError"] = validationErrors;
-                return null;
-            }
-            else
-            {
-                            string agentJson = HttpContext.Session.GetString("Agent");
-            Agent agent = System.Text.Json.JsonSerializer.Deserialize<Agent>(agentJson);
-            int cost = int.Parse(Request.Form["txtHomeCost"]);
-            Address address = new Address(
-                    Request.Form["txtHomeStreet"].ToString(),
-                    Request.Form["txtHomeCity"].ToString(),
-                    (States)Enum.Parse(typeof(States), Request.Form["ddlHomeState"].ToString()),
-                    Request.Form["txtHomeZipCode"].ToString()
-                );
-            PropertyType propertyType = (PropertyType)Enum.Parse(typeof(PropertyType), Request.Form["ddlPropertyType"].ToString());
-            GarageType garageType = (GarageType)Enum.Parse(typeof(GarageType), Request.Form["ddlGarageType"].ToString());
-            string description = Request.Form["txtDescription"].ToString();
-            SaleStatus saleStatus = (SaleStatus)Enum.Parse(typeof(SaleStatus), Request.Form["ddlSaleStatus"].ToString());
-
-            //read images
-            Images images = new Images();
-            for(int i = 0; i < int.Parse(TempData["ImageCount"].ToString()); i++)
-            {
-                var test = (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"]);
-                var test2 = Request.Form[$"txtImageInformation_{i}"];
-                images.Add(new Image(
-                        //        (string)Request.Form[$"ImageURL{i}"],
-                        "https://img.freepik.com/premium-vector/isolated-home-vector-illustration_1076263-25.jpg",
-                        (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"].ToString()),
-                        Request.Form[$"txtImageInformation_{i}"],
-                        i == 1
-                    ));
-            }
-            //read amenities
-            Amenities amenities = new Amenities();
-            for (int i = 0; i < int.Parse(TempData["AmenityCount"].ToString()); i++)
-            {
-                amenities.Add(new Amenity(
-                        (AmenityType)Enum.Parse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"].ToString()),
-                        Request.Form[$"txtAmenityInformation_{i}"]
-                    ));
-            }
-
-            //read temperature control
-            TemperatureControl temperatureControl = new TemperatureControl(
-                    (HeatingTypes)Enum.Parse(typeof(HeatingTypes), Request.Form[$"ddlHeating"].ToString()),
-                    (CoolingTypes)Enum.Parse(typeof(CoolingTypes), Request.Form[$"ddlCooling"].ToString())
-                );
-            //read rooms
-            Rooms rooms = new Rooms();
-            for (int i = 0; i < int.Parse(TempData["RoomCount"].ToString()); i++)
-            {
-                rooms.Add(new Room(
-                        (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"].ToString()),
-                        int.Parse(Request.Form[$"txtLength_{i}"]),
-                        int.Parse(Request.Form[$"txtWidth_{i}"])
-                    ));
-            }
-
-            //read Utilities
-            Utilities utilities = new Utilities();
-            for (int i = 0; i < int.Parse(TempData["UtilityCount"].ToString()); i++)
-            {
-                utilities.Add(new Project4.Models.Utility(
-                        (UtilityTypes)Enum.Parse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"].ToString()),
-                        Request.Form[$"txtUtilityInformation_{i}"]
-                    ));
-            }
-
-            Home home = new Home(
-                agent.AgentID,
-                cost,
-                address,
-                propertyType,
-                DateTime.Now.Year,
-                garageType,
-                description,
-                DateTime.Now,
-                saleStatus,
-                images,
-                amenities,
-                temperatureControl,
-                rooms,
-                utilities
-                );
-            return home;
-            }
-
-        }
-         */
-
 
 		public IActionResult BackupEditHome(int homeID)
 		{
@@ -945,13 +759,10 @@ namespace Project4.Controllers
             {
 				string id = DateTime.Now.Ticks.ToString();
 				string imageName = id + ".png";
-				string relativePath = $"FileStorage/{id}"; // Relative path to the file
+				string relativePath = $"FileStorage"; // Relative path to the file
 				string absolutePath = Path.Combine(Directory.GetCurrentDirectory(), relativePath); // Absolute path to the file
 
-				if (!Directory.Exists(relativePath))
-				{
-					Directory.CreateDirectory(absolutePath);
-				}
+
 
 				if (imageFile.Length > 0)
 				{
@@ -960,7 +771,7 @@ namespace Project4.Controllers
 					string fullPath = Path.Combine(absolutePath, newFileName);
 					Console.WriteLine(fullPath);
 
-					using (var fileStream = new FileStream(fullPath, FileMode.Create))
+					using (FileStream fileStream = new FileStream(fullPath, FileMode.Create))
 					{
 						imageFile.CopyTo(fileStream);
 					}
@@ -1078,25 +889,25 @@ namespace Project4.Controllers
 			return RedirectToAction("AllEditHomes");
 		}
 
-        public async Task TryDeleteHome(int homeID)
+        public void TryDeleteHome(int homeID)
         {
             try
             {
 				string apiUrl = $"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/DeleteHomeListing/{homeID}";
 				using (HttpClient client = new HttpClient())
 				{
-					HttpResponseMessage response = await client.DeleteAsync(apiUrl);
+					HttpResponseMessage response = client.DeleteAsync(apiUrl).Result;
 
 					if (response.IsSuccessStatusCode)
 					{
-						string responseBody = await response.Content.ReadAsStringAsync();
+						string responseBody = response.Content.ReadAsStringAsync().Result;
 						Console.WriteLine("Successfully deleted home listing.");
 						Console.WriteLine("Response: " + responseBody);
 					}
 					else
 					{
 						Console.WriteLine($"HTTP Error: {response.StatusCode}");
-						string errorBody = await response.Content.ReadAsStringAsync();
+						string errorBody = response.Content.ReadAsStringAsync().Result;
 						Console.WriteLine("Error Details: " + errorBody);
 					}
 				}
