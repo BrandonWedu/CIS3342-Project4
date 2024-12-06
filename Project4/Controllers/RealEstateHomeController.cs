@@ -282,16 +282,22 @@ namespace Project4.Controllers
                 }
 			}
 
-            //image
+			// Image Validation
 			if (TempData["ImageCount"] == null || !int.TryParse(TempData["ImageCount"].ToString(), out int imageCount))
 			{
-				validationErrors.Add("Home listing requires atleast one Image");
+				validationErrors.Add("Home listing requires at least one Image");
 				isValidHome = false;
 			}
 			else
 			{
 				for (int i = 0; i < imageCount; i++)
 				{
+					// Check if Image is hidden
+					if (TempData[$"ImageHidden_{i}"] == null || (bool)TempData[$"ImageHidden_{i}"] == true)
+					{
+						continue; // Skip validation if HiddenImage_{i} is true
+					}
+
 					if (!Enum.TryParse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"], out _))
 					{
 						validationErrors.Add($"Invalid room type for image.");
@@ -303,18 +309,39 @@ namespace Project4.Controllers
 						isValidHome = false;
 					}
 				}
+
+				// Check if all images are hidden
+				bool isAllHidden = true;
+				for (int i = 0; i < imageCount; i++)
+				{
+					if (TempData[$"ImageHidden_{i}"] == null || (bool)TempData[$"ImageHidden_{i}"] == false)
+					{
+						isAllHidden = false;
+					}
+				}
+				if (isAllHidden)
+				{
+					validationErrors.Add("Home listing requires at least one image");
+				}
 			}
 
-            //amenity
+
+			// Amenity Validation
 			if (TempData["AmenityCount"] == null || !int.TryParse(TempData["AmenityCount"].ToString(), out int amenityCount))
 			{
-				validationErrors.Add("Home listing requires atleast one Amenity.");
+				validationErrors.Add("Home listing requires at least one Amenity.");
 				isValidHome = false;
 			}
 			else
 			{
 				for (int i = 0; i < amenityCount; i++)
 				{
+					// Check if Amenity is hidden
+					if (TempData[$"AmenityHidden_{i}"] == null || (bool)TempData[$"AmenityHidden_{i}"] == true)
+					{
+						continue; // Skip validation if HiddenAmenity_{i} is true
+					}
+
 					if (!Enum.TryParse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"], out _))
 					{
 						validationErrors.Add($"Invalid amenity type for amenity.");
@@ -326,18 +353,39 @@ namespace Project4.Controllers
 						isValidHome = false;
 					}
 				}
+
+				// Check if all amenities are hidden
+				bool isAllHidden = true;
+				for (int i = 0; i < amenityCount; i++)
+				{
+					if (TempData[$"AmenityHidden_{i}"] == null || (bool)TempData[$"AmenityHidden_{i}"] == false)
+					{
+						isAllHidden = false;
+					}
+				}
+				if (isAllHidden)
+				{
+					validationErrors.Add("Home listing requires at least one amenity");
+				}
 			}
 
-            //utility
+
+			// Utility Validation
 			if (TempData["UtilityCount"] == null || !int.TryParse(TempData["UtilityCount"].ToString(), out int utilityCount))
 			{
-				validationErrors.Add("Home listing requires atleast one Utility");
+				validationErrors.Add("Home listing requires at least one Utility");
 				isValidHome = false;
 			}
 			else
 			{
 				for (int i = 0; i < utilityCount; i++)
 				{
+					// Check if Utility is hidden
+					if (TempData[$"UtilityHidden_{i}"] == null || (bool)TempData[$"UtilityHidden_{i}"] == true)
+					{
+						continue; // Skip validation if HiddenUtility_{i} is true
+					}
+
 					if (!Enum.TryParse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"], out _))
 					{
 						validationErrors.Add($"Invalid utility type for utility.");
@@ -349,7 +397,22 @@ namespace Project4.Controllers
 						isValidHome = false;
 					}
 				}
+
+				// Check if all utilities are hidden
+				bool isAllHidden = true;
+				for (int i = 0; i < utilityCount; i++)
+				{
+					if (TempData[$"UtilityHidden_{i}"] == null || (bool)TempData[$"UtilityHidden_{i}"] == false)
+					{
+						isAllHidden = false;
+					}
+				}
+				if (isAllHidden)
+				{
+					validationErrors.Add("Home listing requires at least one utility");
+				}
 			}
+
 
 
 			if (isValidHome == false)
