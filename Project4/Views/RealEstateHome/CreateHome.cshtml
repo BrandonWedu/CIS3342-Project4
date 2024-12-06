@@ -4,6 +4,7 @@
 
 @{
 	ViewData["Title"] = "Project 4 - Schedule Showing";
+	Layout = "~/Views/Shared/_AgentLayout.cshtml";
 }
 <div class="container my-4">
 	<form asp-controller="RealEstateHome" enctype="multipart/form-data" asp-action="HomeForm" method="POST" class="card shadow mt-5 p-3">
@@ -324,9 +325,16 @@
 		</div>
 
 
-		@if (TempData["Errors"] != null)
+		@if (TempData["ValidationError"] != null)
 		{
-			<p>@TempData["Errors"]</p>
+			var validationErrors = TempData["ValidationError"] as List<string>;
+
+			<ul>
+				@foreach (string error in validationErrors)
+				{
+					<li class="text-danger">@error</li>
+				}
+			</ul>
 		}
 	</form>
 </div>

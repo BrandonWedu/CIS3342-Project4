@@ -30,6 +30,7 @@ body {
     background-color: #007bff;
     border-bottom: 0.2rem solid #0056b3;
     margin-bottom: 4rem;
+    color:white;
 }
 
 .navbar-brand img {
@@ -39,14 +40,24 @@ body {
 
 .navbar-nav .nav-link {
     font-size: 16px;
+    color: white;
 }
 
     .navbar-nav .nav-link.active {
-        color: #ffcc00;
+        color: white;
         font-weight: bold;
     }
 
 a {
     color: #007bff;
     text-decoration: none;
+}
+
+footer a {
+    color: white !important;
+    text-decoration: none;
+}
+
+.navbar-brand a{
+    color: white;
 }

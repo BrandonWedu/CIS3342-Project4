@@ -3,6 +3,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    Layout = "~/Views/Shared/_AgentLayout.cshtml";
     Agent currentAgent = null;
     Homes agentHomes = null;
 
@@ -33,7 +34,7 @@
                             <strong>Date Listed: @currentHome.DateListed</strong> <br />
                         </p>
                         <div class="d-flex gap-2">
-                            <a asp-controller="RealEstateHome" asp-action="EditHome" asp-route-homeID="@currentHome.HomeID" class="btn btn-primary btn-sm me-2"> Edit Home Listing</a>
+                            <a asp-controller="RealEstateHome" asp-action="BackupEditHome" asp-route-homeID="@currentHome.HomeID" class="btn btn-primary btn-sm me-2"> Edit Home Listing</a>
                             @*
                             <form method="POST" asp-controller="RealEstateHome" asp-action="EditHome" asp-route-homeID="@currentHome.HomeID">
                                 <button type="submit" class="btn btn-primary btn-sm me-2" name="AcceptOffer" id="btnViewDetails">Edit Home Listing</button>

@@ -45,22 +45,34 @@ namespace HomeListingAPI
             dbConnect.DoUpdate(sqlCommand);
             return (int)outputParam.Value == 0;
         }
-        internal static bool DeleteHome(int homeID)
+        internal static void DeleteHome(int homeID)
         {
-            DBConnect dbConnect = new DBConnect();
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "P4_DeleteHome";
+			try
+			{
+				DBConnect dbConnect = new DBConnect();
+				SqlCommand sqlCommand = new SqlCommand
+				{
+					CommandType = CommandType.StoredProcedure,
+					CommandText = "P4_DeleteHome"
+				};
+				sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@HomeID", homeID, SqlDbType.Int, 8));
 
-            sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@homeID", homeID, SqlDbType.Int, 8));
+				dbConnect.DoUpdate(sqlCommand);
+			}
+			catch (SqlException sqlEx)
+			{
+				// Handle SQL specific exceptions, like issues with query, constraints, etc.
+				Console.WriteLine($"SQL Exception: {sqlEx.Message}");
+				throw; // Rethrow if you want it to bubble up or handle it differently
+			}
+			catch (Exception ex)
+			{
+				// Handle all other types of exceptions
+				Console.WriteLine($"Exception: {ex.Message}");
+				throw; // Rethrow the exception to be handled at a higher level or log it
+			}
 
-            SqlParameter outputParam = DBParameterHelper.OutputParameter("@deleted", SqlDbType.Int, 8);
-            sqlCommand.Parameters.Add(outputParam);
-
-            dbConnect.DoUpdate(sqlCommand);
-            return (int)outputParam.Value == 0;
-
-        }
+		}
 
         internal static void UpdateHome(Home home, Home oldHome)
         {
