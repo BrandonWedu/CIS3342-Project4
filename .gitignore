@@ -398,4 +398,5 @@ FodyWeavers.xsd
 *.sln.iml
 
 #FileStorage
-FileStorage/
+FileStorage/*
+!FileStorage/
