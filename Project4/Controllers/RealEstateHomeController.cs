@@ -237,7 +237,8 @@ namespace Project4.Controllers
 				isValidHome = false;
 			}
 
-			if (TempData["RoomCount"] == null || !int.TryParse(TempData["RoomCount"].ToString(), out int roomCount))
+            //room
+   			if (TempData["RoomCount"] == null || !int.TryParse(TempData["RoomCount"].ToString(), out int roomCount))
 			{
 				validationErrors.Add("Home listing requires at least one room");
 				isValidHome = false;
@@ -246,6 +247,10 @@ namespace Project4.Controllers
 			{
 				for (int i = 0; i < roomCount; i++)
 				{
+					if (TempData[$"RoomHidden_{i}"] == null || (bool)TempData[$"RoomHidden_{i}"] == true)
+					{
+						continue; // Skip validation if HiddenRoom_{i} is true
+					}
 					if (!Enum.TryParse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"], out _))
 					{
 						validationErrors.Add($"Invalid room type for the room.");
@@ -263,8 +268,21 @@ namespace Project4.Controllers
 						isValidHome = false;
 					}
 				}
+                bool isAllHidden = true;
+                for (int i = 0; i < roomCount; i++)
+                {
+                    if (TempData[$"RoomHidden_{i}"] == null || (bool)TempData[$"RoomHidden_{i}"] == false)
+					{
+                        isAllHidden = false;
+					}
+                }
+                if(isAllHidden)
+                {
+					validationErrors.Add("Home listing requires at least one room");
+                }
 			}
 
+            //image
 			if (TempData["ImageCount"] == null || !int.TryParse(TempData["ImageCount"].ToString(), out int imageCount))
 			{
 				validationErrors.Add("Home listing requires atleast one Image");
@@ -287,6 +305,7 @@ namespace Project4.Controllers
 				}
 			}
 
+            //amenity
 			if (TempData["AmenityCount"] == null || !int.TryParse(TempData["AmenityCount"].ToString(), out int amenityCount))
 			{
 				validationErrors.Add("Home listing requires atleast one Amenity.");
@@ -309,6 +328,7 @@ namespace Project4.Controllers
 				}
 			}
 
+            //utility
 			if (TempData["UtilityCount"] == null || !int.TryParse(TempData["UtilityCount"].ToString(), out int utilityCount))
 			{
 				validationErrors.Add("Home listing requires atleast one Utility");
@@ -359,24 +379,30 @@ namespace Project4.Controllers
                 Images images = new Images();
                 for (int i = 0; i < int.Parse(TempData["ImageCount"].ToString()); i++)
                 {
-                    var test = (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"]);
-                    var test2 = Request.Form[$"txtImageInformation_{i}"];
-                    images.Add(new Image(
-                            //        (string)Request.Form[$"ImageURL{i}"],
-                            "https://img.freepik.com/premium-vector/isolated-home-vector-illustration_1076263-25.jpg",
-                            (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"].ToString()),
-                            Request.Form[$"txtImageInformation_{i}"],
-                            i == 1
-                        ));
+                    if ((bool)TempData[$"ImageHidden_{i}"] == false)
+                    {
+						//var test = (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"]);
+						//var test2 = Request.Form[$"txtImageInformation_{i}"];
+						images.Add(new Image(
+								//        (string)Request.Form[$"ImageURL{i}"],
+								"https://img.freepik.com/premium-vector/isolated-home-vector-illustration_1076263-25.jpg",
+								(RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"].ToString()),
+								Request.Form[$"txtImageInformation_{i}"],
+								i == 1
+							));
+                    }
                 }
                 //read amenities
                 Amenities amenities = new Amenities();
                 for (int i = 0; i < int.Parse(TempData["AmenityCount"].ToString()); i++)
                 {
-                    amenities.Add(new Amenity(
-                            (AmenityType)Enum.Parse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"].ToString()),
-                            Request.Form[$"txtAmenityInformation_{i}"]
-                        ));
+                    if ((bool)TempData[$"AmenityHidden_{i}"] == false)
+                    {
+                        amenities.Add(new Amenity(
+                                (AmenityType)Enum.Parse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"].ToString()),
+                                Request.Form[$"txtAmenityInformation_{i}"]
+						));
+                    }
                 }
 
                 //read temperature control
@@ -388,21 +414,27 @@ namespace Project4.Controllers
                 Rooms rooms = new Rooms();
                 for (int i = 0; i < int.Parse(TempData["RoomCount"].ToString()); i++)
                 {
-                    rooms.Add(new Room(
-                            (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"].ToString()),
-                            int.Parse(Request.Form[$"txtLength_{i}"]),
-                            int.Parse(Request.Form[$"txtWidth_{i}"])
-                        ));
+                    if ((bool)TempData[$"RoomHidden_{i}"] == false)
+                    {
+                        rooms.Add(new Room(
+                                (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"].ToString()),
+                                int.Parse(Request.Form[$"txtLength_{i}"]),
+                                int.Parse(Request.Form[$"txtWidth_{i}"])
+                            ));
+                    }
                 }
 
                 //read Utilities
                 Utilities utilities = new Utilities();
                 for (int i = 0; i < int.Parse(TempData["UtilityCount"].ToString()); i++)
                 {
-                    utilities.Add(new Project4.Models.Utility(
-                            (UtilityTypes)Enum.Parse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"].ToString()),
-                            Request.Form[$"txtUtilityInformation_{i}"]
-                        ));
+                    if ((bool)TempData[$"RoomHidden_{i}"] == false)
+                    {
+                        utilities.Add(new Project4.Models.Utility(
+                                (UtilityTypes)Enum.Parse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"].ToString()),
+                                Request.Form[$"txtUtilityInformation_{i}"]
+                            ));
+                    }
                 }
 
                 Home home = new Home(
