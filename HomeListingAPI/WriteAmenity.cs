@@ -50,7 +50,29 @@ namespace HomeListingAPI
 
         internal static void UpdateAmenities(int homeID, Amenities updatedAmenities, Amenities oldAmenities)
         {
-            foreach (Amenity currentAmenity in updatedAmenities.List)
+
+			//Remove deleted amenities
+			foreach (Amenity currentOldAmenity in oldAmenities.List)
+			{
+				// Check if the current old amenity exists in the updated amenities list
+				bool existsInUpdatedList = updatedAmenities.List.Any(updatedAmenity => updatedAmenity.AmenityID == currentOldAmenity.AmenityID);
+
+				if (!existsInUpdatedList)
+				{
+					// Delete the old amenity because it wasn't present in the updated amenities
+					DBConnect dbConnect = new DBConnect();
+					SqlCommand sqlCommand = new SqlCommand
+					{
+						CommandType = CommandType.StoredProcedure,
+						CommandText = "P4_RemoveAmenity"
+					};
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@AmenityID", (int)currentOldAmenity.AmenityID, SqlDbType.Int, 8));
+					dbConnect.DoUpdate(sqlCommand);
+				}
+			}
+
+
+			foreach (Amenity currentAmenity in updatedAmenities.List)
             {
                 if (currentAmenity.AmenityID != 0)
                 {
@@ -80,25 +102,7 @@ namespace HomeListingAPI
                 }
             }
 
-            //Remove deleted amenities
-            foreach (Amenity currentOldAmenity in oldAmenities.List)
-            {
-                foreach (Amenity currentAmenity in updatedAmenities.List)
-                {
-                    // Every updated amenity gets compared to each old amenity
-                    if (currentOldAmenity.AmenityID != currentAmenity.AmenityID)
-                    {
-                        //Delete the old amenity because it wasnt present in the updated amenities
-                        DBConnect dbConnect = new DBConnect();
-                        SqlCommand sqlCommand = new SqlCommand();
-                        sqlCommand.CommandType = CommandType.StoredProcedure;
-                        sqlCommand.CommandText = "P4_RemoveAmenity";
-                        sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@AmenityID", (int)currentOldAmenity.AmenityID, SqlDbType.Int, 8));
-                        dbConnect.DoUpdate(sqlCommand);
-                    }
-                }
-            }
 
-        }
+		}
     }
 }

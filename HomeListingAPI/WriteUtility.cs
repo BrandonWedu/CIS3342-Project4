@@ -50,9 +50,28 @@ namespace HomeListingAPI
 
         internal static void UpdateUtilities(int homeID, Utilities updatedUtilites, Utilities oldUtilites)
         {
+			//Remove deleted utilities
+			foreach (Utility currentOldUtility in oldUtilites.List)
+			{
+				// Check if the current old utility exists in the updated utilities list
+				bool existsInUpdatedList = updatedUtilites.List.Any(updatedUtility => updatedUtility.UtilityID == currentOldUtility.UtilityID);
 
-            //Update or add utilities
-            foreach (Utility currentUtility in updatedUtilites.List)
+				if (!existsInUpdatedList)
+				{
+					// Delete the old utility because it wasn't present in the updated utilities
+					DBConnect dbConnect = new DBConnect();
+					SqlCommand sqlCommand = new SqlCommand
+					{
+						CommandType = CommandType.StoredProcedure,
+						CommandText = "P4_RemoveUtility"
+					};
+					sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@UtilityID", (int)currentOldUtility.UtilityID, SqlDbType.Int, 8));
+					dbConnect.DoUpdate(sqlCommand);
+				}
+			}
+
+			//Update or add utilities
+			foreach (Utility currentUtility in updatedUtilites.List)
             {
                 if (currentUtility.UtilityID != 0)
                 {
@@ -83,24 +102,7 @@ namespace HomeListingAPI
             }
 
 
-            //Remove deleted utilities
-            foreach (Utility currentOldUtility in oldUtilites.List)
-            {
-                foreach (Utility currentUtility in updatedUtilites.List)
-                {
-                    // Every updated utility gets compared to each old utility
-                    if (currentOldUtility.UtilityID != currentUtility.UtilityID)
-                    {
-                        //Delete the old utility because it wasnt present in the updated utilities 
-                        DBConnect dbConnect = new DBConnect();
-                        SqlCommand sqlCommand = new SqlCommand();
-                        sqlCommand.CommandType = CommandType.StoredProcedure;
-                        sqlCommand.CommandText = "P4_RemoveUtility";
-                        sqlCommand.Parameters.Add(DBParameterHelper.InputParameter<int>("@UtilityID", (int)currentOldUtility.UtilityID, SqlDbType.Int, 8));
-                        dbConnect.DoUpdate(sqlCommand);
-                    }
-                }
-            }
-        }
+
+		}
     }
 }
