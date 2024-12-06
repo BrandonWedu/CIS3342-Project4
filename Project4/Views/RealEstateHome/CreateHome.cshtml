@@ -7,9 +7,8 @@
 	Layout = "~/Views/Shared/_AgentLayout.cshtml";
 }
 <div class="container my-4">
-	<form asp-controller="RealEstateHome" enctype="multipart/form-data" asp-action="HomeForm" method="POST" class="card shadow mt-5 p-3">
+		<form asp-controller="RealEstateHome" enctype="multipart/form-data" asp-action="HomeForm" method="POST" class="card shadow mt-5 p-3">
 		<h1>Create a Home Listing</h1>
-
 		<div class="row mt-3">
 			<h2>Home Address</h2>
 			<span class="form-label">Street</span>
@@ -324,6 +323,10 @@
 			</div>
 		</div>
 
+        @if(TempData["Response"] != null)
+        {
+            <p class="text-danger">@TempData["Response"]</p>
+        }
 
 		@if (TempData["ValidationError"] != null)
 		{

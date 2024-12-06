@@ -62,7 +62,7 @@ namespace Project4.Controllers
                     break;
                 case "AddHome":
                     Home home = GetHomeData();
-                    AddHomeAsync(home);
+                    AddHome(home);
                     break;
 
             }
@@ -173,34 +173,57 @@ namespace Project4.Controllers
             TempData[$"ImageUploaded_{i}"] = true;
             RetainData();
         }
-        //Code To Add Home to server through API
-        public async Task AddHomeAsync(Home home)
-        {
-            if (home == null)
-            {
-                Console.WriteLine("Home was null, failed validation");
-                return;
-            }
+		//Code To Add Home to server through API
+		public void AddHome(Home home)
+		{
+			if (home == null)
+			{
+				Console.WriteLine("Home was null, failed validation");
+				TempData["Response"] = "Invalid home data";
+				return;
+			}
 
-            StringContent content = new StringContent(System.Text.Json.JsonSerializer.Serialize(home), Encoding.UTF8, "application/json");
-            string copy = System.Text.Json.JsonSerializer.Serialize(home);
-            using (HttpClient httpClient = new HttpClient())
-            {
-                //TODO: show error if there is an error
-                try
-                {
-                    HttpResponseMessage response = await httpClient.PostAsync("https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/CreateHome/CreateHomeListing", content);
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"Response Body: {responseBody}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
-        }
-        //Get Home Data
-        public Home GetHomeData()
+			StringContent content = new StringContent(
+				System.Text.Json.JsonSerializer.Serialize(home),
+				Encoding.UTF8,
+				"application/json"
+			);
+
+			using (HttpClient httpClient = new HttpClient())
+			{
+				try
+				{
+					// Blocking call to PostAsync
+					HttpResponseMessage response = httpClient.PostAsync(
+						"https://cis-iis2.temple.edu/Fall2024/CIS3342_tui78495/WebAPI/CreateHome/CreateHomeListing",
+						content
+					).GetAwaiter().GetResult();
+
+					// Blocking call to ReadAsStringAsync
+					string responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+					Console.WriteLine($"Response Body: {responseBody}");
+
+					// Error handling
+					if (responseBody == "-1")
+					{
+						// Home already exists
+						TempData["Response"] = "Error, a home with this address already exists";
+					}
+					else
+					{
+						TempData["Response"] = "Home Created";
+					}
+				}
+				catch (Exception ex)
+				{
+					// Handle exceptions
+					Console.WriteLine($"Exception: {ex.Message}");
+					TempData["Response"] = "Web API Connection Error";
+				}
+			}
+		}
+		//Get Home Data
+		public Home GetHomeData()
         {
             RetainData();
 
@@ -479,15 +502,15 @@ namespace Project4.Controllers
                     );
                 PropertyType propertyType = (PropertyType)Enum.Parse(typeof(PropertyType), Request.Form["ddlPropertyType"].ToString());
                 GarageType garageType = (GarageType)Enum.Parse(typeof(GarageType), Request.Form["ddlGarageType"].ToString());
-                string description = Request.Form["txtDescription"].ToString();
+                string description = Request.Form["txtHomeDescription"].ToString();
                 SaleStatus saleStatus = (SaleStatus)Enum.Parse(typeof(SaleStatus), Request.Form["ddlSaleStatus"].ToString());
 
                 //read images
                 Images images = new Images();
                 for (int i = 0; i < int.Parse(TempData["ImageCount"].ToString()); i++)
                 {
-                    if ((bool)TempData[$"ImageHidden_{i}"] == false)
-                    {
+                   // if ((bool)TempData[$"ImageHidden_{i}"] == false)
+                    //{
 						//var test = (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"]);
 						//var test2 = Request.Form[$"txtImageInformation_{i}"];
 						images.Add(new Image(
@@ -497,19 +520,19 @@ namespace Project4.Controllers
 								Request.Form[$"txtImageInformation_{i}"],
 								i == 1
 							));
-                    }
+                    //}
                 }
                 //read amenities
                 Amenities amenities = new Amenities();
                 for (int i = 0; i < int.Parse(TempData["AmenityCount"].ToString()); i++)
                 {
-                    if ((bool)TempData[$"AmenityHidden_{i}"] == false)
-                    {
+                    //if ((bool)TempData[$"AmenityHidden_{i}"] == false)
+                   // {
                         amenities.Add(new Amenity(
                                 (AmenityType)Enum.Parse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"].ToString()),
                                 Request.Form[$"txtAmenityInformation_{i}"]
 						));
-                    }
+                  //  }
                 }
 
                 //read temperature control
@@ -521,27 +544,27 @@ namespace Project4.Controllers
                 Rooms rooms = new Rooms();
                 for (int i = 0; i < int.Parse(TempData["RoomCount"].ToString()); i++)
                 {
-                    if ((bool)TempData[$"RoomHidden_{i}"] == false)
-                    {
+                   // if ((bool)TempData[$"RoomHidden_{i}"] == false)
+                    //{
                         rooms.Add(new Room(
                                 (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"].ToString()),
                                 int.Parse(Request.Form[$"txtLength_{i}"]),
                                 int.Parse(Request.Form[$"txtWidth_{i}"])
                             ));
-                    }
+                    //}
                 }
 
                 //read Utilities
                 Utilities utilities = new Utilities();
                 for (int i = 0; i < int.Parse(TempData["UtilityCount"].ToString()); i++)
                 {
-                    if ((bool)TempData[$"RoomHidden_{i}"] == false)
-                    {
+                   // if ((bool)TempData[$"RoomHidden_{i}"] == false)
+                    //{
                         utilities.Add(new Project4.Models.Utility(
                                 (UtilityTypes)Enum.Parse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"].ToString()),
                                 Request.Form[$"txtUtilityInformation_{i}"]
                             ));
-                    }
+                    //}
                 }
 
                 Home home = new Home(
