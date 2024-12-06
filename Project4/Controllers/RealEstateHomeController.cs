@@ -438,7 +438,7 @@ namespace Project4.Controllers
                 Images images = new Images();
                 for (int i = 0; i < int.Parse(TempData["ImageCount"].ToString()); i++)
                 {
-                    if ((bool)TempData[$"ImageHidden_{i}"] == false)
+                    if (TempData[$"ImageHidden_{i}"] == null ||(bool)TempData[$"ImageHidden_{i}"] == false)
                     {
 						//var test = (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlImageRoomType_{i}"]);
 						//var test2 = Request.Form[$"txtImageInformation_{i}"];
@@ -455,7 +455,7 @@ namespace Project4.Controllers
                 Amenities amenities = new Amenities();
                 for (int i = 0; i < int.Parse(TempData["AmenityCount"].ToString()); i++)
                 {
-                    if ((bool)TempData[$"AmenityHidden_{i}"] == false)
+                    if (TempData[$"AmenityHidden_{i}"] == null || (bool)TempData[$"AmenityHidden_{i}"] == false)
                     {
                         amenities.Add(new Amenity(
                                 (AmenityType)Enum.Parse(typeof(AmenityType), Request.Form[$"ddlAmenityType_{i}"].ToString()),
@@ -473,7 +473,7 @@ namespace Project4.Controllers
                 Rooms rooms = new Rooms();
                 for (int i = 0; i < int.Parse(TempData["RoomCount"].ToString()); i++)
                 {
-                    if ((bool)TempData[$"RoomHidden_{i}"] == false)
+                    if (TempData[$"RoomHidden_{i}"] == null || (bool)TempData[$"RoomHidden_{i}"] == false)
                     {
                         rooms.Add(new Room(
                                 (RoomType)Enum.Parse(typeof(RoomType), Request.Form[$"ddlRoomType_{i}"].ToString()),
@@ -487,7 +487,7 @@ namespace Project4.Controllers
                 Utilities utilities = new Utilities();
                 for (int i = 0; i < int.Parse(TempData["UtilityCount"].ToString()); i++)
                 {
-                    if ((bool)TempData[$"RoomHidden_{i}"] == false)
+                    if (TempData[$"RoomHidden_{i}"] == null || (bool)TempData[$"RoomHidden_{i}"] == false)
                     {
                         utilities.Add(new Project4.Models.Utility(
                                 (UtilityTypes)Enum.Parse(typeof(UtilityTypes), Request.Form[$"ddlUtilityType_{i}"].ToString()),
