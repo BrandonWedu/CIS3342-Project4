@@ -1,7 +1,10 @@
-﻿namespace HomeListingAPI
+﻿using System.Text.Json.Serialization;
+
+namespace HomeListingAPI
 {
     public class ListOfObjects<T> : IListOfObjects<T> where T : ICloneable<T>
     {
+        [JsonPropertyName("list")]
         protected List<T> list = new List<T>();
 
         public List<T> List

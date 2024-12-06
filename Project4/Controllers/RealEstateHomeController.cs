@@ -457,7 +457,7 @@ namespace Project4.Controllers
                 Console.WriteLine("Home ID: " + currentHome.HomeID + " , AgentID: " + currentHome.AgentID + " , StoredAgentID: " + currentAgent.AgentID);
                 if (currentHome.AgentID.ToString() == currentAgent.AgentID.ToString())
                 {
-                    agentHomes.List.Add(currentHome);
+                    agentHomes.Add(currentHome);
                     Console.WriteLine("Added Home To List");
                 }
             }
