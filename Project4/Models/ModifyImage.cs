@@ -10,5 +10,17 @@
             get { return image; }
             set { image = value; }
         }
+        public void AddWatermark()
+        {
+
+        }
+        public void Compress()
+        {
+
+        }
+        public void Resize()
+        {
+
+        }
     }
 }
