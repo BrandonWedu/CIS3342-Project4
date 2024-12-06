@@ -148,9 +148,7 @@
 										</form>
 										@if((currentHome.SaleStatus == SaleStatus.Sold || currentHome.SaleStatus == SaleStatus.OffMarket))
 										{
-											<form method="POST" asp-controller="Offer" asp-action="MakeOffer" asp-route-homeID="@currentHome.HomeID">
-												<button type="submit" class="btn btn-primary btn-sm" name="btnMakeOffer" id="btnMakeOffer">Make Offer</button>
-											</form>
+
 										}
 										else
 										{

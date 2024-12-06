@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Project4.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
     <header>
@@ -24,7 +25,19 @@
                             <a class="nav-link" href="../index.html">Index</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Dashboard" asp-action="Dashboard">Main Dashboard</a>
+                            <a class="nav-link" asp-controller="AgentDashboard" asp-action="AgentDashboard">Agent Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="RealEstateHome" asp-action="CreateHome">Create New Listing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="RealEstateHome" asp-action="AllEditHomes">All Listing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Showing" asp-action="ViewShowings">All Showings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Offer" asp-action="AllOffers">All Offers</a>
                         </li>
                     </ul>
                 </div>
@@ -33,13 +46,13 @@
     </header>
 
     <div class="container-fluid">
-        <main role="main" >
+        <main role="main">
             @RenderBody()
         </main>
     </div>
     <br />
     <br />
-    <br/>
+    <br />
     <footer class="bg-primary border-top footer text-muted">
         <div class="container align-content-center">
             <p class="text-white">&copy; 2024 Brandon White & Nathan Flohr. All Rights Reserved.</p>
