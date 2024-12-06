@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Project4.Models;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace Project4.Controllers
 {
@@ -64,11 +65,42 @@ namespace Project4.Controllers
             response.Close();
             Homes allHomes = JsonConvert.DeserializeObject<Homes>(data);
             Homes listOfHomes = allHomes;
-            //Get Filtered Values
 
-            //Homes filteredHomes = SearchHomes.Search(listOfHomes);
-            return View();
+            // Filterable Values
+			string? street = string.IsNullOrWhiteSpace(Request.Form["txtFilterStreet"]) ? null : (string?)Request.Form["txtFilterStreet"];
+			string? city = string.IsNullOrWhiteSpace(Request.Form["txtFilterCity"]) ? null : (string?)Request.Form["txtFilterCity"];
+			string? zipCode = string.IsNullOrWhiteSpace(Request.Form["txtFilterZipCode"]) ? null : (string?)Request.Form["txtFilterZipCode"];
+			int? priceMin = int.TryParse(Request.Form["txtFilterMinPrice"], out var parsedPriceMin) ? parsedPriceMin : null;
+			int? priceMax = int.TryParse(Request.Form["txtFilterMaxPrice"], out var parsedPriceMax) ? parsedPriceMax : null;
+			int? houseSizeMin = int.TryParse(Request.Form["txtFilterMinHouseSize"], out var parsedHouseSizeMin) ? parsedHouseSizeMin : null;
+			int? houseSizeMax = int.TryParse(Request.Form["txtFilterMaxHouseSize"], out var parsedHouseSizeMax) ? parsedHouseSizeMax : null;
+			int? bedroomMin = int.TryParse(Request.Form["txtMinBedroom"], out var parsedBedroomMin) ? parsedBedroomMin : null;
+			double? bathroomMin = double.TryParse(Request.Form["txtMinBathroom"], out var parsedBathroomMin) ? parsedBathroomMin : null;
+
+
+			States? state = Request.Form["ddlFilterState"] == "Select a State"? null : Enum.Parse<States>(Request.Form["ddlFilterState"]);
+			SaleStatus? saleStatus = Request.Form["ddlFilterSaleStatus"] == "Select a Sale Status"? null : Enum.Parse<SaleStatus>(Request.Form["ddlFilterSaleStatus"]); 
+
+            PropertyType? propertyType = null;
+
+			List<AmenityType> amenities = new List<AmenityType>();
+
+			Homes filteredHomes = SearchHomes.Search(listOfHomes, street, city, state, zipCode, priceMin, priceMax, propertyType, houseSizeMin, houseSizeMax, bedroomMin, bathroomMin, amenities, saleStatus);
+            ViewBag.Homes = filteredHomes;
+            RetainData();
+
+			return View("Dashboard");
         }
+        //save request.form to temp data
+        public void RetainData()
+        {
+            foreach (string key in Request.Form.Keys)
+            {
+                TempData[key] = Request.Form[key];
+            }
+            TempData.Keep();
+        }
+
 
         public IActionResult ClearFilter()
         {

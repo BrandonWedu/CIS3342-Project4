@@ -28,7 +28,9 @@
 				<input type="text" name="txtFilterCity" class="form-control mb-3" value="@TempData["txtFilterCity"]">
 
 				<label class="form-label">State</label>
+				<br/>
 				<select name="ddlFilterState" class="from-select mb-3">
+                    <option value="Select a State">Select a State</option>
                     @foreach (States state in Enum.GetValues(typeof(States)))
                     {
                         if (TempData["ddlFilterState"] != null && TempData["ddlFilterState"].ToString() == state.ToString())
@@ -41,6 +43,7 @@
                         }
                     }
 				</select>
+				<br />
 
 				<label class="form-label">Zip Code</label>
 				<input type="text" name="txtFilterZipCode" class="form-control mb-3" value="@TempData["txtFilterZipCode"]">
@@ -48,24 +51,24 @@
 				<label for="priceRange" class="form-label">Price Range</label>
 				<div class="input-group mb-3" id="priceRange">
 					<span class="input-group-text">$</span>
-					<input type="text" class="form-control" placeholder="Min" id="txtFilterMinPrice" name="txtFilterMinPrice" />
+					<input type="text" class="form-control" placeholder="Min" id="txtFilterMinPrice" name="txtFilterMinPrice" value="@TempData["txtFilterMinPrice"]"/>
 					<span class="input-group-text">-</span>
-					<input type="text" class="form-control" placeholder="Max" id="txtFilterMaxPrice" name="txtFilterMaxPrice" />
+					<input type="text" class="form-control" placeholder="Max" id="txtFilterMaxPrice" name="txtFilterMaxPrice" value="@TempData["txtFilterMaxPrice"]"/>
 				</div>
 
 				<label for="houseSize" class="form-label">House Size</label>
 				<div class="input-group mb-3" id="houseSize">
 					<span class="input-group-text">sft.</span>
-					<input type="text" class="form-control" placeholder="Min" name="txtFilterMinHouseSize" />
+					<input type="text" class="form-control" placeholder="Min" name="txtFilterMinHouseSize" value="@TempData["txtFilterMinHouseSize"]" />
 					<span class="input-group-text">-</span>
-					<input type="text" class="form-control" placeholder="Max" name="txtFilterMaxHouseSize" />
+					<input type="text" class="form-control" placeholder="Max" name="txtFilterMaxHouseSize" value="@TempData["txtFilterMaxHouseSize"]" />
 				</div>
 
 				<label for="minBedroom" class="form-label">Min Bedrooms</label>
-				<input type="text" class="form-control" id="txtMinBedroom" name="txtMinBedroom" />
+				<input type="text" class="form-control" id="txtMinBedroom" name="txtMinBedroom" value="@TempData["txtMinBedroom"]"/>
 
 				<label for="minBathroom" class="form-label">Min Bathroom</label>
-				<input type="text" class="form-control" id="txtMinBathroom" name="txtMinBathroom" />
+				<input type="text" class="form-control" id="txtMinBathroom" name="txtMinBathroom" value="@TempData["txtMinBathroom"]"/>
 
 				<label class="form-label">Property Type:</label>
 				<br/>
@@ -81,6 +84,7 @@
                     }
                     <label for="@propertyType">@propertyType</label><br>
                 }
+				<br />
 
 				<label class="form-label">Amenities:</label>
 				<br/>
@@ -96,10 +100,12 @@
                     }
                     <label for="@amenity">@amenity</label><br>
                 }
+				<br />
 
 				<label class="form-label">Sale Status:</label>
 				<br/>
 				<select name="ddlFilterSaleStatus" class="from-select mb-3">
+                    <option value="Select a Sale Status">Select a Sale Status</option>
                     @foreach (SaleStatus status in Enum.GetValues(typeof(SaleStatus)))
                     {
                         if (TempData["ddlFilterSaleStatus"] != null && TempData["ddlFilterSaleStatus"].ToString() == status.ToString())
@@ -112,8 +118,16 @@
                         }
                     }
 				</select>
+				</br>
 
 				<button type="submit" class="btn-primary">Filter Homes</button>
+				@if(TempData["Errors"] != null)
+				{
+					foreach (string error in (List<string>)TempData["Errors"])
+					{
+						<p class="alert-danger">@error</p>
+					}
+				}
 			</div>
 		</form>
 	</div>
@@ -124,7 +138,7 @@
 			<div class="row">
 				@if (allHomes.List.Count == 0)
 				{
-					<h2>No Home Listings Are For Sale!</h2>
+					<h2>No Home Listings Are For Sale with search params!</h2>
 				}
 				else
 				{
