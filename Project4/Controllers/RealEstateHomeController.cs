@@ -992,12 +992,13 @@ namespace Project4.Controllers
             }
             else
             {
+                string city = Request.Form["txtHomeCity"];
+                Address newAddress = new Address(Request.Form["txtHomeStreet"], Request.Form["txtHomeCity"], Enum.Parse<States>(Request.Form["ddlHomeState"]), Request.Form["txtHomeZipCode"]);
+
                 string updatedHomeJson = HttpContext.Session.GetString("EditHome");
                 Home updatedHome = JsonConvert.DeserializeObject<Home>(updatedHomeJson);
-                updatedHome.Address.Street = Request.Form["txtHomeStreet"];
-                updatedHome.Address.City = Request.Form["txtHomeCity"];
-                updatedHome.Address.State = Enum.Parse<States>(Request.Form["ddlHomeState"]);
-                updatedHome.Address.ZipCode = Request.Form["txtHomeZipCode"];
+
+                updatedHome.Address = newAddress;
                 updatedHome.Cost = int.Parse(Request.Form["txtHomeCost"]);
                 updatedHome.PropertyType = Enum.Parse<PropertyType>(Request.Form["ddlPropertyType"]);
                 updatedHome.YearConstructed = int.Parse(Request.Form["txtYearConstructed"]);
