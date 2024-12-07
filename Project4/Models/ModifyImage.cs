@@ -26,7 +26,7 @@ namespace Project4.Models
 			using (SixLabors.ImageSharp.Image img = SixLabors.ImageSharp.Image.Load(image))
 			{
 				//Font
-				SixLabors.Fonts.Font font = SystemFonts.CreateFont("Arial", 40, FontStyle.Regular);
+				SixLabors.Fonts.Font font = SystemFonts.CreateFont("Arial", 20, FontStyle.Regular);
 
 				//Color of text
 				Color watermarkColor = Color.White.WithAlpha(0.8f);

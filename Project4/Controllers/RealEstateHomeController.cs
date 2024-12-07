@@ -856,9 +856,24 @@ namespace Project4.Controllers
                     string fullPath = Path.Combine(absolutePath, newFileName);
                     Console.WriteLine(fullPath);
 
+                    //agent from session
+                    string agentJson = HttpContext.Session.GetString("Agent");
+                    Agent agent = System.Text.Json.JsonSerializer.Deserialize<Agent>(agentJson);
+
+                    ModifyImage modifyImage = new ModifyImage();
+                    using (MemoryStream memoryStream = new MemoryStream())
+                    {
+                        imageFile.CopyTo(memoryStream);
+                        modifyImage.Image = memoryStream.ToArray();
+                    }
+
+                    modifyImage.Resize();
+                    modifyImage.Compress();
+                    modifyImage.AddWatermark(agent.WorkCompany.CompanyName);
+
                     using (FileStream fileStream = new FileStream(fullPath, FileMode.Create))
                     {
-                        imageFile.CopyTo(fileStream);
+                        fileStream.Write(modifyImage.Image, 0, modifyImage.Image.Length);
                     }
 
                     string imagesJson = HttpContext.Session.GetString("EditImages");
@@ -1054,9 +1069,9 @@ namespace Project4.Controllers
             }
         }
 
-        public IActionResult DeleteHome(int home)
+        public IActionResult DeleteHome(int homeID)
         {
-            TryDeleteHome(home);
+            TryDeleteHome(homeID);
             return RedirectToAction("AllEditHomes", "RealEstateHome");
         }
     }
