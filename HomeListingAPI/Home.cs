@@ -22,6 +22,7 @@ namespace HomeListingAPI
     //enum for GarageTypes
     public enum GarageType
     {
+        NA,
         SingleCar,
         DoubleCar,
         MultiCar

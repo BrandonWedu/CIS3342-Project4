@@ -1054,9 +1054,9 @@ namespace Project4.Controllers
             }
         }
 
-        public IActionResult DeleteHome(int home)
+        public IActionResult DeleteHome(int homeID)
         {
-            TryDeleteHome(home);
+            TryDeleteHome(homeID);
             return RedirectToAction("AllEditHomes", "RealEstateHome");
         }
     }

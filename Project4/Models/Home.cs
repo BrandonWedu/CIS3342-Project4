@@ -22,6 +22,7 @@ namespace Project4.Models
     //enum for GarageTypes
     public enum GarageType
     {
+        NA,
         SingleCar,
         DoubleCar,
         MultiCar
