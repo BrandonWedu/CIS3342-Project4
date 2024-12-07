@@ -137,6 +137,8 @@ namespace Project4.Controllers
 				TempData["UploadError"] = "Image must be a .png!";
                 return;
             }
+			string agentJson = HttpContext.Session.GetString("Agent");
+			Agent agent = System.Text.Json.JsonSerializer.Deserialize<Agent>(agentJson);
 
             //TODO: Modify Image Learning Opportunity
             //-------------------------------------------------------
@@ -148,7 +150,7 @@ namespace Project4.Controllers
             }
             modifyImage.Resize();
             modifyImage.Compress();
-            modifyImage.AddWatermark();
+            modifyImage.AddWatermark(agent.WorkCompany.CompanyName);
             //-------------------------------------------------------
             
             //Generate File Name
