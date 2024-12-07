@@ -130,10 +130,11 @@ namespace Project4.Controllers
         //Uploads image to the server
         public void UploadImage(int i)
         {
+			TempData["UploadError"] = "";
             IFormFile file = Request.Form.Files[$"fuImage_{i}"];
             if (file == null || file.FileName.Split('.').Last() != "png")
             {
-                //TODO: error
+				TempData["UploadError"] = "Image must be a .png!";
                 return;
             }
 
@@ -341,6 +342,12 @@ namespace Project4.Controllers
 						if (string.IsNullOrWhiteSpace(imageInfo))
 						{
 							validationErrors.Add($"Image information is required for image {i + 1}.");
+						}
+
+						// Validate file upload for the current image
+						if (TempData[$"ImageUploaded_{i}"] == null)
+						{
+							validationErrors.Add($"You must upload a file for image {i + 1}.");
 						}
 					}
 				}

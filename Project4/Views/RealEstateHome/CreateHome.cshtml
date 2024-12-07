@@ -256,6 +256,7 @@
 
 		<div class="row mt-3">
 			<h2>Add Image Information</h2>
+			<p class="text-danger">@TempData["UploadError"]</p>
 			@if (TempData["ImageCount"] == null)
 			{
 				TempData["ImageCount"] = 0;
@@ -330,7 +331,7 @@
 
 		@if (TempData["ValidationError"] != null)
 		{
-			var validationErrors = TempData["ValidationError"] as List<string>;
+			List<string> validationErrors = TempData["ValidationError"] as List<string>;
 
 			<ul>
 				@foreach (string error in validationErrors)

@@ -72,7 +72,7 @@ namespace Project4.Models
             string relativePath = $"FileStorage";
             string absolutePath = Path.Combine(Directory.GetCurrentDirectory(), relativePath);
             string fullPath = Path.Combine(absolutePath, Url);
-            return fullPath;
-        }
+			return fullPath; // Returns a relative URL
+		}
     }
 }
