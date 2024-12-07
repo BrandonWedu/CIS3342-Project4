@@ -35,7 +35,6 @@ namespace HomeListingAPI.Controllers
             currentHome.TemperatureControl = updatedHome.TemperatureControl;
             currentHome.YearConstructed = updatedHome.YearConstructed;
             currentHome.Utilities = updatedHome.Utilities;
-            currentHome.Address = updatedHome.Address;
 
             Home oldHome = ReadHome.GetHomeByHomeID((int)updatedHome.HomeID);
 
